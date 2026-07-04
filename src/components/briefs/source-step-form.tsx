@@ -6,6 +6,7 @@ import {
   saveSourceStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -20,6 +21,7 @@ type SourceStepFormProps = {
 
 export function SourceStepForm({ projectId, draft }: SourceStepFormProps) {
   const [state, formAction] = useActionState(saveSourceStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
 
   const [selectedSourceType, setSelectedSourceType] = useState<WizardSourceType>(
     (state.values?.sourceType as WizardSourceType | undefined) ?? draft.sourceType ?? 'idea',

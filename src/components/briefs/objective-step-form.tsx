@@ -6,6 +6,7 @@ import {
   saveObjectiveStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +20,7 @@ type ObjectiveStepFormProps = {
 
 export function ObjectiveStepForm({ projectId, draft }: ObjectiveStepFormProps) {
   const [state, formAction] = useActionState(saveObjectiveStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
 
   return (
     <form action={formAction} className="space-y-4 rounded-lg border border-border p-4">

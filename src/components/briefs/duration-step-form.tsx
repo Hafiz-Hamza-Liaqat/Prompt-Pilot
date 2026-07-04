@@ -6,6 +6,7 @@ import {
   saveDurationStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +21,7 @@ type DurationStepFormProps = {
 
 export function DurationStepForm({ projectId, draft }: DurationStepFormProps) {
   const [state, formAction] = useActionState(saveDurationStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
   const currentValue =
     (state.values?.durationSeconds as string | undefined) ??
     (draft.durationSeconds !== null && draft.durationSeconds !== undefined

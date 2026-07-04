@@ -6,6 +6,7 @@ import {
   saveStyleStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,6 +19,7 @@ type StyleStepFormProps = {
 
 export function StyleStepForm({ projectId, draft }: StyleStepFormProps) {
   const [state, formAction] = useActionState(saveStyleStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
 
   return (
     <form action={formAction} className="space-y-4 rounded-lg border border-border p-4">

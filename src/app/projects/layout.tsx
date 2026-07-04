@@ -1,4 +1,3 @@
-import { ProjectAppHeader } from '@/components/projects/project-app-header';
 import { requireUser } from '@/server/auth/require-user';
 
 export default async function ProjectsLayout({
@@ -8,10 +7,5 @@ export default async function ProjectsLayout({
 }>) {
   await requireUser({ redirectTo: '/projects' });
 
-  return (
-    <>
-      <ProjectAppHeader />
-      {children}
-    </>
-  );
+  return children;
 }

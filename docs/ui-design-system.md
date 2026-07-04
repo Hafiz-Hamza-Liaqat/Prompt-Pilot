@@ -82,8 +82,9 @@ Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Text
 | Component | Path | Purpose |
 |---|---|---|
 | PageContainer | `src/components/layout/page-container.tsx` | Responsive max-width wrapper |
-| SiteHeader | `src/components/layout/site-header.tsx` | Brand, badge, in-page navigation |
-| SiteFooter | `src/components/layout/site-footer.tsx` | Copyright and product honesty |
+| SiteHeader | `src/components/layout/site-header.tsx` | Brand, public nav, auth-aware account menu |
+| SiteFooter | `src/components/layout/site-footer.tsx` | Global public footer with platform/company/help links |
+| AccountMenu | `src/components/layout/account-menu.tsx` | Signed-in/out account controls (header only) |
 | SectionHeading | `src/components/layout/section-heading.tsx` | Reusable section titles |
 
 ### Project components
@@ -91,7 +92,6 @@ Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Text
 | Component | Path | Purpose |
 |---|---|---|
 | SubmitButton | `src/components/forms/submit-button.tsx` | Pending-aware form submit |
-| ProjectAppHeader | `src/components/projects/project-app-header.tsx` | Projects area navigation |
 | ProjectCard | `src/components/projects/project-card.tsx` | Dashboard project summary |
 | ProjectCreateForm | `src/components/projects/project-create-form.tsx` | Create project |
 | ProjectEditForm | `src/components/projects/project-edit-form.tsx` | Edit title and description |

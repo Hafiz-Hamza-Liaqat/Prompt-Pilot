@@ -7,6 +7,7 @@ import {
   initialBriefFormState,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -89,6 +90,7 @@ function renderEnabledRequirements(draft: PartialVideoBriefDraft): React.ReactNo
 
 export function BriefReview({ projectId, draft }: BriefReviewProps) {
   const [state, formAction] = useActionState(completeBriefAction, initialBriefFormState);
+  useBriefFormRedirect(state);
 
   return (
     <div className="space-y-4">

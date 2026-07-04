@@ -43,9 +43,26 @@ A phase may be marked `DONE` only when:
 ```text
 Current phase: None
 Phase 11-A: DONE
+Phase 11-B: DONE
 Next ready phase: Phase 12 — AI Provider Boundary
 Phase 12: READY (not started)
 ```
+
+---
+
+## Phase 11-B navigation and workflow repair (2026-07-05)
+
+| Item | Result |
+|---|---|
+| Global footer | Single `SiteFooter` in root layout; grouped Platform/Company/Help links; optional Social when `OFFICIAL_X_PROFILE_URL` is set |
+| Public pages | `/about`, `/support`, `/news` with truthful non-generative copy |
+| Auth-aware header | `SiteHeader` + `AccountMenu`; removed nested `ProjectAppHeader` |
+| Brief persistence | Replaced `.upsert()` with insert-or-update pattern under RLS |
+| Brief redirects | Server actions return `redirectTo`; client navigates via `useBriefFormRedirect` |
+| Project cards | Primary CTA derived from brief/project state |
+| Sign-out | Revalidates `/`, `/projects`, and `/account` layouts |
+| Footer tests | `tests/layout/globalFooter.spec.ts`, `tests/public/*Page.spec.ts` |
+| Official X URL | Configured in `src/config/public-site.ts`; omitted from footer when unset |
 
 ---
 
@@ -87,7 +104,8 @@ Phase 12: READY (not started)
 | 10 | Complexity and Risk Scoring | DONE | Complexity and execution-risk formulas implemented; 819 unit tests; 16,384 requirement-combination invariants; scoring service provider-neutral; workspace quality section replaced; no migration; seven-table inventory preserved; 188 SQL tests; all integrations including scoring boundary passed; lint 0/0; typecheck/build/smoke passed; commit `aa84a6c` |
 | 11 | Provider Recommendation Engine | DONE | Offering-level evaluation; provider deduplication; evidence-backed fit and coverage; 948 unit tests; 16,384 recommendation invariants; Sora exclusion from catalogue; no migration; seven-table inventory; 188 SQL tests; all integrations including recommendation boundary passed; lint 0/0; typecheck/build/smoke passed; local commit feat(phase-11) |
 | 11-A | Post-Phase 11 Acceptance Closure | DONE | Vitest RPC timeout fixed; provider disclaimer corrected; 969 unit tests; three consecutive `npm test` exit 0; public browser checks passed; manual authenticated/responsive/a11y sign-off pending |
-| 12 | AI Provider Boundary | READY | Requires Phase 11-A closure |
+| 11-B | Global Navigation and Workflow Repair | DONE | Global footer and public pages; auth-aware header; brief persistence/redirect fixes; project card CTAs; sign-out revalidation; footer/public page tests |
+| 12 | AI Provider Boundary | READY | Requires Phase 11-B closure |
 | 13 | Structured Plan Generation | NOT_STARTED | Requires Phase 12 |
 | 14 | Scene Editing and Controlled Regeneration | NOT_STARTED | Requires Phase 13 |
 | 15 | Provider-Specific Prompt Compiler | NOT_STARTED | Requires Phase 14 |

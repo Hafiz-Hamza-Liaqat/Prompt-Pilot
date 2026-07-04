@@ -6,6 +6,7 @@ import {
   saveDestinationStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Label } from '@/components/ui/label';
 import { ASPECT_RATIO_OPTIONS, DESTINATION_OPTIONS } from '@/config/video-brief-wizard';
@@ -18,6 +19,7 @@ type DestinationStepFormProps = {
 
 export function DestinationStepForm({ projectId, draft }: DestinationStepFormProps) {
   const [state, formAction] = useActionState(saveDestinationStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
 
   return (
     <form action={formAction} className="space-y-4 rounded-lg border border-border p-4">

@@ -150,7 +150,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: SourceStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       source_type: input.sourceType,
       source_text: input.sourceText,
       source_url: input.sourceUrl,
@@ -162,7 +162,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: ObjectiveStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       working_title: input.workingTitle,
       objective: input.objective,
       target_audience: input.targetAudience,
@@ -174,7 +174,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: DestinationStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       publishing_destination: input.publishingDestination,
       aspect_ratio: input.aspectRatio,
     });
@@ -185,7 +185,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: CategoryStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       video_category: input.videoCategory,
     });
   }
@@ -195,7 +195,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: DurationStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       duration_seconds: input.durationSeconds,
     });
   }
@@ -205,7 +205,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: StyleStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       visual_style: input.visualStyle,
       tone: input.tone,
     });
@@ -216,7 +216,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: RequirementsStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, mapRequirementsToDb(input.productionRequirements));
+    return this.persistStep(userId, projectId, mapRequirementsToDb(input.productionRequirements));
   }
 
   async savePrioritiesStep(
@@ -224,7 +224,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     projectId: string,
     input: PrioritiesStepInput,
   ): Promise<VideoBriefRepositoryResult<PartialVideoBriefDraft>> {
-    return this.upsertStep(userId, projectId, {
+    return this.persistStep(userId, projectId, {
       budget_priority: input.budgetPriority,
       quality_priority: input.qualityPriority,
       user_constraints: input.userConstraints,
@@ -313,7 +313,7 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
     return { ok: true, data: undefined };
   }
 
-  private async upsertStep(
+  private async persistStep(
     userId: string,
     projectId: string,
     fields: Record<string, string | number | boolean | null>,
@@ -324,17 +324,29 @@ export class SupabaseVideoBriefRepository implements VideoBriefRepository {
       return project;
     }
 
-    const { data, error } = await (this.supabase as SupabaseClient)
+    const { data: existing, error: existingError } = await (this.supabase as SupabaseClient)
       .from('video_briefs')
-      .upsert(
-        {
-          project_id: projectId,
-          ...fields,
-        },
-        { onConflict: 'project_id' },
-      )
-      .select(BRIEF_COLUMNS)
-      .single();
+      .select('id')
+      .eq('project_id', projectId)
+      .maybeSingle();
+
+    if (existingError) {
+      return persistenceError();
+    }
+
+    const query = existing
+      ? (this.supabase as SupabaseClient)
+          .from('video_briefs')
+          .update(fields)
+          .eq('project_id', projectId)
+      : (this.supabase as SupabaseClient)
+          .from('video_briefs')
+          .insert({
+            project_id: projectId,
+            ...fields,
+          });
+
+    const { data, error } = await query.select(BRIEF_COLUMNS).single();
 
     if (error || !data) {
       return persistenceError();

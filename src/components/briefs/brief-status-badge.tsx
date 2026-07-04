@@ -1,8 +1,13 @@
 import { Badge } from '@/components/ui/badge';
-import { deriveBriefStatus, type PartialVideoBriefDraft } from '@/domain/videoBriefDraft';
+import {
+  deriveBriefStatus,
+  type BriefStatus,
+  type PartialVideoBriefDraft,
+} from '@/domain/videoBriefDraft';
 
 type BriefStatusBadgeProps = {
-  draft: PartialVideoBriefDraft | null;
+  draft?: PartialVideoBriefDraft | null;
+  status?: BriefStatus;
 };
 
 const STATUS_LABELS = {
@@ -11,12 +16,12 @@ const STATUS_LABELS = {
   ready: 'Ready',
 } as const;
 
-export function BriefStatusBadge({ draft }: BriefStatusBadgeProps) {
-  const status = deriveBriefStatus(draft);
+export function BriefStatusBadge({ draft = null, status }: BriefStatusBadgeProps) {
+  const resolvedStatus = status ?? deriveBriefStatus(draft);
 
   return (
-    <Badge variant={status === 'ready' ? 'default' : 'secondary'}>
-      {STATUS_LABELS[status]}
+    <Badge variant={resolvedStatus === 'ready' ? 'default' : 'secondary'}>
+      {STATUS_LABELS[resolvedStatus]}
     </Badge>
   );
 }

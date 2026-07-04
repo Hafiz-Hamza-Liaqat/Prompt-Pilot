@@ -13,6 +13,7 @@ import {
   parseProjectDashboardQuery,
   PROJECT_NOTICE_MESSAGES,
 } from '@/domain/project';
+import { deriveBriefStatus, type BriefStatus } from '@/domain/videoBriefDraft';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireUser } from '@/server/auth/require-user';
 import { createProjectService } from '@/server/projects/project-service';
@@ -75,6 +76,34 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   }
 
   const { projects, totalMatching, totalPages, activeCount, archivedCount } = listResult.data;
+
+  const projectIds = projects.map((project) => project.id);
+  const briefStatusByProjectId = new Map<string, BriefStatus>();
+
+  if (projectIds.length > 0) {
+    const { data: briefRows } = await supabase
+      .from('video_briefs')
+      .select('project_id, completed_at')
+      .in('project_id', projectIds);
+
+    for (const projectId of projectIds) {
+      briefStatusByProjectId.set(projectId, 'not_started');
+    }
+
+    for (const row of briefRows ?? []) {
+      briefStatusByProjectId.set(
+        row.project_id,
+        deriveBriefStatus({
+          id: row.project_id,
+          projectId: row.project_id,
+          completedAt: row.completed_at,
+          createdAt: '',
+          updatedAt: '',
+        }),
+      );
+    }
+  }
+
   const totalProjects = activeCount + archivedCount;
   const emptyState = getEmptyState(query, totalProjects);
 
@@ -117,7 +146,11 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         ) : (
           <div className="grid gap-4">
             {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <ProjectCard
+                key={project.id}
+                project={project}
+                briefStatus={briefStatusByProjectId.get(project.id) ?? 'not_started'}
+              />
             ))}
           </div>
         )}

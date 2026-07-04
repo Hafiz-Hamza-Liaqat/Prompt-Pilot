@@ -6,6 +6,7 @@ import {
   savePrioritiesStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,6 +20,7 @@ type PrioritiesStepFormProps = {
 
 export function PrioritiesStepForm({ projectId, draft }: PrioritiesStepFormProps) {
   const [state, formAction] = useActionState(savePrioritiesStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
 
   return (
     <form action={formAction} className="space-y-4 rounded-lg border border-border p-4">

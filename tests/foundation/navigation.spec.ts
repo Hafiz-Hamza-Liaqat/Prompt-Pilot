@@ -42,9 +42,9 @@ describe('publicNavigation', () => {
 
   it('includes required section targets and providers route', () => {
     const hrefs = publicNavigation.map((item) => item.href);
-    expect(hrefs).toContain('#workflow');
-    expect(hrefs).toContain('#capabilities');
-    expect(hrefs).toContain('#scope');
+    expect(hrefs).toContain('/#workflow');
+    expect(hrefs).toContain('/#capabilities');
+    expect(hrefs).toContain('/#scope');
     expect(hrefs).toContain('/providers');
   });
 });

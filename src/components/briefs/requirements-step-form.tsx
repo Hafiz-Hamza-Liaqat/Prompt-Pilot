@@ -6,6 +6,7 @@ import {
   saveRequirementsStepAction,
 } from '@/app/projects/[projectId]/brief/actions';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
+import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';
 import { PRODUCTION_REQUIREMENT_OPTIONS } from '@/config/video-brief-wizard';
 import type { PartialVideoBriefDraft } from '@/domain/videoBriefDraft';
@@ -17,6 +18,7 @@ type RequirementsStepFormProps = {
 
 export function RequirementsStepForm({ projectId, draft }: RequirementsStepFormProps) {
   const [state, formAction] = useActionState(saveRequirementsStepAction, initialBriefFormState);
+  useBriefFormRedirect(state);
   const requirements = draft.productionRequirements;
 
   return (

@@ -1,7 +1,6 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { projectIdSchema } from '@/domain/project';
 import {
@@ -17,7 +16,6 @@ import {
   sourceStepSchema,
   styleStepSchema,
   type WizardInputStep,
-  type WizardStep,
 } from '@/domain/videoBriefDraft';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireUserResult } from '@/server/auth/require-user';
@@ -26,6 +24,7 @@ import { createSupabaseVideoBriefRepository } from '@/server/briefs/supabase-vid
 
 export type BriefFormState = {
   status: BriefActionStatus;
+  redirectTo?: string;
   fieldErrors?: Record<string, string | undefined>;
   values?: Record<string, string | boolean | null | undefined>;
 };
@@ -70,18 +69,20 @@ function revalidateBriefPaths(projectId: string) {
   revalidatePath(`/projects/${projectId}/brief/review`);
 }
 
-function redirectToWizardStep(projectId: string, step: WizardStep): never {
-  redirect(`/projects/${projectId}/brief/${step}`);
-}
-
-function redirectAfterStepSave(projectId: string, currentStep: WizardInputStep): never {
+function redirectAfterStepSave(projectId: string, currentStep: WizardInputStep): BriefFormState {
   const nextStep = getNextStep(currentStep);
 
   if (!nextStep) {
-    redirect(`/projects/${projectId}/brief/review`);
+    return {
+      status: 'success',
+      redirectTo: `/projects/${projectId}/brief/review`,
+    };
   }
 
-  redirectToWizardStep(projectId, nextStep);
+  return {
+    status: 'success',
+    redirectTo: `/projects/${projectId}/brief/${nextStep}`,
+  };
 }
 
 function parseProjectId(formData: FormData): string | null {
@@ -186,7 +187,7 @@ export async function saveSourceStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'source');
+  return redirectAfterStepSave(projectId, 'source');
 }
 
 export async function saveObjectiveStepAction(
@@ -235,7 +236,7 @@ export async function saveObjectiveStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'objective');
+  return redirectAfterStepSave(projectId, 'objective');
 }
 
 export async function saveDestinationStepAction(
@@ -281,7 +282,7 @@ export async function saveDestinationStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'destination');
+  return redirectAfterStepSave(projectId, 'destination');
 }
 
 export async function saveCategoryStepAction(
@@ -324,7 +325,7 @@ export async function saveCategoryStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'category');
+  return redirectAfterStepSave(projectId, 'category');
 }
 
 export async function saveDurationStepAction(
@@ -369,7 +370,7 @@ export async function saveDurationStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'duration');
+  return redirectAfterStepSave(projectId, 'duration');
 }
 
 export async function saveStyleStepAction(
@@ -415,7 +416,7 @@ export async function saveStyleStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'style');
+  return redirectAfterStepSave(projectId, 'style');
 }
 
 export async function saveRequirementsStepAction(
@@ -463,7 +464,7 @@ export async function saveRequirementsStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'requirements');
+  return redirectAfterStepSave(projectId, 'requirements');
 }
 
 export async function savePrioritiesStepAction(
@@ -512,7 +513,7 @@ export async function savePrioritiesStepAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirectAfterStepSave(projectId, 'priorities');
+  return redirectAfterStepSave(projectId, 'priorities');
 }
 
 export async function completeBriefAction(
@@ -538,7 +539,10 @@ export async function completeBriefAction(
   }
 
   revalidateBriefPaths(projectId);
-  redirect(`/projects/${projectId}?notice=brief-ready`);
+  return {
+    status: 'success',
+    redirectTo: `/projects/${projectId}?notice=brief-ready`,
+  };
 }
 
 export const initialBriefFormState: BriefFormState = { status: 'idle' };

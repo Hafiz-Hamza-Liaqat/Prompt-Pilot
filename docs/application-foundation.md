@@ -51,6 +51,10 @@ Central product identity lives in `src/config/site.ts` and is consumed by applic
 | `/auth/sign-up` | Account creation |
 | `/auth/callback` | Auth code exchange |
 | `/auth/error` | Safe authentication error page |
+| `/providers` | Public source-backed provider catalogue |
+| `/about` | About Prompt Pilot — planning scope and non-generative boundary |
+| `/support` | Support / Help — workflow guidance (no fake contact system) |
+| `/news` | News Feed — verified public updates only |
 | `/account` | Protected account foundation with link to projects |
 | `/projects` | Protected project dashboard (create, search, filter, sort, paginate) |
 | `/projects/[projectId]` | Project detail, video brief status, edit, archive/restore, duplicate |
@@ -58,7 +62,18 @@ Central product identity lives in `src/config/site.ts` and is consumed by applic
 | `/projects/[projectId]/brief/[step]` | Wizard step (`source` … `review`) |
 | `/projects/[projectId]/delete` | Soft-delete confirmation |
 
-The root layout includes a site header, skip navigation link, and site footer. Session refresh runs through `src/proxy.ts`. Project routes use a dedicated app header with Projects, Account, and sign-out navigation.
+The root layout includes one auth-aware site header (`SiteHeader` + `AccountMenu`), a skip navigation link, and one global public site footer (`SiteFooter`). Session refresh runs through `src/proxy.ts`. Project routes no longer use a nested app header; account controls (Projects, Account, Sign out) live only in the header account menu, not in the footer.
+
+Footer navigation is defined in `src/config/public-site.ts`:
+
+| Group | Links |
+|---|---|
+| Platform | `/#workflow`, `/#capabilities`, `/#scope`, `/providers` |
+| Company | `/about`, `/news` |
+| Help | `/support` |
+| Social | Official Prompt Pilot X profile (HTTPS, omitted when unset) |
+
+The Support page states when direct contact details are unavailable. The News page publishes only verified updates or an honest empty state.
 
 Framework-level boundaries (not separate URL routes):
 

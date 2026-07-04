@@ -26,9 +26,11 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 11 — Evidence-Backed Provider Recommendation Engine** (current)
+**Phase 11-B — Global navigation and workflow repair** (current)
 
-Local Supabase Auth, project dashboard, guided video brief wizard, and public provider catalogue. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. Scene timing, complexity/execution-risk assessments, and provider recommendations are calculated deterministically from the saved brief and catalogue; prompt, continuity, and audio/editing sections remain static preview fixtures. No planning output is persisted or AI-generated.
+Local Supabase Auth, project dashboard, guided video brief wizard, public provider catalogue, and global navigation shell. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. Scene timing, complexity/execution-risk assessments, and provider recommendations are calculated deterministically from the saved brief and catalogue; prompt, continuity, and audio/editing sections remain static preview fixtures. No planning output is persisted or AI-generated.
+
+Public site configuration lives in `src/config/public-site.ts`, including footer navigation and the official Prompt Pilot X profile URL (`OFFICIAL_X_PROFILE_URL`). When the X URL is unset, the footer omits the social link rather than publishing a placeholder.
 
 ## Local development foundation
 
