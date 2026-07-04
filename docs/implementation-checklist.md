@@ -42,9 +42,9 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 3
-Only permitted work in Phase 2-A: Foundation hygiene and dependency-risk review (complete)
-Next phase after Phase 2-A closure: Phase 3 — UI Design System and Application Shell
+Next ready phase: Phase 4
+Only permitted work: None (Phase 3 complete)
+Next phase after Phase 3 closure: Phase 4 — Supabase Database and Authentication
 ```
 
 ---
@@ -59,8 +59,8 @@ Next phase after Phase 2-A closure: Phase 3 — UI Design System and Application
 | 1-B | Product Identity Migration and Phase Governance | DONE | Prompt Pilot identity migrated; governance rules and checklist added |
 | 2 | Next.js Repository and Application Foundation | DONE | 42 tests passed; lint/typecheck/build passed; HTTP 200 smoke on :3100 |
 | 2-A | Foundation Hygiene and Dependency-Risk Review | DONE | ESLint 0/0; 42 tests; typecheck/build/smoke passed; audit recorded |
-| 3 | UI Design System and Application Shell | READY | Requires Phase 2-A |
-| 4 | Supabase Database and Authentication | NOT_STARTED | Requires Phase 3 |
+| 3 | UI Design System and Application Shell | DONE | Tailwind v4; shadcn/Radix; button/badge/card/separator; 64 tests; lint 0/0; typecheck/build/smoke passed; audit reviewed; commit pending |
+| 4 | Supabase Database and Authentication | READY | Requires Phase 3 |
 | 5 | Dashboard and Project Management | NOT_STARTED | Requires Phase 4 |
 | 6 | Guided Creation Wizard | NOT_STARTED | Requires Phase 5 |
 | 7 | Provider Catalogue | NOT_STARTED | Requires Phase 6 |

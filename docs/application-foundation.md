@@ -4,7 +4,7 @@
 
 Related documents: [Implementation Checklist](implementation-checklist.md) · [Structured Output Contracts](structured-output-contracts.md) · [Phase Roadmap](phase-roadmap.md)
 
-Phase 2 establishes a minimal, production-buildable Next.js App Router foundation around the existing Zod domain contracts.
+Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell around the existing Zod domain contracts.
 
 ---
 
@@ -14,6 +14,8 @@ Phase 2 establishes a minimal, production-buildable Next.js App Router foundatio
 |---|---|
 | Application framework | Next.js App Router |
 | UI library | React |
+| Styling | Tailwind CSS v4 |
+| Components | shadcn/ui (Radix primitives) |
 | Language | TypeScript (strict) |
 | Linting | ESLint with `eslint-config-next` |
 | Domain validation | Zod (Phase 1 contracts in `src/domain/`) |
@@ -27,7 +29,9 @@ Central product identity lives in `src/config/site.ts` and is consumed by applic
 
 | Route | Purpose |
 |---|---|
-| `/` | Minimal truthful foundation landing page |
+| `/` | Public landing page with hero, workflow, capabilities, and scope sections |
+
+The root layout includes a site header, skip navigation link, and site footer. No authenticated application routes exist.
 
 Framework-level boundaries (not separate URL routes):
 
@@ -41,7 +45,7 @@ Framework-level boundaries (not separate URL routes):
 
 ## Product honesty
 
-The Phase 2 foundation explicitly does **not** include:
+The Phase 3 foundation explicitly does **not** include:
 
 - Video generation
 - Image generation
@@ -49,8 +53,9 @@ The Phase 2 foundation explicitly does **not** include:
 - Authentication
 - Database access
 - External API calls
+- Live feature workflows
 
-The landing page and `siteConfig` state that Prompt Pilot produces plans, recommendations, prompts, and instructions only.
+The landing page, marketing configuration, and `siteConfig` state that Prompt Pilot produces plans, recommendations, prompts, and instructions only.
 
 ---
 
@@ -80,7 +85,7 @@ npm run start
 
 ## Dependency health
 
-| Check | Status (Phase 2-A) |
+| Check | Status (Phase 3) |
 |---|---|
 | ESLint baseline | 0 errors, 0 warnings |
 | npm audit | 2 moderate (transitive PostCSS via Next.js); 0 high; 0 critical |
@@ -95,7 +100,6 @@ See [Dependency Risk Register](dependency-risk-register.md) for decision records
 
 | Area | Target phase |
 |---|---|
-| Tailwind CSS and shadcn/ui | Phase 3 |
 | Authentication and Supabase | Phase 4 |
 | Dashboard, wizard, provider catalogue | Phases 5–8 |
 | AI planning and prompt compilation | Phases 12–16 |

@@ -12,7 +12,7 @@ Users often know what they want to communicate but not how to plan, decompose, p
 
 ## Technology direction (provisional)
 
-The planned stack is documented for future phases. Phase 2 initializes Next.js, React, and ESLint. Tailwind, shadcn/ui, Supabase, and other layers remain deferred.
+The planned stack is documented for future phases. Phase 3 integrates Tailwind CSS v4 and shadcn/ui (Radix). Supabase and other layers remain deferred for later phases.
 
 | Layer | Direction |
 |---|---|
@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 2 initializes Next.js, 
 
 ## Development status
 
-**Phase 2 — Next.js Repository and Application Foundation** (current)
+**Phase 3 — UI Design System and Application Shell** (current)
 
-Minimal Next.js App Router foundation with a truthful landing page. Domain Zod contracts remain authoritative. No authentication, database, or AI integrations.
+Public application shell with Tailwind CSS v4, shadcn/ui (Radix), responsive header and footer, skip navigation, and a truthful marketing landing page. Domain Zod contracts remain authoritative. No authentication, database, or AI integrations.
 
 ## Local development foundation
 
@@ -52,4 +52,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Structured Output Contracts](docs/structured-output-contracts.md) | Zod schemas and validation rules for video plans |
 | [Implementation Checklist](docs/implementation-checklist.md) | Authoritative phase execution status |
 | [Application Foundation](docs/application-foundation.md) | Next.js foundation, routes, and commands |
+| [UI Design System](docs/ui-design-system.md) | Tailwind v4, shadcn/ui, tokens, and layout components |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

@@ -10,7 +10,7 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04**
+**2026-07-04** (last reviewed during Phase 3 closure)
 
 ---
 
