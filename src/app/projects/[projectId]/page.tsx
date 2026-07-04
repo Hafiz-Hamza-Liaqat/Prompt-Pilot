@@ -137,7 +137,7 @@ export default async function ProjectDetailPage({
                 <Link href={`/projects/${project.id}/workspace`}>Preview result workspace</Link>
               </Button>
               <p className="text-sm text-muted-foreground">
-                View deterministic scene timing and preview the remaining future result sections.
+                View deterministic scene timing, production complexity, execution risk, and the remaining preview sections.
               </p>
             </div>
           ) : (

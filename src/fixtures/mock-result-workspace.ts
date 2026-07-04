@@ -168,64 +168,6 @@ const fixtureData = {
       isSample: true as const,
     },
   ],
-  qualityItems: [
-    {
-      key: 'brief_completeness',
-      label: 'Brief completeness',
-      evaluationState: 'brief_available' as const,
-      sampleNote: 'The completed brief is available as real context for this workspace preview.',
-      isSample: true as const,
-    },
-    {
-      key: 'requirement_coverage',
-      label: 'Requirement coverage',
-      evaluationState: 'future_evaluation' as const,
-      sampleNote: 'Automated requirement coverage review is deferred.',
-      isSample: true as const,
-    },
-    {
-      key: 'provider_capability_evidence',
-      label: 'Provider capability evidence',
-      evaluationState: 'future_evaluation' as const,
-      sampleNote: 'Catalogue evidence exists, but no brief-specific evaluation is performed.',
-      isSample: true as const,
-    },
-    {
-      key: 'duration_feasibility',
-      label: 'Duration feasibility',
-      evaluationState: 'future_evaluation' as const,
-      sampleNote: 'Structural scene timing is calculated from the saved duration.',
-      isSample: true as const,
-    },
-    {
-      key: 'continuity_coverage',
-      label: 'Continuity coverage',
-      evaluationState: 'future_evaluation' as const,
-      sampleNote: 'Continuity evaluation is not implemented.',
-      isSample: true as const,
-    },
-    {
-      key: 'prompt_completeness',
-      label: 'Prompt completeness',
-      evaluationState: 'future_evaluation' as const,
-      sampleNote: 'Prompt compilation is not active.',
-      isSample: true as const,
-    },
-    {
-      key: 'safety_review',
-      label: 'Safety review',
-      evaluationState: 'not_evaluated' as const,
-      sampleNote: 'Automated safety review is not implemented.',
-      isSample: true as const,
-    },
-    {
-      key: 'human_review',
-      label: 'Human review',
-      evaluationState: 'not_evaluated' as const,
-      sampleNote: 'Human review remains a future workflow step.',
-      isSample: true as const,
-    },
-  ],
 } as const satisfies MockResultWorkspaceStaticFixture;
 
 export const mockResultWorkspaceFixture =

@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 9 — Deterministic Duration and Scene Decomposition** (current)
+**Phase 10 — Deterministic Complexity and Execution-Risk Scoring** (current)
 
-Local Supabase Auth, project dashboard, guided video brief wizard, and public provider catalogue. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. The scene roadmap is calculated deterministically from the saved duration; prompt, continuity, audio/editing, and quality sections remain static preview fixtures. No planning output is persisted or AI-generated.
+Local Supabase Auth, project dashboard, guided video brief wizard, and public provider catalogue. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. Scene timing and complexity/execution-risk assessments are calculated deterministically from the saved brief; prompt, continuity, and audio/editing sections remain static preview fixtures. No planning output is persisted or AI-generated.
 
 ## Local development foundation
 
@@ -59,4 +59,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Provider Catalogue](docs/provider-catalogue.md) | Source-backed read-only AI video provider catalogue |
 | [Mock Result Workspace](docs/mock-result-workspace.md) | Hybrid workspace preview with deterministic scene timing |
 | [Duration Scene Decomposition](docs/duration-scene-decomposition.md) | Deterministic scene-count, role, and timing algorithm |
+| [Complexity and Risk Scoring](docs/complexity-risk-scoring.md) | Deterministic production complexity and execution-risk assessment |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

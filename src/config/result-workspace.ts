@@ -12,7 +12,7 @@ export const WORKSPACE_SECTION_LABELS: Record<WorkspaceSection, string> = {
   prompts: 'Prompt package',
   continuity: 'Continuity',
   'audio-editing': 'Audio and editing',
-  quality: 'Quality review',
+  quality: 'Complexity and risk',
 };
 
 export const WORKSPACE_SECTION_DESCRIPTIONS: Record<WorkspaceSection, string> = {
@@ -29,27 +29,29 @@ export const WORKSPACE_SECTION_DESCRIPTIONS: Record<WorkspaceSection, string> = 
   'audio-editing':
     'Static audio and editing layout preview without generated scripts or audio.',
   quality:
-    'Future quality-review checklist preview. Automated quality evaluation is not implemented.',
+    'Transparent rule-based planning complexity and execution-risk assessment.',
 };
 
 export const WORKSPACE_TRUTHFULNESS_NOTICES = {
   previewTitle: WORKSPACE_PREVIEW_TITLE,
   sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
   hybridNotice:
-    'The scene roadmap is calculated deterministically from the saved duration. Prompt, continuity, audio/editing, and quality sections still use static demonstration data. No AI model or provider has generated or recommended this plan.',
+    'Scene timing, complexity, and execution risk are calculated with transparent deterministic rules. Prompt, continuity, and audio/editing sections still use static demonstration data. No AI model or provider has generated or recommended this plan.',
   providerPanelLabel: 'Catalogue reference — not recommendations',
   providerUnevaluatedNotice:
     'These catalogue entries have not been evaluated against this brief.',
   sceneRoadmapNotice:
     'Timing is calculated from the saved duration using fixed structural rules. Creative scene content is added in later phases.',
+  complexityRiskNotice:
+    'These values are planning heuristics derived from the saved brief and scene structure. They are not success probabilities, provider recommendations, or quality scores.',
   promptInactiveNotice: 'Provider-specific prompt compilation is not active.',
-  qualityInactiveNotice: 'Automated quality evaluation is not implemented.',
   overviewPreviewStatus: 'Preview only',
   overviewNoPlan: 'No final production plan has been generated',
   overviewNoRecommendation: 'No provider has been recommended',
 } as const;
 
 export const WORKSPACE_SCENE_ROADMAP_NOTICE = WORKSPACE_TRUTHFULNESS_NOTICES.sceneRoadmapNotice;
+export const WORKSPACE_COMPLEXITY_RISK_NOTICE = WORKSPACE_TRUTHFULNESS_NOTICES.complexityRiskNotice;
 
 export const WORKSPACE_SAMPLE_BADGE_LABEL = 'Sample';
 export const WORKSPACE_INTERFACE_PREVIEW_LABEL = 'Interface preview';

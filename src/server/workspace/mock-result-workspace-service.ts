@@ -22,6 +22,10 @@ import {
   createSceneDecompositionService,
   type SceneDecompositionService,
 } from '@/server/scenes/scene-decomposition-service';
+import {
+  createComplexityRiskService,
+  type ComplexityRiskService,
+} from '@/server/scoring/complexity-risk-service';
 
 export type MockWorkspaceServiceErrorCode =
   | 'not_authenticated'
@@ -40,6 +44,7 @@ export type MockWorkspaceDependencies = {
   providerCatalogueRepository: ProviderCatalogueRepository;
   fixture: MockResultWorkspaceStaticFixture;
   sceneDecompositionService?: SceneDecompositionService;
+  complexityRiskService?: ComplexityRiskService;
 };
 
 function mapProjectError<T>(result: RepositoryResult<T>): MockWorkspaceServiceResult<T> {
@@ -194,6 +199,7 @@ function applyRequirementAwareAudio(
 export class MockResultWorkspaceService {
   private readonly catalogueService: ProviderCatalogueService;
   private readonly sceneDecompositionService: SceneDecompositionService;
+  private readonly complexityRiskService: ComplexityRiskService;
 
   constructor(private readonly dependencies: MockWorkspaceDependencies) {
     this.catalogueService = new ProviderCatalogueService(
@@ -201,6 +207,8 @@ export class MockResultWorkspaceService {
     );
     this.sceneDecompositionService =
       dependencies.sceneDecompositionService ?? createSceneDecompositionService();
+    this.complexityRiskService =
+      dependencies.complexityRiskService ?? createComplexityRiskService();
   }
 
   async loadWorkspace(
@@ -276,6 +284,23 @@ export class MockResultWorkspaceService {
       return { ok: false, code: 'invalid_fixture' };
     }
 
+    const assessmentResult = this.complexityRiskService.assessCompletedBriefComplexityRisk(
+      briefResult.data,
+      decompositionResult.data,
+    );
+
+    if (!assessmentResult.ok) {
+      if (
+        assessmentResult.code === 'brief_required' ||
+        assessmentResult.code === 'duration_mismatch' ||
+        assessmentResult.code === 'invalid_input'
+      ) {
+        return { ok: false, code: 'invalid_fixture' };
+      }
+
+      return { ok: false, code: 'invalid_fixture' };
+    }
+
     try {
       const viewModel = MockResultWorkspaceViewModelSchema.parse({
         mode: 'hybrid_preview',
@@ -299,10 +324,10 @@ export class MockResultWorkspaceService {
           referenceState: 'catalogue_reference' as const,
         })),
         sceneDecomposition: decompositionResult.data,
+        complexityRiskAssessment: assessmentResult.data,
         samplePromptSections: fixture.samplePromptSections,
         continuityItems: applyRequirementAwareContinuity(fixture, briefResult.data),
         audioEditingItems: applyRequirementAwareAudio(fixture, briefResult.data),
-        qualityItems: fixture.qualityItems,
       });
 
       return { ok: true, data: viewModel };

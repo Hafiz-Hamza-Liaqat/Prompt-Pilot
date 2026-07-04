@@ -42,8 +42,8 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 10
-Next phase after Phase 9-A closure: Phase 10 — Complexity and Risk Scoring
+Next ready phase: Phase 11
+Next phase after Phase 9-A closure: Phase 11 — Provider Recommendation Engine
 ```
 
 ---
@@ -67,8 +67,8 @@ Next phase after Phase 9-A closure: Phase 10 — Complexity and Risk Scoring
 | 8 | Mock Result Workspace | DONE | Mock workspace schema; static fixture; completed-brief gate; workspace integration passed; commit `7f78df1` |
 | 9 | Duration and Scene Decomposition | DONE | Deterministic scene algorithm; hybrid workspace; 677 unit tests; 172 SQL tests; scene integration passed; no migration; commit `a8c0365` |
 | 9-A | Database Inventory and Derived-Output Boundary Audit | DONE | Migration/live/generated counts agree at 7; static + SQL inventory guards; scene non-persistence verified; docs corrected; 689 unit tests; 188 SQL tests; commit `22618ed` |
-| 10 | Complexity and Risk Scoring | READY | Requires Phase 9-A |
-| 11 | Provider Recommendation Engine | NOT_STARTED | Requires Phase 10 |
+| 10 | Complexity and Risk Scoring | DONE | Complexity and execution-risk formulas implemented; 819 unit tests; 16,384 requirement-combination invariants; scoring service provider-neutral; workspace quality section replaced; no migration; seven-table inventory preserved; 188 SQL tests; all integrations including scoring boundary passed; lint 0/0; typecheck/build/smoke passed; commit pending |
+| 11 | Provider Recommendation Engine | READY | Requires Phase 10 |
 | 12 | AI Provider Boundary | NOT_STARTED | Requires Phase 11 |
 | 13 | Structured Plan Generation | NOT_STARTED | Requires Phase 12 |
 | 14 | Scene Editing and Controlled Regeneration | NOT_STARTED | Requires Phase 13 |

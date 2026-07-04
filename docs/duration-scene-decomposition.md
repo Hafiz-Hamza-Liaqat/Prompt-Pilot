@@ -90,7 +90,8 @@ The workspace notice distinguishes deterministic scene timing from remaining sta
 | Project and brief | persisted input |
 | Provider catalogue | source-backed snapshot |
 | Scene roadmap | deterministic rule engine |
-| Prompt, continuity, audio/editing, quality | static preview fixtures |
+| Complexity and risk | deterministic rule engine |
+| Prompt, continuity, audio/editing | static preview fixtures |
 
 Top-level workspace mode:
 
@@ -102,13 +103,12 @@ isDecisionReady: false
 
 ## Deferred work
 
-- Complexity and risk scoring (Phase 10)
-- Provider recommendations
+- Provider recommendations (Phase 11)
 - Creative scene descriptions
 - Prompt compilation
 - Continuity generation
 - Audio/editing guidance
-- Quality scoring
+- Quality evaluation (Phase 25)
 - Plan persistence
 - Export
 

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { calculateComplexityRiskAssessment } from '../../src/domain/complexityRiskAssessment.js';
 import { decomposeDurationIntoScenes } from '../../src/domain/sceneDecomposition.js';
 import {
   DATA_ORIGINS,
@@ -82,6 +83,17 @@ function validProviderReference(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function buildAssessment(durationSeconds = 30) {
+  const decomposition = decomposeDurationIntoScenes(durationSeconds);
+  return calculateComplexityRiskAssessment({
+    durationSeconds,
+    sceneCount: decomposition.sceneCount,
+    sourceType: 'idea',
+    userConstraints: null,
+    productionRequirements: createDefaultProductionRequirements(),
+  });
+}
+
 function validViewModel(overrides: Record<string, unknown> = {}) {
   return {
     mode: 'hybrid_preview' as const,
@@ -102,10 +114,10 @@ function validViewModel(overrides: Record<string, unknown> = {}) {
       validProviderReference({ id: 'runway', displayName: 'Runway' }),
     ],
     sceneDecomposition: decomposeDurationIntoScenes(30),
+    complexityRiskAssessment: buildAssessment(30),
     samplePromptSections: mockResultWorkspaceFixture.samplePromptSections,
     continuityItems: mockResultWorkspaceFixture.continuityItems,
     audioEditingItems: mockResultWorkspaceFixture.audioEditingItems,
-    qualityItems: mockResultWorkspaceFixture.qualityItems,
     ...overrides,
   };
 }
@@ -145,7 +157,7 @@ describe('data origin', () => {
       prompts: 'static_fixture',
       continuity: 'static_fixture',
       'audio-editing': 'static_fixture',
-      quality: 'static_fixture',
+      quality: 'deterministic_rule_engine',
     });
   });
 });
@@ -195,6 +207,21 @@ describe('scene decomposition contract', () => {
     const withoutScenes = { ...validViewModel() };
     delete (withoutScenes as { sceneDecomposition?: unknown }).sceneDecomposition;
     expect(() => MockResultWorkspaceViewModelSchema.parse(withoutScenes)).toThrow();
+  });
+});
+
+describe('complexity risk assessment contract', () => {
+  it('requires complexityRiskAssessment instead of static quality items', () => {
+    const parsed = MockResultWorkspaceViewModelSchema.parse(validViewModel());
+    expect(parsed.complexityRiskAssessment.algorithmVersion).toBe('complexity-risk-v1');
+    expect(parsed.complexityRiskAssessment.isAiGenerated).toBe(false);
+    expect(parsed).not.toHaveProperty('qualityItems');
+  });
+
+  it('rejects view models missing complexityRiskAssessment', () => {
+    const withoutAssessment = { ...validViewModel() };
+    delete (withoutAssessment as { complexityRiskAssessment?: unknown }).complexityRiskAssessment;
+    expect(() => MockResultWorkspaceViewModelSchema.parse(withoutAssessment)).toThrow();
   });
 });
 
@@ -261,7 +288,6 @@ describe('evaluation states', () => {
     const allItems = [
       ...mockResultWorkspaceFixture.continuityItems,
       ...mockResultWorkspaceFixture.audioEditingItems,
-      ...mockResultWorkspaceFixture.qualityItems,
     ];
 
     for (const item of allItems) {
@@ -315,11 +341,11 @@ describe('static fixture schema', () => {
   });
 
   it('uses the approved fixture version', () => {
-    expect(mockResultWorkspaceFixture.fixtureVersion).toBe('workspace-v2');
+    expect(mockResultWorkspaceFixture.fixtureVersion).toBe('workspace-v3');
   });
 
-  it('does not include sample scenes in the active fixture', () => {
-    expect(mockResultWorkspaceFixture).not.toHaveProperty('sampleScenes');
+  it('does not include static quality items in the active fixture', () => {
+    expect(mockResultWorkspaceFixture).not.toHaveProperty('qualityItems');
   });
 });
 

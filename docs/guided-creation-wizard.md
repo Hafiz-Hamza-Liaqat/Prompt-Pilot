@@ -170,7 +170,7 @@ Phase 6 explicitly does not implement:
 | Area | Target phase |
 |---|---|
 | Provider catalogue | Phase 7 |
-| Provider scoring and recommendations | Phases 10–11 |
+| Provider scoring and recommendations | Phase 11 (complexity/risk scoring in Phase 10 is provider-neutral) |
 | Scene planning and decomposition | Phase 9 (structural timing from saved duration only) |
 | Prompt compilation | Phase 15 |
 | AI generation and planning | Phases 12–13 |

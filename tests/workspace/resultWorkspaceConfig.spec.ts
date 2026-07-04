@@ -90,10 +90,12 @@ describe('result workspace configuration', () => {
     );
   });
 
-  it('states quality evaluation is inactive', () => {
-    expect(WORKSPACE_SECTION_DESCRIPTIONS.quality.toLowerCase()).toContain('not implemented');
-    expect(WORKSPACE_TRUTHFULNESS_NOTICES.qualityInactiveNotice.toLowerCase()).toContain(
-      'not implemented',
+  it('labels complexity and risk section deterministically', () => {
+    expect(WORKSPACE_SECTION_LABELS.quality).toBe('Complexity and risk');
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.quality.toLowerCase()).toContain('complexity');
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.quality.toLowerCase()).toContain('execution-risk');
+    expect(WORKSPACE_TRUTHFULNESS_NOTICES.complexityRiskNotice.toLowerCase()).toContain(
+      'not success probabilities',
     );
   });
 

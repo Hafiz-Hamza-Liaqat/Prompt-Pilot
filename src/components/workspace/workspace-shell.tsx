@@ -8,7 +8,7 @@ import { WorkspaceOverview } from './workspace-overview';
 import { WorkspacePreviewNotice } from './workspace-preview-notice';
 import { WorkspacePromptPreview } from './workspace-prompt-preview';
 import { WorkspaceProviderReference } from './workspace-provider-reference';
-import { WorkspaceQualityPreview } from './workspace-quality-preview';
+import { WorkspaceComplexityRisk } from './workspace-complexity-risk';
 import { WorkspaceSceneRoadmap } from './workspace-scene-roadmap';
 import { WorkspaceSectionHeading } from './workspace-section-heading';
 import { WorkspaceSectionNav } from './workspace-section-nav';
@@ -30,7 +30,7 @@ function renderActiveSection(workspace: MockResultWorkspaceViewModel) {
     case 'audio-editing':
       return <WorkspaceAudioEditingPreview items={workspace.audioEditingItems} />;
     case 'quality':
-      return <WorkspaceQualityPreview items={workspace.qualityItems} />;
+      return <WorkspaceComplexityRisk assessment={workspace.complexityRiskAssessment} />;
     case 'overview':
     default:
       return <WorkspaceOverview project={workspace.project} brief={workspace.brief} />;

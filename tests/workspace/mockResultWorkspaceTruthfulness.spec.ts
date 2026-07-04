@@ -6,7 +6,9 @@ import {
   WORKSPACE_SAMPLE_DISCLAIMER,
   WORKSPACE_SECTION_ORIGINS,
 } from '../../src/domain/mockResultWorkspace.js';
+import { calculateComplexityRiskAssessment } from '../../src/domain/complexityRiskAssessment.js';
 import { decomposeDurationIntoScenes } from '../../src/domain/sceneDecomposition.js';
+import { createDefaultProductionRequirements } from '../../src/domain/productionRequirements.js';
 import { mockResultWorkspaceFixture } from '../../src/fixtures/mock-result-workspace.js';
 import {
   containsRetiredProductName,
@@ -21,7 +23,7 @@ function buildTruthfulViewModel() {
     mode: 'hybrid_preview',
     dataOrigin: 'mixed',
     isDecisionReady: false,
-    fixtureVersion: 'workspace-v2',
+    fixtureVersion: 'workspace-v3',
     sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
     previewTitle: WORKSPACE_PREVIEW_TITLE,
     sectionOrigins: WORKSPACE_SECTION_ORIGINS,
@@ -106,10 +108,16 @@ function buildTruthfulViewModel() {
       },
     ],
     sceneDecomposition: decomposeDurationIntoScenes(30),
+    complexityRiskAssessment: calculateComplexityRiskAssessment({
+      durationSeconds: 30,
+      sceneCount: 3,
+      sourceType: 'idea',
+      userConstraints: null,
+      productionRequirements: createDefaultProductionRequirements(),
+    }),
     samplePromptSections: mockResultWorkspaceFixture.samplePromptSections,
     continuityItems: mockResultWorkspaceFixture.continuityItems,
     audioEditingItems: mockResultWorkspaceFixture.audioEditingItems,
-    qualityItems: mockResultWorkspaceFixture.qualityItems,
   });
 }
 
@@ -132,10 +140,13 @@ describe('workspace disclaimer wording', () => {
     expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toContain('recommended');
   });
 
-  it('does not claim scene roadmap is AI-generated', () => {
+  it('does not claim assessments are AI-generated', () => {
     const model = buildTruthfulViewModel();
-    expect(model.sceneDecomposition.isAiGenerated).toBe(false);
-    expect(JSON.stringify(model.sceneDecomposition).toLowerCase()).not.toContain('generated scene');
+    expect(model.complexityRiskAssessment.isAiGenerated).toBe(false);
+    expect(model.complexityRiskAssessment.complexity.score).toBeGreaterThanOrEqual(0);
+    expect(JSON.stringify(model.complexityRiskAssessment).toLowerCase()).not.toContain(
+      'success probability',
+    );
   });
 });
 
@@ -171,11 +182,11 @@ describe('media generation claims', () => {
     expect(audioSection?.sampleContent.toLowerCase()).toContain('no dialogue or voiceover is generated');
   });
 
-  it('quality items defer automated evaluation', () => {
-    const safety = mockResultWorkspaceFixture.qualityItems.find(
-      (item) => item.key === 'safety_review',
+  it('prompt sections defer executable generation', () => {
+    const promptSection = mockResultWorkspaceFixture.samplePromptSections.find(
+      (section) => section.key === 'scene_objective',
     );
-    expect(safety?.sampleNote.toLowerCase()).toContain('not implemented');
+    expect(promptSection?.sampleContent.toLowerCase()).toContain('preview');
   });
 });
 

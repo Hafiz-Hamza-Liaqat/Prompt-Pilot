@@ -755,7 +755,7 @@ describe('MockResultWorkspaceService', () => {
     }
   });
 
-  it('keeps continuity, audio, and quality sections marked as sample', async () => {
+  it('keeps continuity and audio sections marked as sample', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
@@ -763,7 +763,36 @@ describe('MockResultWorkspaceService', () => {
     if (result.ok) {
       expect(result.data.continuityItems.every((item) => item.isSample)).toBe(true);
       expect(result.data.audioEditingItems.every((item) => item.isSample)).toBe(true);
-      expect(result.data.qualityItems.every((item) => item.isSample)).toBe(true);
+      expect(result.data).not.toHaveProperty('qualityItems');
+    }
+  });
+
+  it('includes deterministic complexity and execution-risk assessment', async () => {
+    const { service } = createService();
+    const result = await service.loadWorkspace(ownerA, projectId);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.complexityRiskAssessment.algorithmVersion).toBe('complexity-risk-v1');
+      expect(result.data.complexityRiskAssessment.isPersisted).toBe(false);
+      expect(result.data.complexityRiskAssessment.complexity.score).toBeGreaterThanOrEqual(0);
+      expect(result.data.complexityRiskAssessment.executionRisk.score).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it('does not change assessment when provider catalogue lifecycle changes', async () => {
+    const baseline = createService();
+    const sunsetting = createService({ sunsettingSora: true });
+
+    const baselineResult = await baseline.service.loadWorkspace(ownerA, projectId);
+    const sunsettingResult = await sunsetting.service.loadWorkspace(ownerA, projectId);
+
+    expect(baselineResult.ok).toBe(true);
+    expect(sunsettingResult.ok).toBe(true);
+    if (baselineResult.ok && sunsettingResult.ok) {
+      expect(baselineResult.data.complexityRiskAssessment).toEqual(
+        sunsettingResult.data.complexityRiskAssessment,
+      );
     }
   });
 
@@ -776,6 +805,7 @@ describe('MockResultWorkspaceService', () => {
       expect(result.data.sectionOrigins.scenes).toBe('deterministic_rule_engine');
       expect(result.data.sectionOrigins.prompts).toBe('static_fixture');
       expect(result.data.sectionOrigins.providers).toBe('catalogue_snapshot');
+      expect(result.data.sectionOrigins.quality).toBe('deterministic_rule_engine');
       expect(result.data.sectionOrigins.overview).toBe('persisted_input');
     }
   });

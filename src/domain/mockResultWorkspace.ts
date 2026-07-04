@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ComplexityRiskAssessmentSchema } from './complexityRiskAssessment';
 import { IsoDateTimeSchema } from './common';
 import { SceneDecompositionSchema } from './sceneDecomposition';
 import { projectIdSchema } from './project';
@@ -49,7 +50,7 @@ export const MOCK_PROMPT_SECTION_KEYS = [
   'negative_constraints',
 ] as const;
 
-export const WORKSPACE_FIXTURE_VERSION = 'workspace-v2' as const;
+export const WORKSPACE_FIXTURE_VERSION = 'workspace-v3' as const;
 
 export const WORKSPACE_SECTION_ORIGINS: Record<
   (typeof WORKSPACE_SECTIONS)[number],
@@ -61,11 +62,11 @@ export const WORKSPACE_SECTION_ORIGINS: Record<
   prompts: 'static_fixture',
   continuity: 'static_fixture',
   'audio-editing': 'static_fixture',
-  quality: 'static_fixture',
+  quality: 'deterministic_rule_engine',
 };
 
 export const WORKSPACE_SAMPLE_DISCLAIMER =
-  'Prompt, continuity, audio/editing, and quality sections still use static demonstration data. No AI model or provider has generated or recommended this plan.';
+  'Prompt, continuity, and audio/editing sections still use static demonstration data. No AI model or provider has generated or recommended this plan.';
 
 export const WORKSPACE_PREVIEW_TITLE = 'Planning workspace preview';
 
@@ -88,7 +89,7 @@ export const WorkspaceSectionOriginsSchema = z.object({
   prompts: z.literal('static_fixture'),
   continuity: z.literal('static_fixture'),
   'audio-editing': z.literal('static_fixture'),
-  quality: z.literal('static_fixture'),
+  quality: z.literal('deterministic_rule_engine'),
 });
 
 export const MockPromptSectionSchema = SampleRecordSchema.extend({
@@ -105,13 +106,6 @@ export const MockContinuityItemSchema = SampleRecordSchema.extend({
 });
 
 export const MockAudioEditingItemSchema = SampleRecordSchema.extend({
-  key: z.string().trim().min(1),
-  label: z.string().trim().min(1),
-  evaluationState: EvaluationStateSchema,
-  sampleNote: z.string().trim().min(1),
-});
-
-export const MockQualityItemSchema = SampleRecordSchema.extend({
   key: z.string().trim().min(1),
   label: z.string().trim().min(1),
   evaluationState: EvaluationStateSchema,
@@ -164,7 +158,6 @@ export const MockResultWorkspaceStaticFixtureSchema = z.object({
   samplePromptSections: z.array(MockPromptSectionSchema).min(8),
   continuityItems: z.array(MockContinuityItemSchema).min(1),
   audioEditingItems: z.array(MockAudioEditingItemSchema).min(1),
-  qualityItems: z.array(MockQualityItemSchema).min(1),
 });
 
 export const MockResultWorkspaceViewModelSchema = z
@@ -181,10 +174,10 @@ export const MockResultWorkspaceViewModelSchema = z
     brief: WorkspaceBriefSummarySchema,
     providers: z.array(WorkspaceProviderReferenceSchema).length(5),
     sceneDecomposition: SceneDecompositionSchema,
+    complexityRiskAssessment: ComplexityRiskAssessmentSchema,
     samplePromptSections: z.array(MockPromptSectionSchema).min(8),
     continuityItems: z.array(MockContinuityItemSchema).min(1),
     audioEditingItems: z.array(MockAudioEditingItemSchema).min(1),
-    qualityItems: z.array(MockQualityItemSchema).min(1),
   })
   .strict();
 
@@ -197,7 +190,6 @@ export type EvaluationState = z.infer<typeof EvaluationStateSchema>;
 export type MockPromptSection = z.infer<typeof MockPromptSectionSchema>;
 export type MockContinuityItem = z.infer<typeof MockContinuityItemSchema>;
 export type MockAudioEditingItem = z.infer<typeof MockAudioEditingItemSchema>;
-export type MockQualityItem = z.infer<typeof MockQualityItemSchema>;
 export type WorkspaceProjectSummary = z.infer<typeof WorkspaceProjectSummarySchema>;
 export type WorkspaceBriefSummary = z.infer<typeof WorkspaceBriefSummarySchema>;
 export type WorkspaceProviderReference = z.infer<typeof WorkspaceProviderReferenceSchema>;
