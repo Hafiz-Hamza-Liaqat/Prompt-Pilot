@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 7 — Provider Catalogue** (current)
+**Phase 8 — Mock Result Workspace** (current)
 
-Local Supabase Auth with email/password signup, signin, signout, `public.profiles`, `public.projects`, and `public.video_briefs` RLS. Authenticated users manage projects and complete a persistent nine-step video brief wizard. A public read-only provider catalogue (`/providers`) snapshots five approved AI video providers with source-backed capability facts. Domain Zod contracts remain authoritative. No provider recommendations, AI planning, or cloud deployment yet.
+Local Supabase Auth, project dashboard, guided video brief wizard, and public provider catalogue. Authenticated users with a completed brief can preview the future result workspace at `/projects/[projectId]/workspace` using static sample layouts combined with real project, brief, and catalogue context. No planning output is persisted or generated.
 
 ## Local development foundation
 
@@ -57,4 +57,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Project Management Foundation](docs/project-management-foundation.md) | Project dashboard, CRUD, archive, duplicate, soft delete |
 | [Guided Creation Wizard](docs/guided-creation-wizard.md) | Nine-step video brief wizard, persistence, and completion |
 | [Provider Catalogue](docs/provider-catalogue.md) | Source-backed read-only AI video provider catalogue |
+| [Mock Result Workspace](docs/mock-result-workspace.md) | Truthful workspace preview with static sample layouts |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

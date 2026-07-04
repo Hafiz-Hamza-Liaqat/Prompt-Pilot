@@ -25,7 +25,8 @@
     "verify:auth:local": "node --env-file=.env.local scripts/verify-local-auth.mjs",
     "verify:projects:local": "node --env-file=.env.local scripts/verify-local-projects.mjs",
     "verify:briefs:local": "node --env-file=.env.local scripts/verify-local-video-briefs.mjs",
-    "verify:providers:local": "node --env-file=.env.local scripts/verify-local-provider-catalogue.mjs"
+    "verify:providers:local": "node --env-file=.env.local scripts/verify-local-provider-catalogue.mjs",
+    "verify:workspace:local": "node --env-file=.env.local scripts/verify-local-mock-workspace.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

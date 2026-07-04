@@ -497,6 +497,7 @@ export const BRIEF_NOTICES = {
   briefReady: 'brief-ready',
   briefReopened: 'brief-reopened',
   projectArchived: 'project-archived',
+  briefRequired: 'brief-required',
 } as const;
 export type BriefNotice = (typeof BRIEF_NOTICES)[keyof typeof BRIEF_NOTICES];
 
@@ -505,6 +506,7 @@ export const BRIEF_NOTICE_MESSAGES: Record<BriefNotice, string> = {
     'Video brief marked ready. Provider recommendations and production planning are added in later phases.',
   'brief-reopened': 'Video brief reopened for editing.',
   'project-archived': 'Restore this project before editing the video brief.',
+  'brief-required': 'Complete the brief before opening the workspace preview.',
 };
 
 export function deriveBriefStatus(draft: PartialVideoBriefDraft | null | undefined): BriefStatus {

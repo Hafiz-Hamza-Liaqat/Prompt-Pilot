@@ -4,7 +4,7 @@
 
 Related documents: [Database and Auth Foundation](database-auth-foundation.md) · [Application Foundation](application-foundation.md) · [Implementation Checklist](implementation-checklist.md)
 
-Phase 5 establishes secure, persistent project management for authenticated users on the local Supabase stack. Phase 6 adds video-brief status and wizard entry on the project detail page.
+Phase 5 establishes secure, persistent project management for authenticated users on the local Supabase stack. Phase 6 adds video-brief status and wizard entry on the project detail page. Phase 8 adds a completed-brief gate and link to the mock result workspace preview.
 
 ---
 

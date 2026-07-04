@@ -10,7 +10,15 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04** (last reviewed during Phase 7 closure)
+**2026-07-04** (last reviewed during Phase 8 closure)
+
+---
+
+## Phase 8 packages reviewed
+
+Phase 8 did not introduce new npm dependencies. Existing Supabase and Next.js packages were re-verified for the mock workspace read path.
+
+No new high or critical vulnerabilities were introduced at Phase 8 review time.
 
 ---
 

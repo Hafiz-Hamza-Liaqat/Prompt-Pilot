@@ -130,6 +130,21 @@ export default async function ProjectDetailPage({
               Restore this project before editing the video brief.
             </p>
           )}
+
+          {briefStatus === 'ready' ? (
+            <div className="space-y-2 border-t border-border pt-4">
+              <Button asChild variant="outline">
+                <Link href={`/projects/${project.id}/workspace`}>Preview result workspace</Link>
+              </Button>
+              <p className="text-sm text-muted-foreground">
+                Preview the future result layout using static sample data.
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Complete the brief before opening the workspace preview.
+            </p>
+          )}
         </div>
 
         <ProjectEditForm

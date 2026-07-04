@@ -4,7 +4,7 @@
 
 Related documents: [Implementation Checklist](implementation-checklist.md) · [Structured Output Contracts](structured-output-contracts.md) · [Phase Roadmap](phase-roadmap.md)
 
-Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication. Phase 5 adds secure project dashboard and management. Phase 6 adds the guided video-brief creation wizard. Phase 7 adds the public read-only provider catalogue at `/providers`.
+Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication. Phase 5 adds secure project dashboard and management. Phase 6 adds the guided video-brief creation wizard. Phase 7 adds the public read-only provider catalogue at `/providers`. Phase 8 adds the authenticated mock result workspace at `/projects/[projectId]/workspace`.
 
 ---
 
