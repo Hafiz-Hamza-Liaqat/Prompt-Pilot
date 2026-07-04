@@ -42,8 +42,8 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 7
-Next phase after Phase 6-A closure: Phase 7 — Provider Catalogue
+Next ready phase: Phase 8
+Next phase after Phase 7 closure: Phase 8 — Mock Result Workspace
 ```
 
 ---
@@ -62,9 +62,9 @@ Next phase after Phase 6-A closure: Phase 7 — Provider Catalogue
 | 4 | Supabase Database and Authentication | DONE | Local Supabase; profiles migration; RLS 19/19; 83 unit tests; auth integration passed; commit `2ce05a8` |
 | 5 | Dashboard and Project Management | DONE | Projects migration `20260704193000`; RLS 35/35 SQL; 122 unit tests; project integration passed; commit `891eb8a` |
 | 6 | Guided Creation Wizard | DONE | Brief migration `20260704200000`; RLS 52/52 SQL; 213 unit tests; brief integration passed; commit `32d1f40` |
-| 6-A | Production Requirement Parity and Completion-RPC Safety | DONE | Shared `productionRequirements.ts`; 14 keys verified; parity SQL + RPC regressions; 233 unit tests; integrations passed; local commit pending |
-| 7 | Provider Catalogue | READY | Requires Phase 6-A |
-| 8 | Mock Result Workspace | NOT_STARTED | Requires Phase 7 |
+| 6-A | Production Requirement Parity and Completion-RPC Safety | DONE | Shared `productionRequirements.ts`; 14 keys verified; parity SQL + RPC regressions; commit `f4a0257` |
+| 7 | Provider Catalogue | DONE | Official-source research; 5 providers seeded; catalogue RLS; 172 SQL tests; 297 unit tests; provider integration passed; commit pending |
+| 8 | Mock Result Workspace | READY | Requires Phase 7 |
 | 9 | Duration and Scene Decomposition | NOT_STARTED | Requires Phase 8 |
 | 10 | Complexity and Risk Scoring | NOT_STARTED | Requires Phase 9 |
 | 11 | Provider Recommendation Engine | NOT_STARTED | Requires Phase 10 |

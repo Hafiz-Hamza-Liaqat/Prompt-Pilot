@@ -9,6 +9,236 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_video_capability_facts: {
+        Row: {
+          capability_key: string
+          created_at: string
+          evidence_summary: string
+          id: string
+          limitation_summary: string | null
+          numeric_value: number | null
+          offering_id: string
+          review_due_at: string
+          source_id: string
+          structured_value: Json | null
+          support_level: string
+          text_value: string | null
+          updated_at: string
+          verified_at: string
+        }
+        Insert: {
+          capability_key: string
+          created_at?: string
+          evidence_summary: string
+          id?: string
+          limitation_summary?: string | null
+          numeric_value?: number | null
+          offering_id: string
+          review_due_at: string
+          source_id: string
+          structured_value?: Json | null
+          support_level: string
+          text_value?: string | null
+          updated_at?: string
+          verified_at: string
+        }
+        Update: {
+          capability_key?: string
+          created_at?: string
+          evidence_summary?: string
+          id?: string
+          limitation_summary?: string | null
+          numeric_value?: number | null
+          offering_id?: string
+          review_due_at?: string
+          source_id?: string
+          structured_value?: Json | null
+          support_level?: string
+          text_value?: string | null
+          updated_at?: string
+          verified_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_video_capability_facts_offering_id_fkey"
+            columns: ["offering_id"]
+            isOneToOne: false
+            referencedRelation: "ai_video_offerings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_video_capability_facts_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "ai_video_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_video_offerings: {
+        Row: {
+          api_access_status: string
+          created_at: string
+          display_name: string
+          id: string
+          lifecycle_status: string
+          offering_key: string
+          offering_type: string
+          official_identifier: string | null
+          ownership_type: string
+          provider_id: string
+          recommendation_eligible: boolean
+          review_due_at: string
+          summary: string
+          sunset_at: string | null
+          updated_at: string
+          verified_at: string
+        }
+        Insert: {
+          api_access_status: string
+          created_at?: string
+          display_name: string
+          id?: string
+          lifecycle_status: string
+          offering_key: string
+          offering_type: string
+          official_identifier?: string | null
+          ownership_type: string
+          provider_id: string
+          recommendation_eligible?: boolean
+          review_due_at: string
+          summary: string
+          sunset_at?: string | null
+          updated_at?: string
+          verified_at: string
+        }
+        Update: {
+          api_access_status?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          lifecycle_status?: string
+          offering_key?: string
+          offering_type?: string
+          official_identifier?: string | null
+          ownership_type?: string
+          provider_id?: string
+          recommendation_eligible?: boolean
+          review_due_at?: string
+          summary?: string
+          sunset_at?: string | null
+          updated_at?: string
+          verified_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_video_offerings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "ai_video_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_video_providers: {
+        Row: {
+          api_access_status: string
+          catalogue_notice: string | null
+          created_at: string
+          display_name: string
+          id: string
+          lifecycle_status: string
+          recommendation_eligible: boolean
+          review_due_at: string
+          summary: string
+          sunset_at: string | null
+          updated_at: string
+          vendor_name: string
+          verified_at: string
+        }
+        Insert: {
+          api_access_status: string
+          catalogue_notice?: string | null
+          created_at?: string
+          display_name: string
+          id: string
+          lifecycle_status: string
+          recommendation_eligible?: boolean
+          review_due_at: string
+          summary: string
+          sunset_at?: string | null
+          updated_at?: string
+          vendor_name: string
+          verified_at: string
+        }
+        Update: {
+          api_access_status?: string
+          catalogue_notice?: string | null
+          created_at?: string
+          display_name?: string
+          id?: string
+          lifecycle_status?: string
+          recommendation_eligible?: boolean
+          review_due_at?: string
+          summary?: string
+          sunset_at?: string | null
+          updated_at?: string
+          vendor_name?: string
+          verified_at?: string
+        }
+        Relationships: []
+      }
+      ai_video_sources: {
+        Row: {
+          created_at: string
+          id: string
+          offering_id: string | null
+          provider_id: string
+          published_or_updated_at: string | null
+          source_kind: string
+          title: string
+          url: string
+          verified_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          offering_id?: string | null
+          provider_id: string
+          published_or_updated_at?: string | null
+          source_kind: string
+          title: string
+          url: string
+          verified_at: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          offering_id?: string | null
+          provider_id?: string
+          published_or_updated_at?: string | null
+          source_kind?: string
+          title?: string
+          url?: string
+          verified_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_video_sources_offering_id_fkey"
+            columns: ["offering_id"]
+            isOneToOne: false
+            referencedRelation: "ai_video_offerings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_video_sources_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "ai_video_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -187,6 +417,50 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      prompt_pilot_catalogue_is_api_access_status: {
+        Args: { p_status: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_capability_key: {
+        Args: { p_key: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_https_url: {
+        Args: { p_url: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_lifecycle_status: {
+        Args: { p_status: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_machine_safe_key: {
+        Args: { p_key: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_offering_type: {
+        Args: { p_type: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_ownership_type: {
+        Args: { p_type: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_provider_id: {
+        Args: { p_id: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_source_kind: {
+        Args: { p_kind: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_is_support_level: {
+        Args: { p_level: string }
+        Returns: boolean
+      }
+      prompt_pilot_catalogue_recommendation_allowed: {
+        Args: { p_lifecycle: string; p_recommendation_eligible: boolean }
+        Returns: boolean
+      }
       prompt_pilot_complete_video_brief: {
         Args: { project_uuid: string }
         Returns: string

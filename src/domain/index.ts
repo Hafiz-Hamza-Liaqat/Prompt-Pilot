@@ -86,6 +86,50 @@ export { ProviderCapabilitySchema } from './providerCapability.js';
 export type { ProviderCapability } from './providerCapability.js';
 
 export {
+  API_ACCESS_STATUSES,
+  BOOLEAN_CATALOGUE_CAPABILITY_KEYS,
+  CATALOGUE_CAPABILITY_KEYS,
+  CatalogueCapabilityFactSchema,
+  CatalogueCapabilityKeySchema,
+  CatalogueOfferingSchema,
+  CatalogueProviderSchema,
+  CatalogueSourceSchema,
+  DEFAULT_REVIEW_INTERVAL_DAYS,
+  HttpsOfficialUrlSchema,
+  LIFECYCLE_STATUSES,
+  LifecycleStatusSchema,
+  LIST_CATALOGUE_CAPABILITY_KEYS,
+  NUMERIC_CATALOGUE_CAPABILITY_KEYS,
+  OFFERING_TYPES,
+  OFFICIAL_SOURCE_HOSTS,
+  OWNERSHIP_TYPES,
+  PRODUCTION_REQUIREMENT_TO_CATALOGUE_CAPABILITY,
+  REVIEW_DUE_SOON_DAYS,
+  SOURCE_KINDS,
+  SUPPORT_LEVELS,
+  SupportLevelSchema,
+  addReviewDueDate,
+  assertApprovedProviderCatalogue,
+  getFreshnessState,
+  isOfficialHostForProvider,
+  isRecommendationEligibleLifecycle,
+} from './providerCatalogue.js';
+export type {
+  ApiAccessStatus,
+  CatalogueCapabilityFact,
+  CatalogueCapabilityKey,
+  CatalogueOffering,
+  CatalogueProvider,
+  CatalogueSource,
+  FreshnessState,
+  LifecycleStatus,
+  OfferingType,
+  OwnershipType,
+  SourceKind,
+  SupportLevel,
+} from './providerCatalogue.js';
+
+export {
   ProviderRecommendationSchema,
   ProviderRecommendationSetSchema,
 } from './providerRecommendation.js';

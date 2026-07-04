@@ -10,7 +10,21 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04** (last reviewed during Phase 6 closure)
+**2026-07-04** (last reviewed during Phase 7 closure)
+
+---
+
+## Phase 7 packages reviewed
+
+Phase 7 did not introduce new npm dependencies. Existing Supabase packages were re-verified for catalogue read paths:
+
+| Package | Role |
+|---|---|
+| `@supabase/supabase-js` | Public anon-compatible catalogue reads and integration verification |
+| `@supabase/ssr` | Cookie-based SSR session handling (unchanged) |
+| `supabase` (dev) | Local CLI, catalogue migrations, SQL tests, type generation |
+
+No new high or critical vulnerabilities were introduced at Phase 7 review time.
 
 ---
 

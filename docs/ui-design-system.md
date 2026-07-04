@@ -73,7 +73,7 @@ Exactly these foundation components are installed:
 - Alert
 - Textarea
 
-Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Textarea for project descriptions and project-specific form components under `src/components/projects/`. Phase 6 adds brief wizard components under `src/components/briefs/`.
+Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Textarea for project descriptions and project-specific form components under `src/components/projects/`. Phase 6 adds brief wizard components under `src/components/briefs/`. Phase 7 adds provider catalogue components under `src/components/providers/`.
 
 ---
 

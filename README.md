@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 6 — Guided Creation Wizard** (current)
+**Phase 7 — Provider Catalogue** (current)
 
-Local Supabase Auth with email/password signup, signin, signout, `public.profiles`, `public.projects`, and `public.video_briefs` RLS. Authenticated users manage projects and complete a persistent nine-step video brief wizard (source through review) with draft/ready status on project detail. URLs are validated and stored only — not fetched. Domain Zod contracts remain authoritative. No provider recommendations, AI planning, or cloud deployment yet.
+Local Supabase Auth with email/password signup, signin, signout, `public.profiles`, `public.projects`, and `public.video_briefs` RLS. Authenticated users manage projects and complete a persistent nine-step video brief wizard. A public read-only provider catalogue (`/providers`) snapshots five approved AI video providers with source-backed capability facts. Domain Zod contracts remain authoritative. No provider recommendations, AI planning, or cloud deployment yet.
 
 ## Local development foundation
 
@@ -56,4 +56,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Database and Auth Foundation](docs/database-auth-foundation.md) | Local Supabase, profiles schema, RLS, and Auth flows |
 | [Project Management Foundation](docs/project-management-foundation.md) | Project dashboard, CRUD, archive, duplicate, soft delete |
 | [Guided Creation Wizard](docs/guided-creation-wizard.md) | Nine-step video brief wizard, persistence, and completion |
+| [Provider Catalogue](docs/provider-catalogue.md) | Source-backed read-only AI video provider catalogue |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { publicNavigation } from '../../src/config/navigation.js';
 
 describe('publicNavigation', () => {
-  it('has exactly three navigation items', () => {
-    expect(publicNavigation).toHaveLength(3);
+  it('has exactly four navigation items', () => {
+    expect(publicNavigation).toHaveLength(4);
   });
 
   it('has non-empty labels', () => {
@@ -18,9 +18,9 @@ describe('publicNavigation', () => {
     }
   });
 
-  it('targets local sections only', () => {
+  it('targets local sections or the providers route', () => {
     for (const item of publicNavigation) {
-      expect(item.href.startsWith('#')).toBe(true);
+      expect(item.href.startsWith('#') || item.href.startsWith('/')).toBe(true);
     }
   });
 
@@ -40,10 +40,11 @@ describe('publicNavigation', () => {
     expect(new Set(hrefs).size).toBe(hrefs.length);
   });
 
-  it('includes required section targets', () => {
+  it('includes required section targets and providers route', () => {
     const hrefs = publicNavigation.map((item) => item.href);
     expect(hrefs).toContain('#workflow');
     expect(hrefs).toContain('#capabilities');
     expect(hrefs).toContain('#scope');
+    expect(hrefs).toContain('/providers');
   });
 });

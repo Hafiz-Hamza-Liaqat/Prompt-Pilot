@@ -4,7 +4,7 @@
 
 Related documents: [Application Foundation](application-foundation.md) · [Implementation Checklist](implementation-checklist.md)
 
-Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC. Phase 6 adds `public.video_briefs` with RLS, reopen trigger, and completion RPC.
+Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC. Phase 6 adds `public.video_briefs` with RLS, reopen trigger, and completion RPC. Phase 7 adds read-only catalogue tables (`ai_video_providers`, `ai_video_offerings`, `ai_video_sources`, `ai_video_capability_facts`) with public SELECT RLS for `anon` and `authenticated`.
 
 ---
 
