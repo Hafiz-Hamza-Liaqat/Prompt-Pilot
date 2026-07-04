@@ -2,6 +2,7 @@ import { PageContainer } from '@/components/layout/page-container';
 import { ProviderCard } from '@/components/providers/provider-card';
 import { ProviderEmptyState } from '@/components/providers/provider-empty-state';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { providerCataloguePublicCopy } from '@/config/providerCatalogue';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createProviderCatalogueService } from '@/server/providers/provider-catalogue-service';
 import { createSupabaseProviderCatalogueRepository } from '@/server/providers/supabase-provider-catalogue-repository';
@@ -45,18 +46,15 @@ export default async function ProvidersPage() {
             AI video provider catalogue
           </h1>
           <p className="text-base leading-relaxed text-muted-foreground">
-            Prompt Pilot maintains a read-only, source-backed snapshot of five approved AI video
-            providers. These entries describe documented capabilities and access status — they are
-            not live synchronizations and do not constitute provider recommendations.
+            {providerCataloguePublicCopy.pageDescription}
           </p>
         </div>
 
         <Alert>
           <AlertTitle>Catalogue disclaimer</AlertTitle>
           <AlertDescription>
-            Provider features, API access, and lifecycle status can change after the recorded
-            verification date. This catalogue does not rank providers, calculate match scores, or
-            recommend a best provider. Provider recommendation is not implemented in this release.
+            {providerCataloguePublicCopy.disclaimerLead}{' '}
+            {providerCataloguePublicCopy.disclaimerBody}
           </AlertDescription>
         </Alert>
 

@@ -9,7 +9,6 @@ import {
   calculateExecutionRiskAssessment,
 } from '../../src/domain/complexityRiskAssessment.js';
 import {
-  PRODUCTION_REQUIREMENT_COUNT,
   PRODUCTION_REQUIREMENT_KEYS,
   createDefaultProductionRequirements,
   type ProductionRequirements,
@@ -53,12 +52,6 @@ function buildRequirementsFromMask(mask: number): ProductionRequirements {
     requirements[key] = Boolean(mask & (1 << index));
   });
   return requirements;
-}
-
-function* allRequirementCombinations(): Generator<ProductionRequirements> {
-  for (let mask = 0; mask < 2 ** PRODUCTION_REQUIREMENT_COUNT; mask += 1) {
-    yield buildRequirementsFromMask(mask);
-  }
 }
 
 describe('provider neutrality and privacy', () => {
@@ -329,60 +322,74 @@ describe('determinism and invariants', () => {
   });
 });
 
-describe('exhaustive 16384 requirement-combination loop', () => {
-  it(
-    'passes invariants for every production-requirement boolean combination',
-    () => {
-      const approvedInteractionFields = new Set<string>(
-        EXECUTION_RISK_INTERACTIONS.flatMap((interaction) => interaction.sourceFields),
-      );
-      let combinationCount = 0;
+function* requirementCombinationsInRange(startMask: number, endMask: number): Generator<ProductionRequirements> {
+  for (let mask = startMask; mask < endMask; mask += 1) {
+    yield buildRequirementsFromMask(mask);
+  }
+}
 
-      for (const requirements of allRequirementCombinations()) {
-        combinationCount += 1;
-        const first = calculateComplexityRiskAssessment({
-          ...LOOP_INPUT,
-          productionRequirements: requirements,
-        });
-        const second = calculateComplexityRiskAssessment({
-          ...LOOP_INPUT,
-          productionRequirements: requirements,
-        });
-
-        expect(first).toEqual(second);
-        expect(first.complexity.score).toBeGreaterThanOrEqual(0);
-        expect(first.complexity.score).toBeLessThanOrEqual(100);
-        expect(first.executionRisk.score).toBeGreaterThanOrEqual(0);
-        expect(first.executionRisk.score).toBeLessThanOrEqual(100);
-        expect(first.executionRisk.rawScore).toBeGreaterThanOrEqual(0);
-
-        for (const key of PROHIBITED_OUTPUT_KEYS) {
-          expect(first).not.toHaveProperty(key);
-        }
-
-        const complexityKeys = first.complexity.contributions.map((factor) => factor.key);
-        const riskKeys = first.executionRisk.contributions.map((factor) => factor.key);
-        expect(new Set(complexityKeys).size).toBe(complexityKeys.length);
-        expect(new Set(riskKeys).size).toBe(riskKeys.length);
-
-        for (const factor of first.complexity.contributions) {
-          expect(factor.points).toBeGreaterThan(0);
-        }
-        for (const factor of first.executionRisk.contributions) {
-          expect(factor.points).toBeGreaterThan(0);
-        }
-
-        for (const factor of [...first.complexity.contributions, ...first.executionRisk.contributions]) {
-          for (const field of factor.sourceFields) {
-            expect(
-              APPROVED_SOURCE_FIELDS.has(field) || approvedInteractionFields.has(field),
-            ).toBe(true);
-          }
-        }
-      }
-
-      expect(combinationCount).toBe(16384);
-    },
-    120_000,
+function runScoringInvariantLoop(startMask: number, endMask: number) {
+  const approvedInteractionFields = new Set<string>(
+    EXECUTION_RISK_INTERACTIONS.flatMap((interaction) => interaction.sourceFields),
   );
+
+  for (const requirements of requirementCombinationsInRange(startMask, endMask)) {
+    const first = calculateComplexityRiskAssessment({
+      ...LOOP_INPUT,
+      productionRequirements: requirements,
+    });
+    const second = calculateComplexityRiskAssessment({
+      ...LOOP_INPUT,
+      productionRequirements: requirements,
+    });
+
+    expect(first).toEqual(second);
+    expect(first.complexity.score).toBeGreaterThanOrEqual(0);
+    expect(first.complexity.score).toBeLessThanOrEqual(100);
+    expect(first.executionRisk.score).toBeGreaterThanOrEqual(0);
+    expect(first.executionRisk.score).toBeLessThanOrEqual(100);
+    expect(first.executionRisk.rawScore).toBeGreaterThanOrEqual(0);
+
+    for (const key of PROHIBITED_OUTPUT_KEYS) {
+      expect(first).not.toHaveProperty(key);
+    }
+
+    const complexityKeys = first.complexity.contributions.map((factor) => factor.key);
+    const riskKeys = first.executionRisk.contributions.map((factor) => factor.key);
+    expect(new Set(complexityKeys).size).toBe(complexityKeys.length);
+    expect(new Set(riskKeys).size).toBe(riskKeys.length);
+
+    for (const factor of first.complexity.contributions) {
+      expect(factor.points).toBeGreaterThan(0);
+    }
+    for (const factor of first.executionRisk.contributions) {
+      expect(factor.points).toBeGreaterThan(0);
+    }
+
+    for (const factor of [...first.complexity.contributions, ...first.executionRisk.contributions]) {
+      for (const field of factor.sourceFields) {
+        expect(
+          APPROVED_SOURCE_FIELDS.has(field) || approvedInteractionFields.has(field),
+        ).toBe(true);
+      }
+    }
+  }
+}
+
+describe('exhaustive 16384 requirement-combination loop', () => {
+  const chunkSize = 4096;
+  const chunkCount = 16384 / chunkSize;
+
+  for (let chunkIndex = 0; chunkIndex < chunkCount; chunkIndex += 1) {
+    const startMask = chunkIndex * chunkSize;
+    const endMask = startMask + chunkSize;
+
+    it(`passes invariants for requirement combinations ${startMask}–${endMask - 1}`, () => {
+      runScoringInvariantLoop(startMask, endMask);
+    }, 60_000);
+  }
+
+  it('covers all 16384 combinations across chunks', () => {
+    expect(chunkCount * chunkSize).toBe(16384);
+  });
 });

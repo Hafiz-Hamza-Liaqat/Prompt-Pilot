@@ -10,7 +10,13 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04** (last reviewed during Phase 11 closure)
+**2026-07-05** (last reviewed during Phase 11-A acceptance closure)
+
+---
+
+## Phase 11-A packages reviewed
+
+Phase 11-A did not introduce new npm dependencies. Vitest test-structure corrections and provider catalogue copy updates were re-verified. No new high or critical vulnerabilities were introduced at Phase 11-A review time.
 
 ---
 

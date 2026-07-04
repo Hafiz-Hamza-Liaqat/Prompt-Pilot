@@ -42,9 +42,26 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 12
-Next phase after Phase 9-A closure: Phase 11 — Provider Recommendation Engine
+Phase 11-A: DONE
+Next ready phase: Phase 12 — AI Provider Boundary
+Phase 12: READY (not started)
 ```
+
+---
+
+## Phase 11-A acceptance closure (2026-07-05)
+
+| Item | Result |
+|---|---|
+| Vitest worker RPC timeout root cause | Single test file exceeded Vitest birpc ~60s file-runtime limit while running 16,384 recommendation invariant combinations |
+| Correction | Shared loop helper plus four combination spec files (16×1024 chunks); scoring loop split into four 4096 chunks; all 16,384 combinations preserved |
+| `npm test` stability | Three consecutive full runs: 969 passed, 0 failed, exit code 0, no worker/RPC error |
+| Provider catalogue disclaimer | Stale “not implemented” copy replaced; public page states unranked catalogue; workspace recommendations described accurately |
+| Provider copy regression test | `tests/providers/providerCatalogueCopy.spec.ts` (5 tests) |
+| Public browser checks | Completed via browser automation on localhost:3100 |
+| Authenticated/responsive/a11y browser checks | MANUAL USER CHECK REQUIRED for full sign-up → workspace journey, responsive layouts, and keyboard/a11y sweep |
+| Generator-platform exclusion | No runtime generation routes, tables, SDKs, or credential UI found |
+| Services left running | Supabase local stack; Next.js production server on http://127.0.0.1:3100 |
 
 ---
 
@@ -69,7 +86,8 @@ Next phase after Phase 9-A closure: Phase 11 — Provider Recommendation Engine
 | 9-A | Database Inventory and Derived-Output Boundary Audit | DONE | Migration/live/generated counts agree at 7; static + SQL inventory guards; scene non-persistence verified; docs corrected; 689 unit tests; 188 SQL tests; commit `22618ed` |
 | 10 | Complexity and Risk Scoring | DONE | Complexity and execution-risk formulas implemented; 819 unit tests; 16,384 requirement-combination invariants; scoring service provider-neutral; workspace quality section replaced; no migration; seven-table inventory preserved; 188 SQL tests; all integrations including scoring boundary passed; lint 0/0; typecheck/build/smoke passed; commit `aa84a6c` |
 | 11 | Provider Recommendation Engine | DONE | Offering-level evaluation; provider deduplication; evidence-backed fit and coverage; 948 unit tests; 16,384 recommendation invariants; Sora exclusion from catalogue; no migration; seven-table inventory; 188 SQL tests; all integrations including recommendation boundary passed; lint 0/0; typecheck/build/smoke passed; local commit feat(phase-11) |
-| 12 | AI Provider Boundary | READY | Requires Phase 11 |
+| 11-A | Post-Phase 11 Acceptance Closure | DONE | Vitest RPC timeout fixed; provider disclaimer corrected; 969 unit tests; three consecutive `npm test` exit 0; public browser checks passed; manual authenticated/responsive/a11y sign-off pending |
+| 12 | AI Provider Boundary | READY | Requires Phase 11-A closure |
 | 13 | Structured Plan Generation | NOT_STARTED | Requires Phase 12 |
 | 14 | Scene Editing and Controlled Regeneration | NOT_STARTED | Requires Phase 13 |
 | 15 | Provider-Specific Prompt Compiler | NOT_STARTED | Requires Phase 14 |
