@@ -42,9 +42,9 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 2
-Only permitted work in Phase 1-B: product identity migration and phase governance
-Next phase after Phase 1-B closure: Phase 2 — Next.js Repository and Application Foundation
+Next ready phase: Phase 3
+Only permitted work in Phase 2: Next.js repository and application foundation (complete)
+Next phase after Phase 2 closure: Phase 3 — UI Design System and Application Shell
 ```
 
 ---
@@ -57,8 +57,8 @@ Next phase after Phase 1-B closure: Phase 2 — Next.js Repository and Applicati
 | 1 | Domain Types and Structured Output Contracts | DONE | 35 tests passed; typecheck passed; commit `8ada825` |
 | 1-A | Contract Corrections | DONE | Quality-priority contracts separated; included in Phase 1 verified state |
 | 1-B | Product Identity Migration and Phase Governance | DONE | Prompt Pilot identity migrated; governance rules and checklist added |
-| 2 | Next.js Repository and Application Foundation | READY | Requires Phase 1-B |
-| 3 | UI Design System and Application Shell | NOT_STARTED | Requires Phase 2 |
+| 2 | Next.js Repository and Application Foundation | DONE | 42 tests passed; lint/typecheck/build passed; HTTP 200 smoke on :3100 |
+| 3 | UI Design System and Application Shell | READY | Requires Phase 2 |
 | 4 | Supabase Database and Authentication | NOT_STARTED | Requires Phase 3 |
 | 5 | Dashboard and Project Management | NOT_STARTED | Requires Phase 4 |
 | 6 | Guided Creation Wizard | NOT_STARTED | Requires Phase 5 |

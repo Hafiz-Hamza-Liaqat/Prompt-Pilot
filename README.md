@@ -12,7 +12,7 @@ Users often know what they want to communicate but not how to plan, decompose, p
 
 ## Technology direction (provisional)
 
-The planned stack is documented for future phases only. Nothing is initialized in Phase 0.
+The planned stack is documented for future phases. Phase 2 initializes Next.js, React, and ESLint. Tailwind, shadcn/ui, Supabase, and other layers remain deferred.
 
 | Layer | Direction |
 |---|---|
@@ -26,9 +26,18 @@ The planned stack is documented for future phases only. Nothing is initialized i
 
 ## Development status
 
-**Phase 1-B — Product identity migration and phase governance** (current)
+**Phase 2 — Next.js Repository and Application Foundation** (current)
 
-TypeScript and Zod domain contracts with Vitest validation are complete. This phase standardizes product identity and adds phase governance. No application UI or infrastructure.
+Minimal Next.js App Router foundation with a truthful landing page. Domain Zod contracts remain authoritative. No authentication, database, or AI integrations.
+
+## Local development foundation
+
+```powershell
+npm install
+npm run dev
+```
+
+Cursor runs lint, typecheck, test, and build verification during phase closure.
 
 ## Documentation
 
@@ -42,3 +51,4 @@ TypeScript and Zod domain contracts with Vitest validation are complete. This ph
 | [Phase Roadmap](docs/phase-roadmap.md) | Milestones from product definition through launch |
 | [Structured Output Contracts](docs/structured-output-contracts.md) | Zod schemas and validation rules for video plans |
 | [Implementation Checklist](docs/implementation-checklist.md) | Authoritative phase execution status |
+| [Application Foundation](docs/application-foundation.md) | Next.js foundation, routes, and commands |
