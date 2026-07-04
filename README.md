@@ -52,3 +52,4 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Structured Output Contracts](docs/structured-output-contracts.md) | Zod schemas and validation rules for video plans |
 | [Implementation Checklist](docs/implementation-checklist.md) | Authoritative phase execution status |
 | [Application Foundation](docs/application-foundation.md) | Next.js foundation, routes, and commands |
+| [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

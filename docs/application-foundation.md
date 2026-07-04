@@ -78,6 +78,19 @@ npm run start
 
 ---
 
+## Dependency health
+
+| Check | Status (Phase 2-A) |
+|---|---|
+| ESLint baseline | 0 errors, 0 warnings |
+| npm audit | 2 moderate (transitive PostCSS via Next.js); 0 high; 0 critical |
+| Forced audit fix | Not used (`npm audit fix --force` rejected) |
+| High/critical accepted | None |
+
+See [Dependency Risk Register](dependency-risk-register.md) for decision records, dependency paths, and review triggers.
+
+---
+
 ## Deferred work
 
 | Area | Target phase |

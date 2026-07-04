@@ -3,12 +3,9 @@ import {
   DurationSecondsSchema,
   IsoDateTimeSchema,
   NonEmptyTrimmedStringSchema,
-  PercentageScoreSchema,
-  SourceReferenceSchema,
   VersionStringSchema,
 } from './common.js';
 import {
-  AiVideoProviderSchema,
   AspectRatioSchema,
   BudgetPrioritySchema,
   QualityPrioritySchema,
