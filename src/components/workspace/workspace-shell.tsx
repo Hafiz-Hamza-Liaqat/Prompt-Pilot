@@ -9,7 +9,7 @@ import { WorkspacePreviewNotice } from './workspace-preview-notice';
 import { WorkspacePromptPreview } from './workspace-prompt-preview';
 import { WorkspaceProviderReference } from './workspace-provider-reference';
 import { WorkspaceQualityPreview } from './workspace-quality-preview';
-import { WorkspaceScenePreview } from './workspace-scene-preview';
+import { WorkspaceSceneRoadmap } from './workspace-scene-roadmap';
 import { WorkspaceSectionHeading } from './workspace-section-heading';
 import { WorkspaceSectionNav } from './workspace-section-nav';
 
@@ -22,7 +22,7 @@ function renderActiveSection(workspace: MockResultWorkspaceViewModel) {
     case 'providers':
       return <WorkspaceProviderReference providers={workspace.providers} />;
     case 'scenes':
-      return <WorkspaceScenePreview scenes={workspace.sampleScenes} />;
+      return <WorkspaceSceneRoadmap decomposition={workspace.sceneDecomposition} />;
     case 'prompts':
       return <WorkspacePromptPreview sections={workspace.samplePromptSections} />;
     case 'continuity':

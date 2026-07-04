@@ -36,6 +36,10 @@ Capability facts are stored with explicit evidence, lifecycle status, API-access
 - No service-role application path for catalogue reads.
 - No provider API keys, runtime provider calls, or runtime source scraping.
 
+## Workspace integration (Phase 9)
+
+The hybrid result workspace displays five catalogue references in alphabetical order without brief-specific evaluation, ranking, or recommendation. Deterministic scene timing is calculated separately from the completed brief duration and does not use provider catalogue data.
+
 ## Deferred work
 
 - Provider recommendation engine

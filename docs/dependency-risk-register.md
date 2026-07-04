@@ -10,7 +10,15 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04** (last reviewed during Phase 8 closure)
+**2026-07-04** (last reviewed during Phase 9 closure)
+
+---
+
+## Phase 9 packages reviewed
+
+Phase 9 did not introduce new npm dependencies. Existing Next.js, Zod, and Supabase packages were re-verified for the deterministic scene-decomposition domain, hybrid workspace service, and integration scripts.
+
+No new high or critical vulnerabilities were introduced at Phase 9 review time.
 
 ---
 

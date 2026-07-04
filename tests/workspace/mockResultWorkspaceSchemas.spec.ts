@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { decomposeDurationIntoScenes } from '../../src/domain/sceneDecomposition.js';
 import {
   DATA_ORIGINS,
   EVALUATION_STATES,
@@ -6,20 +7,22 @@ import {
   MockPromptSectionSchema,
   MockResultWorkspaceStaticFixtureSchema,
   MockResultWorkspaceViewModelSchema,
-  MockSceneSchema,
   MOCK_PROMPT_SECTION_KEYS,
-  MOCK_SCENE_IDS,
   PROVIDER_REFERENCE_STATES,
   ProviderReferenceStateSchema,
+  SECTION_DATA_ORIGINS,
   WORKSPACE_FIXTURE_VERSION,
   WORKSPACE_MODES,
   WORKSPACE_PREVIEW_TITLE,
   WORKSPACE_SAMPLE_DISCLAIMER,
+  WORKSPACE_SECTION_ORIGINS,
   WORKSPACE_SECTIONS,
   WorkspaceModeSchema,
   DataOriginSchema,
+  SectionDataOriginSchema,
   EvaluationStateSchema,
   WorkspaceSectionSchema,
+  WorkspaceSectionOriginsSchema,
   createSourcePreview,
   deriveContinuityEvaluationState,
   mapEnabledRequirementLabels,
@@ -81,12 +84,13 @@ function validProviderReference(overrides: Record<string, unknown> = {}) {
 
 function validViewModel(overrides: Record<string, unknown> = {}) {
   return {
-    mode: 'mock_preview' as const,
-    dataOrigin: 'static_fixture' as const,
+    mode: 'hybrid_preview' as const,
+    dataOrigin: 'mixed' as const,
     isDecisionReady: false as const,
     fixtureVersion: WORKSPACE_FIXTURE_VERSION,
     sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
     previewTitle: WORKSPACE_PREVIEW_TITLE,
+    sectionOrigins: WORKSPACE_SECTION_ORIGINS,
     activeSection: 'overview' as const,
     project: validProjectSummary(),
     brief: validBriefSummary(),
@@ -97,7 +101,7 @@ function validViewModel(overrides: Record<string, unknown> = {}) {
       validProviderReference({ id: 'openai_sora', displayName: 'OpenAI Sora' }),
       validProviderReference({ id: 'runway', displayName: 'Runway' }),
     ],
-    sampleScenes: mockResultWorkspaceFixture.sampleScenes,
+    sceneDecomposition: decomposeDurationIntoScenes(30),
     samplePromptSections: mockResultWorkspaceFixture.samplePromptSections,
     continuityItems: mockResultWorkspaceFixture.continuityItems,
     audioEditingItems: mockResultWorkspaceFixture.audioEditingItems,
@@ -107,18 +111,42 @@ function validViewModel(overrides: Record<string, unknown> = {}) {
 }
 
 describe('workspace mode', () => {
-  it('accepts only mock_preview', () => {
-    expect(WORKSPACE_MODES).toEqual(['mock_preview']);
-    expect(WorkspaceModeSchema.parse('mock_preview')).toBe('mock_preview');
-    expect(() => WorkspaceModeSchema.parse('live')).toThrow();
+  it('accepts only hybrid_preview', () => {
+    expect(WORKSPACE_MODES).toEqual(['hybrid_preview']);
+    expect(WorkspaceModeSchema.parse('hybrid_preview')).toBe('hybrid_preview');
+    expect(() => WorkspaceModeSchema.parse('mock_preview')).toThrow();
   });
 });
 
 describe('data origin', () => {
-  it('accepts only static_fixture', () => {
-    expect(DATA_ORIGINS).toEqual(['static_fixture']);
-    expect(DataOriginSchema.parse('static_fixture')).toBe('static_fixture');
-    expect(() => DataOriginSchema.parse('database')).toThrow();
+  it('accepts only mixed at top level', () => {
+    expect(DATA_ORIGINS).toEqual(['mixed']);
+    expect(DataOriginSchema.parse('mixed')).toBe('mixed');
+    expect(() => DataOriginSchema.parse('static_fixture')).toThrow();
+  });
+
+  it('defines approved section data origins', () => {
+    expect(SECTION_DATA_ORIGINS).toEqual([
+      'persisted_input',
+      'catalogue_snapshot',
+      'deterministic_rule_engine',
+      'static_fixture',
+    ]);
+    for (const origin of SECTION_DATA_ORIGINS) {
+      expect(() => SectionDataOriginSchema.parse(origin)).not.toThrow();
+    }
+  });
+
+  it('maps each workspace section to an approved origin', () => {
+    expect(WorkspaceSectionOriginsSchema.parse(WORKSPACE_SECTION_ORIGINS)).toEqual({
+      overview: 'persisted_input',
+      providers: 'catalogue_snapshot',
+      scenes: 'deterministic_rule_engine',
+      prompts: 'static_fixture',
+      continuity: 'static_fixture',
+      'audio-editing': 'static_fixture',
+      quality: 'static_fixture',
+    });
   });
 });
 
@@ -155,46 +183,18 @@ describe('workspace sections', () => {
   });
 });
 
-describe('mock scene contract', () => {
-  it('fixture contains exactly four sample scenes', () => {
-    expect(mockResultWorkspaceFixture.sampleScenes).toHaveLength(4);
-    expect(MOCK_SCENE_IDS).toHaveLength(4);
+describe('scene decomposition contract', () => {
+  it('requires sceneDecomposition instead of sample scenes', () => {
+    const parsed = MockResultWorkspaceViewModelSchema.parse(validViewModel());
+    expect(parsed.sceneDecomposition.isAiGenerated).toBe(false);
+    expect(parsed.sceneDecomposition.isPersisted).toBe(false);
+    expect(parsed).not.toHaveProperty('sampleScenes');
   });
 
-  it('uses sequential unique scene order', () => {
-    const orders = mockResultWorkspaceFixture.sampleScenes.map((scene) => scene.order);
-    expect(orders).toEqual([1, 2, 3, 4]);
-    expect(new Set(orders).size).toBe(4);
-  });
-
-  it('marks every sample scene with isSample true', () => {
-    for (const scene of mockResultWorkspaceFixture.sampleScenes) {
-      expect(scene.isSample).toBe(true);
-    }
-  });
-
-  it('rejects scenes with isSample false', () => {
-    const scene = {
-      ...mockResultWorkspaceFixture.sampleScenes[0],
-      isSample: false,
-    };
-    expect(() => MockSceneSchema.parse(scene)).toThrow();
-  });
-
-  it('keeps sample scene ids free of provider identifiers', () => {
-    for (const scene of mockResultWorkspaceFixture.sampleScenes) {
-      expect(scene.id.includes('provider')).toBe(false);
-    }
-    for (const sceneId of MOCK_SCENE_IDS) {
-      expect(sceneId.includes('provider')).toBe(false);
-    }
-  });
-
-  it('does not include generated timestamps on scenes', () => {
-    for (const scene of mockResultWorkspaceFixture.sampleScenes) {
-      expect(scene).not.toHaveProperty('generatedAt');
-      expect(scene).not.toHaveProperty('createdAt');
-    }
+  it('rejects view models missing sceneDecomposition', () => {
+    const withoutScenes = { ...validViewModel() };
+    delete (withoutScenes as { sceneDecomposition?: unknown }).sceneDecomposition;
+    expect(() => MockResultWorkspaceViewModelSchema.parse(withoutScenes)).toThrow();
   });
 });
 
@@ -303,19 +303,23 @@ describe('static fixture schema', () => {
     expect(mockResultWorkspaceFixture.sampleDisclaimer.trim().length).toBeGreaterThan(0);
   });
 
-  it('disclaimer references static or sample data', () => {
+  it('disclaimer references remaining static sections', () => {
     const disclaimer = mockResultWorkspaceFixture.sampleDisclaimer.toLowerCase();
-    expect(disclaimer).toMatch(/static|demonstration|sample/);
+    expect(disclaimer).toMatch(/static|demonstration/);
+    expect(disclaimer).toContain('prompt');
   });
 
-  it('disclaimer states data was not generated or calculated', () => {
+  it('disclaimer states no AI model or provider generated the plan', () => {
     const disclaimer = mockResultWorkspaceFixture.sampleDisclaimer.toLowerCase();
-    expect(disclaimer).toMatch(/not been generated|have not been generated/);
-    expect(disclaimer).toMatch(/calculated|recommended/);
+    expect(disclaimer).toContain('no ai model or provider');
   });
 
   it('uses the approved fixture version', () => {
-    expect(mockResultWorkspaceFixture.fixtureVersion).toBe('mock-v1');
+    expect(mockResultWorkspaceFixture.fixtureVersion).toBe('workspace-v2');
+  });
+
+  it('does not include sample scenes in the active fixture', () => {
+    expect(mockResultWorkspaceFixture).not.toHaveProperty('sampleScenes');
   });
 });
 

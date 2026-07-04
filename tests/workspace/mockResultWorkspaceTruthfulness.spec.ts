@@ -4,7 +4,9 @@ import {
   MockResultWorkspaceViewModelSchema,
   WORKSPACE_PREVIEW_TITLE,
   WORKSPACE_SAMPLE_DISCLAIMER,
+  WORKSPACE_SECTION_ORIGINS,
 } from '../../src/domain/mockResultWorkspace.js';
+import { decomposeDurationIntoScenes } from '../../src/domain/sceneDecomposition.js';
 import { mockResultWorkspaceFixture } from '../../src/fixtures/mock-result-workspace.js';
 import {
   containsRetiredProductName,
@@ -16,12 +18,13 @@ const BRIEF_ID = '44444444-4444-4444-4444-444444444444';
 
 function buildTruthfulViewModel() {
   return MockResultWorkspaceViewModelSchema.parse({
-    mode: 'mock_preview',
-    dataOrigin: 'static_fixture',
+    mode: 'hybrid_preview',
+    dataOrigin: 'mixed',
     isDecisionReady: false,
-    fixtureVersion: 'mock-v1',
+    fixtureVersion: 'workspace-v2',
     sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
     previewTitle: WORKSPACE_PREVIEW_TITLE,
+    sectionOrigins: WORKSPACE_SECTION_ORIGINS,
     activeSection: 'overview',
     project: {
       id: PROJECT_ID,
@@ -102,7 +105,7 @@ function buildTruthfulViewModel() {
         referenceState: 'catalogue_reference',
       },
     ],
-    sampleScenes: mockResultWorkspaceFixture.sampleScenes,
+    sceneDecomposition: decomposeDurationIntoScenes(30),
     samplePromptSections: mockResultWorkspaceFixture.samplePromptSections,
     continuityItems: mockResultWorkspaceFixture.continuityItems,
     audioEditingItems: mockResultWorkspaceFixture.audioEditingItems,
@@ -121,14 +124,18 @@ describe('workspace disclaimer wording', () => {
   });
 
   it('uses the approved preview title', () => {
-    expect(WORKSPACE_PREVIEW_TITLE).toBe('Sample workspace preview');
+    expect(WORKSPACE_PREVIEW_TITLE).toBe('Planning workspace preview');
   });
 
-  it('states results were not generated for this project', () => {
-    expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toMatch(
-      /not been generated|have not been generated/,
-    );
+  it('states remaining sections use static data', () => {
+    expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toContain('static demonstration data');
     expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toContain('recommended');
+  });
+
+  it('does not claim scene roadmap is AI-generated', () => {
+    const model = buildTruthfulViewModel();
+    expect(model.sceneDecomposition.isAiGenerated).toBe(false);
+    expect(JSON.stringify(model.sceneDecomposition).toLowerCase()).not.toContain('generated scene');
   });
 });
 

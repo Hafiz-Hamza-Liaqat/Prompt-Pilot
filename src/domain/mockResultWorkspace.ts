@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { IsoDateTimeSchema } from './common';
+import { SceneDecompositionSchema } from './sceneDecomposition';
 import { projectIdSchema } from './project';
 import type { ProductionRequirementKey } from './productionRequirements';
 import {
@@ -8,8 +9,15 @@ import {
   ProductionRequirementsSchema,
 } from './productionRequirements';
 
-export const WORKSPACE_MODES = ['mock_preview'] as const;
-export const DATA_ORIGINS = ['static_fixture'] as const;
+export const WORKSPACE_MODES = ['hybrid_preview'] as const;
+export const DATA_ORIGINS = ['mixed'] as const;
+export const SECTION_DATA_ORIGINS = [
+  'persisted_input',
+  'catalogue_snapshot',
+  'deterministic_rule_engine',
+  'static_fixture',
+] as const;
+
 export const WORKSPACE_SECTIONS = [
   'overview',
   'providers',
@@ -41,19 +49,25 @@ export const MOCK_PROMPT_SECTION_KEYS = [
   'negative_constraints',
 ] as const;
 
-export const MOCK_SCENE_IDS = [
-  'sample-scene-opening-hook',
-  'sample-scene-context-problem',
-  'sample-scene-core-message',
-  'sample-scene-closing-direction',
-] as const;
+export const WORKSPACE_FIXTURE_VERSION = 'workspace-v2' as const;
 
-export const WORKSPACE_FIXTURE_VERSION = 'mock-v1' as const;
+export const WORKSPACE_SECTION_ORIGINS: Record<
+  (typeof WORKSPACE_SECTIONS)[number],
+  (typeof SECTION_DATA_ORIGINS)[number]
+> = {
+  overview: 'persisted_input',
+  providers: 'catalogue_snapshot',
+  scenes: 'deterministic_rule_engine',
+  prompts: 'static_fixture',
+  continuity: 'static_fixture',
+  'audio-editing': 'static_fixture',
+  quality: 'static_fixture',
+};
 
 export const WORKSPACE_SAMPLE_DISCLAIMER =
-  'The result sections below use static demonstration data. They have not been generated, calculated, or recommended for this project.';
+  'Prompt, continuity, audio/editing, and quality sections still use static demonstration data. No AI model or provider has generated or recommended this plan.';
 
-export const WORKSPACE_PREVIEW_TITLE = 'Sample workspace preview';
+export const WORKSPACE_PREVIEW_TITLE = 'Planning workspace preview';
 
 const SampleRecordSchema = z.object({
   isSample: z.literal(true),
@@ -61,25 +75,20 @@ const SampleRecordSchema = z.object({
 
 export const WorkspaceModeSchema = z.enum(WORKSPACE_MODES);
 export const DataOriginSchema = z.enum(DATA_ORIGINS);
+export const SectionDataOriginSchema = z.enum(SECTION_DATA_ORIGINS);
 export const WorkspaceSectionSchema = z.enum(WORKSPACE_SECTIONS);
 export const ProviderReferenceStateSchema = z.enum(PROVIDER_REFERENCE_STATES);
 export const EvaluationStateSchema = z.enum(EVALUATION_STATES);
 export const MockPromptSectionKeySchema = z.enum(MOCK_PROMPT_SECTION_KEYS);
 
-export const MockSceneSchema = SampleRecordSchema.extend({
-  id: z.enum(MOCK_SCENE_IDS),
-  order: z.number().int().min(1).max(4),
-  label: z.string().trim().min(1),
-  purpose: z.string().trim().min(1),
-  sampleContent: z.string().trim().min(1),
-}).superRefine((value, ctx) => {
-  if (value.id.includes('provider')) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'Sample scenes must not include provider identifiers',
-      path: ['id'],
-    });
-  }
+export const WorkspaceSectionOriginsSchema = z.object({
+  overview: z.literal('persisted_input'),
+  providers: z.literal('catalogue_snapshot'),
+  scenes: z.literal('deterministic_rule_engine'),
+  prompts: z.literal('static_fixture'),
+  continuity: z.literal('static_fixture'),
+  'audio-editing': z.literal('static_fixture'),
+  quality: z.literal('static_fixture'),
 });
 
 export const MockPromptSectionSchema = SampleRecordSchema.extend({
@@ -152,7 +161,6 @@ export const WorkspaceProviderReferenceSchema = z.object({
 export const MockResultWorkspaceStaticFixtureSchema = z.object({
   fixtureVersion: z.literal(WORKSPACE_FIXTURE_VERSION),
   sampleDisclaimer: z.string().trim().min(1),
-  sampleScenes: z.array(MockSceneSchema).length(4),
   samplePromptSections: z.array(MockPromptSectionSchema).min(8),
   continuityItems: z.array(MockContinuityItemSchema).min(1),
   audioEditingItems: z.array(MockAudioEditingItemSchema).min(1),
@@ -167,11 +175,12 @@ export const MockResultWorkspaceViewModelSchema = z
     fixtureVersion: z.literal(WORKSPACE_FIXTURE_VERSION),
     sampleDisclaimer: z.string().trim().min(1),
     previewTitle: z.literal(WORKSPACE_PREVIEW_TITLE),
+    sectionOrigins: WorkspaceSectionOriginsSchema,
     activeSection: WorkspaceSectionSchema,
     project: WorkspaceProjectSummarySchema,
     brief: WorkspaceBriefSummarySchema,
     providers: z.array(WorkspaceProviderReferenceSchema).length(5),
-    sampleScenes: z.array(MockSceneSchema).length(4),
+    sceneDecomposition: SceneDecompositionSchema,
     samplePromptSections: z.array(MockPromptSectionSchema).min(8),
     continuityItems: z.array(MockContinuityItemSchema).min(1),
     audioEditingItems: z.array(MockAudioEditingItemSchema).min(1),
@@ -181,10 +190,10 @@ export const MockResultWorkspaceViewModelSchema = z
 
 export type WorkspaceMode = z.infer<typeof WorkspaceModeSchema>;
 export type DataOrigin = z.infer<typeof DataOriginSchema>;
+export type SectionDataOrigin = z.infer<typeof SectionDataOriginSchema>;
 export type WorkspaceSection = z.infer<typeof WorkspaceSectionSchema>;
 export type ProviderReferenceState = z.infer<typeof ProviderReferenceStateSchema>;
 export type EvaluationState = z.infer<typeof EvaluationStateSchema>;
-export type MockScene = z.infer<typeof MockSceneSchema>;
 export type MockPromptSection = z.infer<typeof MockPromptSectionSchema>;
 export type MockContinuityItem = z.infer<typeof MockContinuityItemSchema>;
 export type MockAudioEditingItem = z.infer<typeof MockAudioEditingItemSchema>;

@@ -7,6 +7,7 @@ import {
   normalizeWorkspaceSection,
   WORKSPACE_FIXTURE_VERSION,
   WORKSPACE_PREVIEW_TITLE,
+  WORKSPACE_SECTION_ORIGINS,
   type MockResultWorkspaceStaticFixture,
   type MockResultWorkspaceViewModel,
   type WorkspaceSection,
@@ -17,6 +18,10 @@ import type { ProjectRepository, RepositoryResult } from '@/server/projects/proj
 import type { VideoBriefRepository } from '@/server/briefs/video-brief-repository';
 import type { ProviderCatalogueRepository } from '@/server/providers/provider-catalogue-repository';
 import { ProviderCatalogueService } from '@/server/providers/provider-catalogue-service';
+import {
+  createSceneDecompositionService,
+  type SceneDecompositionService,
+} from '@/server/scenes/scene-decomposition-service';
 
 export type MockWorkspaceServiceErrorCode =
   | 'not_authenticated'
@@ -34,6 +39,7 @@ export type MockWorkspaceDependencies = {
   briefRepository: VideoBriefRepository;
   providerCatalogueRepository: ProviderCatalogueRepository;
   fixture: MockResultWorkspaceStaticFixture;
+  sceneDecompositionService?: SceneDecompositionService;
 };
 
 function mapProjectError<T>(result: RepositoryResult<T>): MockWorkspaceServiceResult<T> {
@@ -187,11 +193,14 @@ function applyRequirementAwareAudio(
 
 export class MockResultWorkspaceService {
   private readonly catalogueService: ProviderCatalogueService;
+  private readonly sceneDecompositionService: SceneDecompositionService;
 
   constructor(private readonly dependencies: MockWorkspaceDependencies) {
     this.catalogueService = new ProviderCatalogueService(
       dependencies.providerCatalogueRepository,
     );
+    this.sceneDecompositionService =
+      dependencies.sceneDecompositionService ?? createSceneDecompositionService();
   }
 
   async loadWorkspace(
@@ -248,14 +257,34 @@ export class MockResultWorkspaceService {
 
     const fixture = this.dependencies.fixture;
 
+    const decompositionResult = this.sceneDecompositionService.decomposeCompletedBrief(
+      briefResult.data,
+    );
+
+    if (!decompositionResult.ok) {
+      if (decompositionResult.code === 'brief_required') {
+        return { ok: false, code: 'brief_required' };
+      }
+
+      if (
+        decompositionResult.code === 'invalid_duration' ||
+        decompositionResult.code === 'decomposition_error'
+      ) {
+        return { ok: false, code: 'invalid_fixture' };
+      }
+
+      return { ok: false, code: 'invalid_fixture' };
+    }
+
     try {
       const viewModel = MockResultWorkspaceViewModelSchema.parse({
-        mode: 'mock_preview',
-        dataOrigin: 'static_fixture',
+        mode: 'hybrid_preview',
+        dataOrigin: 'mixed',
         isDecisionReady: false,
         fixtureVersion: WORKSPACE_FIXTURE_VERSION,
         sampleDisclaimer: fixture.sampleDisclaimer,
         previewTitle: WORKSPACE_PREVIEW_TITLE,
+        sectionOrigins: WORKSPACE_SECTION_ORIGINS,
         activeSection,
         project: mapProjectSummary(mappedProject.data),
         brief: mapBriefSummary(briefResult.data),
@@ -269,7 +298,7 @@ export class MockResultWorkspaceService {
           sunsetAt: item.provider.sunsetAt,
           referenceState: 'catalogue_reference' as const,
         })),
-        sampleScenes: fixture.sampleScenes,
+        sceneDecomposition: decompositionResult.data,
         samplePromptSections: fixture.samplePromptSections,
         continuityItems: applyRequirementAwareContinuity(fixture, briefResult.data),
         audioEditingItems: applyRequirementAwareAudio(fixture, briefResult.data),

@@ -1,6 +1,5 @@
 import {
   MOCK_PROMPT_SECTION_KEYS,
-  MOCK_SCENE_IDS,
   MockResultWorkspaceStaticFixtureSchema,
   WORKSPACE_FIXTURE_VERSION,
   WORKSPACE_SAMPLE_DISCLAIMER,
@@ -10,44 +9,6 @@ import {
 const fixtureData = {
   fixtureVersion: WORKSPACE_FIXTURE_VERSION,
   sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
-  sampleScenes: [
-    {
-      id: MOCK_SCENE_IDS[0],
-      order: 1,
-      label: 'Opening hook',
-      purpose: 'Layout example for an attention-grabbing opening beat.',
-      sampleContent:
-        'Demonstration copy showing how a future scene card might summarize an opening hook without using this project brief.',
-      isSample: true as const,
-    },
-    {
-      id: MOCK_SCENE_IDS[1],
-      order: 2,
-      label: 'Context and audience problem',
-      purpose: 'Layout example for establishing context.',
-      sampleContent:
-        'Neutral placeholder text illustrating where audience context would appear after future decomposition phases.',
-      isSample: true as const,
-    },
-    {
-      id: MOCK_SCENE_IDS[2],
-      order: 3,
-      label: 'Core message or demonstration',
-      purpose: 'Layout example for the primary message beat.',
-      sampleContent:
-        'Sample structure only. No scene timing, provider syntax, or project-specific script content is included.',
-      isSample: true as const,
-    },
-    {
-      id: MOCK_SCENE_IDS[3],
-      order: 4,
-      label: 'Closing direction',
-      purpose: 'Layout example for a closing beat.',
-      sampleContent:
-        'Demonstration closing note showing how future guidance might be organized without claiming suitability for this brief.',
-      isSample: true as const,
-    },
-  ],
   samplePromptSections: [
     {
       key: MOCK_PROMPT_SECTION_KEYS[0],
@@ -168,7 +129,7 @@ const fixtureData = {
       key: 'dialogue_planning',
       label: 'Dialogue planning slot',
       evaluationState: 'future_evaluation' as const,
-      sampleNote: 'No dialogue script is generated in Phase 8.',
+      sampleNote: 'No dialogue script is generated in this preview.',
       isSample: true as const,
     },
     {
@@ -233,7 +194,7 @@ const fixtureData = {
       key: 'duration_feasibility',
       label: 'Duration feasibility',
       evaluationState: 'future_evaluation' as const,
-      sampleNote: 'Duration-aware feasibility checks begin in Phase 9.',
+      sampleNote: 'Structural scene timing is calculated from the saved duration.',
       isSample: true as const,
     },
     {

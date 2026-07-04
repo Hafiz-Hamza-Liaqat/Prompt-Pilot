@@ -73,9 +73,14 @@ describe('result workspace configuration', () => {
     );
   });
 
-  it('references Phase 9 or future scene decomposition', () => {
-    expect(WORKSPACE_SECTION_DESCRIPTIONS.scenes.toLowerCase()).toContain('phase 9');
-    expect(WORKSPACE_TRUTHFULNESS_NOTICES.sceneFutureNotice.toLowerCase()).toContain('phase 9');
+  it('describes deterministic scene decomposition', () => {
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.scenes.toLowerCase()).toContain('deterministic');
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.scenes.toLowerCase()).toContain(
+      'creative scene descriptions are not generated',
+    );
+    expect(WORKSPACE_TRUTHFULNESS_NOTICES.sceneRoadmapNotice.toLowerCase()).toContain(
+      'creative scene content',
+    );
   });
 
   it('states prompt compilation is inactive', () => {

@@ -42,8 +42,8 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 9
-Next phase after Phase 8 closure: Phase 9 — Duration and Scene Decomposition
+Next ready phase: Phase 10
+Next phase after Phase 9 closure: Phase 10 — Complexity and Risk Scoring
 ```
 
 ---
@@ -64,9 +64,9 @@ Next phase after Phase 8 closure: Phase 9 — Duration and Scene Decomposition
 | 6 | Guided Creation Wizard | DONE | Brief migration `20260704200000`; RLS 52/52 SQL; 213 unit tests; brief integration passed; commit `32d1f40` |
 | 6-A | Production Requirement Parity and Completion-RPC Safety | DONE | Shared `productionRequirements.ts`; 14 keys verified; parity SQL + RPC regressions; commit `f4a0257` |
 | 7 | Provider Catalogue | DONE | Official-source research; 5 providers seeded; catalogue RLS; 172 SQL tests; 297 unit tests; provider integration passed; commit `193b7eb` |
-| 8 | Mock Result Workspace | DONE | Mock workspace schema; static fixture; completed-brief gate; 392 unit tests; workspace integration passed; commit pending |
-| 9 | Duration and Scene Decomposition | READY | Requires Phase 8 |
-| 10 | Complexity and Risk Scoring | NOT_STARTED | Requires Phase 9 |
+| 8 | Mock Result Workspace | DONE | Mock workspace schema; static fixture; completed-brief gate; workspace integration passed; commit `7f78df1` |
+| 9 | Duration and Scene Decomposition | DONE | Deterministic scene algorithm; hybrid workspace; 677 unit tests; 172 SQL tests; scene integration passed; no migration; commit pending |
+| 10 | Complexity and Risk Scoring | READY | Requires Phase 9 |
 | 11 | Provider Recommendation Engine | NOT_STARTED | Requires Phase 10 |
 | 12 | AI Provider Boundary | NOT_STARTED | Requires Phase 11 |
 | 13 | Structured Plan Generation | NOT_STARTED | Requires Phase 12 |

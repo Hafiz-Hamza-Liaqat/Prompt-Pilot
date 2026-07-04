@@ -509,13 +509,14 @@ function createService(options?: {
 }
 
 describe('MockResultWorkspaceService', () => {
-  it('returns workspace for a valid completed brief', async () => {
+  it('returns hybrid workspace for a valid completed brief', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data.mode).toBe('mock_preview');
+      expect(result.data.mode).toBe('hybrid_preview');
+      expect(result.data.dataOrigin).toBe('mixed');
       expect(result.data.brief.completedAt).toBe(COMPLETED_AT);
     }
   });
@@ -715,16 +716,78 @@ describe('MockResultWorkspaceService', () => {
     }
   });
 
-  it('does not calculate scene durations', async () => {
+  it('calculates deterministic scene roadmap from brief duration', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      for (const scene of result.data.sampleScenes) {
-        expect(scene).not.toHaveProperty('durationSeconds');
-        expect(scene).not.toHaveProperty('allocatedDuration');
-      }
+      expect(result.data.sceneDecomposition.isAiGenerated).toBe(false);
+      expect(result.data.sceneDecomposition.isPersisted).toBe(false);
+      expect(result.data.sceneDecomposition.totalDurationSeconds).toBe(30);
+      expect(result.data.sceneDecomposition.sceneCount).toBe(3);
+      expect(result.data).not.toHaveProperty('sampleScenes');
+    }
+  });
+
+  it('matches scene duration sum to brief duration', async () => {
+    const { briefRepository, service } = createService();
+    briefRepository.seed(buildCompletedBrief({ durationSeconds: 60 }));
+    const result = await service.loadWorkspace(ownerA, projectId);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      const sum = result.data.sceneDecomposition.scenes.reduce(
+        (total, scene) => total + scene.durationSeconds,
+        0,
+      );
+      expect(sum).toBe(60);
+    }
+  });
+
+  it('keeps prompt section marked as sample', async () => {
+    const { service } = createService();
+    const result = await service.loadWorkspace(ownerA, projectId);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.samplePromptSections.every((section) => section.isSample)).toBe(true);
+    }
+  });
+
+  it('keeps continuity, audio, and quality sections marked as sample', async () => {
+    const { service } = createService();
+    const result = await service.loadWorkspace(ownerA, projectId);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.continuityItems.every((item) => item.isSample)).toBe(true);
+      expect(result.data.audioEditingItems.every((item) => item.isSample)).toBe(true);
+      expect(result.data.qualityItems.every((item) => item.isSample)).toBe(true);
+    }
+  });
+
+  it('exposes mixed section origins truthfully', async () => {
+    const { service } = createService();
+    const result = await service.loadWorkspace(ownerA, projectId);
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data.sectionOrigins.scenes).toBe('deterministic_rule_engine');
+      expect(result.data.sectionOrigins.prompts).toBe('static_fixture');
+      expect(result.data.sectionOrigins.providers).toBe('catalogue_snapshot');
+      expect(result.data.sectionOrigins.overview).toBe('persisted_input');
+    }
+  });
+
+  it('maps invalid duration safely', async () => {
+    const { briefRepository, service } = createService();
+    briefRepository.seed(buildCompletedBrief({ durationSeconds: 4 }));
+
+    const result = await service.loadWorkspace(ownerA, projectId);
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.code).toBe('invalid_fixture');
     }
   });
 
@@ -736,13 +799,12 @@ describe('MockResultWorkspaceService', () => {
     expect(mockResultWorkspaceFixture).toEqual(fixtureCopy);
   });
 
-  it('keeps static fixture content marked as sample', async () => {
+  it('keeps static fixture sample sections marked as sample', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data.sampleScenes.every((scene) => scene.isSample)).toBe(true);
       expect(result.data.samplePromptSections.every((section) => section.isSample)).toBe(true);
     }
   });
@@ -750,7 +812,7 @@ describe('MockResultWorkspaceService', () => {
   it('maps invalid fixture data to invalid_fixture', async () => {
     const invalidFixture = {
       ...mockResultWorkspaceFixture,
-      sampleScenes: mockResultWorkspaceFixture.sampleScenes.slice(0, 2),
+      samplePromptSections: mockResultWorkspaceFixture.samplePromptSections.slice(0, 2),
     };
     const { service } = createService({ fixture: invalidFixture });
     const result = await service.loadWorkspace(ownerA, projectId);

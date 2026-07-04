@@ -1,18 +1,20 @@
-# Mock Result Workspace
+# Hybrid Result Workspace
 
 ## Purpose
 
-Phase 8 validates the future Prompt Pilot result information architecture without generating planning output. The workspace combines real project and completed-brief context with static sample layouts for scenes, prompts, continuity, audio/editing guidance, and quality review.
+The workspace preview combines real persisted input, a source-backed provider catalogue snapshot, deterministic scene timing, and static sample layouts for prompts, continuity, audio/editing guidance, and quality review.
+
+Phase 8 introduced the workspace shell with static sample scenes. Phase 9 replaced the sample scene roadmap with deterministic duration decomposition while keeping other sections as static fixtures.
 
 ## Real data displayed
 
 - Authenticated project title, description, and archived state
 - Completed video brief summary and enabled production requirements
 - Read-only provider catalogue references (five providers)
+- Deterministic scene roadmap calculated from the saved brief duration
 
 ## Static data displayed
 
-- Sample scene roadmap (four layout examples)
 - Sample prompt package sections
 - Sample continuity checklist organization
 - Sample audio and editing layout slots
@@ -20,19 +22,20 @@ Phase 8 validates the future Prompt Pilot result information architecture withou
 
 ## Truthfulness
 
-- No AI generation
+- Scene timing is rule-based and not AI-generated
 - No provider recommendation or ranking
-- No duration decomposition
 - No prompt compilation
 - No quality, risk, or match scoring
 - No persisted planning output
 - No provider execution
 
-Every workspace page shows a prominent **Sample workspace preview** notice. Each sample section is marked **Sample** or **Interface preview**. The provider panel is labelled **Catalogue reference — not recommendations**.
+Every workspace page shows a prominent **Planning workspace preview** notice. The scene section is labelled **Deterministic timing**. Remaining sample sections are marked **Sample** or **Interface preview**. The provider panel is labelled **Catalogue reference — not recommendations**.
+
+See also [Duration and Scene Decomposition](./duration-scene-decomposition.md).
 
 ## Persistence
 
-Phase 8 creates **no database migration** and stores **no mock result data** in Supabase. The static fixture lives in version-controlled application code at `src/fixtures/mock-result-workspace.ts`.
+No database migration stores workspace or scene decomposition output. The static fixture lives in version-controlled application code at `src/fixtures/mock-result-workspace.ts`. Scene timing is derived on each request from the completed brief duration.
 
 ## Access
 
@@ -45,9 +48,9 @@ Route: `/projects/[projectId]/workspace?section=<section>`
 
 ## Replacement map
 
-| Phase 8 preview | Future phase |
+| Current preview | Future phase |
 |---|---|
-| Sample scene roadmap | Phase 9+ duration and scene decomposition |
+| Deterministic scene timing (structural only) | Phase 10+ scoring and creative scene content |
 | Provider reference panel | Phase 11 provider recommendation |
 | Sample prompt package | Phase 15 provider-specific prompt compilation |
 | Continuity preview | Phase 16 continuity bible |
@@ -58,6 +61,7 @@ Route: `/projects/[projectId]/workspace?section=<section>`
 
 - Actual result generation and persistence
 - Recommendations and scoring
+- Creative scene descriptions
 - Prompt compilation and export
 - Sharing and provider execution
 - Deployment

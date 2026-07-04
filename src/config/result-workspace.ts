@@ -21,7 +21,7 @@ export const WORKSPACE_SECTION_DESCRIPTIONS: Record<WorkspaceSection, string> = 
   providers:
     'Catalogue reference — not recommendations. Provider entries are not evaluated against this brief.',
   scenes:
-    'Static scene layout preview. Actual duration-aware scene decomposition begins in Phase 9.',
+    'Deterministic duration decomposition. Creative scene descriptions are not generated in this phase.',
   prompts:
     'Static prompt-section layout preview. Provider-specific prompt compilation is not active.',
   continuity:
@@ -35,20 +35,27 @@ export const WORKSPACE_SECTION_DESCRIPTIONS: Record<WorkspaceSection, string> = 
 export const WORKSPACE_TRUTHFULNESS_NOTICES = {
   previewTitle: WORKSPACE_PREVIEW_TITLE,
   sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
+  hybridNotice:
+    'The scene roadmap is calculated deterministically from the saved duration. Prompt, continuity, audio/editing, and quality sections still use static demonstration data. No AI model or provider has generated or recommended this plan.',
   providerPanelLabel: 'Catalogue reference — not recommendations',
   providerUnevaluatedNotice:
     'These catalogue entries have not been evaluated against this brief.',
-  sceneFutureNotice: 'Actual duration-aware scene decomposition begins in Phase 9.',
+  sceneRoadmapNotice:
+    'Timing is calculated from the saved duration using fixed structural rules. Creative scene content is added in later phases.',
   promptInactiveNotice: 'Provider-specific prompt compilation is not active.',
   qualityInactiveNotice: 'Automated quality evaluation is not implemented.',
   overviewPreviewStatus: 'Preview only',
-  overviewNoPlan: 'No plan has been generated',
+  overviewNoPlan: 'No final production plan has been generated',
   overviewNoRecommendation: 'No provider has been recommended',
 } as const;
+
+export const WORKSPACE_SCENE_ROADMAP_NOTICE = WORKSPACE_TRUTHFULNESS_NOTICES.sceneRoadmapNotice;
 
 export const WORKSPACE_SAMPLE_BADGE_LABEL = 'Sample';
 export const WORKSPACE_INTERFACE_PREVIEW_LABEL = 'Interface preview';
 export const WORKSPACE_CATALOGUE_REFERENCE_LABEL = 'Catalogue reference';
+export const WORKSPACE_DETERMINISTIC_BADGE_LABEL = 'Deterministic timing';
+export const WORKSPACE_RULE_BASED_BADGE_LABEL = 'Rule-based';
 
 export const EVALUATION_STATE_LABELS = {
   not_evaluated: 'Not evaluated',

@@ -171,7 +171,7 @@ Phase 6 explicitly does not implement:
 |---|---|
 | Provider catalogue | Phase 7 |
 | Provider scoring and recommendations | Phases 10–11 |
-| Scene planning and decomposition | Phase 9 |
+| Scene planning and decomposition | Phase 9 (structural timing from saved duration only) |
 | Prompt compilation | Phase 15 |
 | AI generation and planning | Phases 12–13 |
 | Source URL extraction (Firecrawl) | Phases 17–19 |

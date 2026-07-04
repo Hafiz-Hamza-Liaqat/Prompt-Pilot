@@ -5,7 +5,7 @@ export function WorkspacePreviewNotice() {
   return (
     <Alert variant="destructive">
       <AlertTitle>{WORKSPACE_TRUTHFULNESS_NOTICES.previewTitle}</AlertTitle>
-      <AlertDescription>{WORKSPACE_TRUTHFULNESS_NOTICES.sampleDisclaimer}</AlertDescription>
+      <AlertDescription>{WORKSPACE_TRUTHFULNESS_NOTICES.hybridNotice}</AlertDescription>
     </Alert>
   );
 }
