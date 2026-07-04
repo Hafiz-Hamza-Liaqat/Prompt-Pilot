@@ -12,7 +12,7 @@ Users often know what they want to communicate but not how to plan, decompose, p
 
 ## Technology direction (provisional)
 
-The planned stack is documented for future phases. Phase 3 integrates Tailwind CSS v4 and shadcn/ui (Radix). Supabase and other layers remain deferred for later phases.
+The planned stack is documented for future phases. Phase 3 integrates Tailwind CSS v4 and shadcn/ui (Radix). Phase 4 adds a local Supabase database and authentication foundation.
 
 | Layer | Direction |
 |---|---|
@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 3 — UI Design System and Application Shell** (current)
+**Phase 4 — Local Supabase Database and Authentication Foundation** (current)
 
-Public application shell with Tailwind CSS v4, shadcn/ui (Radix), responsive header and footer, skip navigation, and a truthful marketing landing page. Domain Zod contracts remain authoritative. No authentication, database, or AI integrations.
+Local Supabase Auth with email/password signup, signin, signout, `public.profiles` RLS, and a protected account foundation route. Domain Zod contracts remain authoritative. No cloud Supabase, dashboard, or project workflows yet.
 
 ## Local development foundation
 
@@ -53,4 +53,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Implementation Checklist](docs/implementation-checklist.md) | Authoritative phase execution status |
 | [Application Foundation](docs/application-foundation.md) | Next.js foundation, routes, and commands |
 | [UI Design System](docs/ui-design-system.md) | Tailwind v4, shadcn/ui, tokens, and layout components |
+| [Database and Auth Foundation](docs/database-auth-foundation.md) | Local Supabase, profiles schema, RLS, and Auth flows |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

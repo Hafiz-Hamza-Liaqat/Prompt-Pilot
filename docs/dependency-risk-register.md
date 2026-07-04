@@ -10,9 +10,19 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04** (last reviewed during Phase 3 closure)
+**2026-07-04** (last reviewed during Phase 4 closure)
 
 ---
+
+## Phase 4 packages reviewed
+
+| Package | Role |
+|---|---|
+| `@supabase/supabase-js` | Supabase client for Auth and RLS-respecting queries |
+| `@supabase/ssr` | Cookie-based SSR session handling |
+| `supabase` (dev) | Local CLI, migrations, SQL tests, type generation |
+
+No new high or critical vulnerabilities were introduced by Phase 4 Supabase packages at review time.
 
 ## Reviewed findings
 

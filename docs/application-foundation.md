@@ -4,7 +4,7 @@
 
 Related documents: [Implementation Checklist](implementation-checklist.md) · [Structured Output Contracts](structured-output-contracts.md) · [Phase Roadmap](phase-roadmap.md)
 
-Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell around the existing Zod domain contracts.
+Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication around the existing Zod domain contracts.
 
 ---
 
@@ -19,7 +19,8 @@ Phase 2 established a minimal, production-buildable Next.js App Router foundatio
 | Language | TypeScript (strict) |
 | Linting | ESLint with `eslint-config-next` |
 | Domain validation | Zod (Phase 1 contracts in `src/domain/`) |
-| Testing | Vitest |
+| Database / Auth | Local Supabase (Phase 4) |
+| Testing | Vitest + Supabase pgTAP SQL tests |
 
 Central product identity lives in `src/config/site.ts` and is consumed by application metadata and the landing page.
 
@@ -30,8 +31,13 @@ Central product identity lives in `src/config/site.ts` and is consumed by applic
 | Route | Purpose |
 |---|---|
 | `/` | Public landing page with hero, workflow, capabilities, and scope sections |
+| `/auth/sign-in` | Email/password sign in |
+| `/auth/sign-up` | Account creation |
+| `/auth/callback` | Auth code exchange |
+| `/auth/error` | Safe authentication error page |
+| `/account` | Protected account foundation (not a dashboard) |
 
-The root layout includes a site header, skip navigation link, and site footer. No authenticated application routes exist.
+The root layout includes a site header, skip navigation link, and site footer. Session refresh runs through `src/proxy.ts`. No project dashboard exists yet.
 
 Framework-level boundaries (not separate URL routes):
 
@@ -45,14 +51,14 @@ Framework-level boundaries (not separate URL routes):
 
 ## Product honesty
 
-The Phase 3 foundation explicitly does **not** include:
+The Phase 4 foundation explicitly does **not** include:
 
 - Video generation
 - Image generation
 - AI provider connections
-- Authentication
-- Database access
-- External API calls
+- Cloud Supabase or deployment
+- Project CRUD or dashboards
+- External API calls beyond local Supabase Auth
 - Live feature workflows
 
 The landing page, marketing configuration, and `siteConfig` state that Prompt Pilot produces plans, recommendations, prompts, and instructions only.
@@ -70,6 +76,10 @@ npm run typecheck
 npm test
 npm run build
 npm run start
+npm run supabase:start
+npm run supabase:reset
+npm run supabase:test
+npm run verify:auth:local
 ```
 
 | Script | Purpose |
@@ -85,7 +95,7 @@ npm run start
 
 ## Dependency health
 
-| Check | Status (Phase 3) |
+| Check | Status (Phase 4) |
 |---|---|
 | ESLint baseline | 0 errors, 0 warnings |
 | npm audit | 2 moderate (transitive PostCSS via Next.js); 0 high; 0 critical |
@@ -100,7 +110,6 @@ See [Dependency Risk Register](dependency-risk-register.md) for decision records
 
 | Area | Target phase |
 |---|---|
-| Authentication and Supabase | Phase 4 |
 | Dashboard, wizard, provider catalogue | Phases 5–8 |
 | AI planning and prompt compilation | Phases 12–16 |
 | Deployment and GitHub push | Explicit user approval after project completion |

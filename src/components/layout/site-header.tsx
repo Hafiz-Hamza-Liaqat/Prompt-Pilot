@@ -19,7 +19,7 @@ export function SiteHeader() {
             Planning layer
           </Badge>
         </div>
-        <nav aria-label="Primary">
+        <nav aria-label="Primary" className="flex flex-wrap items-center gap-4 sm:gap-6">
           <ul className="flex flex-wrap items-center gap-4 sm:gap-6">
             {publicNavigation.map((item) => (
               <li key={item.href}>
@@ -31,6 +31,24 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
+          </ul>
+          <ul className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <li>
+              <Link
+                href="/auth/sign-in"
+                className="text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
+              >
+                Sign in
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/auth/sign-up"
+                className="text-sm font-medium text-brand no-underline transition-colors hover:text-brand/80"
+              >
+                Create account
+              </Link>
+            </li>
           </ul>
         </nav>
       </PageContainer>

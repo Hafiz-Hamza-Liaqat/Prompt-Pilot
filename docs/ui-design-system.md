@@ -68,6 +68,11 @@ Exactly these foundation components are installed:
 - Badge
 - Card
 - Separator
+- Input
+- Label
+- Alert
+
+Phase 4 uses Input, Label, and Alert for authentication forms only.
 
 ---
 
@@ -96,7 +101,7 @@ Exactly these foundation components are installed:
 
 ## Current limitations
 
-- No authentication or user accounts
+- No authentication UI beyond sign-in, sign-up, and account foundation
 - No dashboard or project workspace
 - No theme toggle or dark-mode UI
 - No forms, dialogs, drawers, or dropdowns

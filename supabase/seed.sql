@@ -1,0 +1,1 @@
+-- Phase 4: no seed data. Local Auth integration tests create disposable accounts.

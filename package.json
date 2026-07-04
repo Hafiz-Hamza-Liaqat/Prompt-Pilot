@@ -14,9 +14,19 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "supabase:reset": "supabase db reset",
+    "supabase:test": "supabase test db",
+    "supabase:lint": "supabase db lint --local",
+    "supabase:types": "node scripts/generate-database-types.mjs",
+    "verify:auth:local": "node --env-file=.env.local scripts/verify-local-auth.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.0",
+    "@supabase/supabase-js": "^2.110.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.23.0",
@@ -37,6 +47,7 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
     "postcss": "^8.5.16",
+    "supabase": "^2.109.0",
     "tailwindcss": "^4.3.2",
     "typescript": "^5.8.2",
     "vitest": "^3.0.9"

@@ -4,7 +4,7 @@ type SectionHeadingProps = {
   eyebrow?: string;
   title: string;
   description?: string;
-  headingLevel: 2 | 3;
+  headingLevel: 1 | 2 | 3;
   className?: string;
 };
 
@@ -15,7 +15,8 @@ export function SectionHeading({
   headingLevel,
   className,
 }: SectionHeadingProps) {
-  const HeadingTag = headingLevel === 2 ? 'h2' : 'h3';
+  const HeadingTag =
+    headingLevel === 1 ? 'h1' : headingLevel === 2 ? 'h2' : 'h3';
 
   return (
     <div className={cn('max-w-2xl', className)}>
