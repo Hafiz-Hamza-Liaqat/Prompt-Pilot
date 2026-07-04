@@ -1,10 +1,12 @@
 # Phase Roadmap
 
-**Project:** ScenePilot
+**Project:** Prompt Pilot
 
-Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-scope.md) · [User Journey](user-journey.md)
+Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-scope.md) · [User Journey](user-journey.md) · [Implementation Checklist](implementation-checklist.md)
 
-Each phase lists a goal, main deliverables, and a completion gate. Phases are sequential within milestones unless noted.
+This roadmap describes phase scope and deliverables. Execution status is tracked in [Implementation Checklist](implementation-checklist.md), which is the authoritative status record.
+
+Phases must not overlap: exactly one phase may be `IN_PROGRESS` at a time. Completing a phase does not automatically start the next phase.
 
 ---
 

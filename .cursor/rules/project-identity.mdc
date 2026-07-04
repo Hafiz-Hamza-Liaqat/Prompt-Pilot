@@ -1,0 +1,37 @@
+---
+description: Prompt Pilot product identity and product-honesty constraints
+alwaysApply: true
+---
+
+# Prompt Pilot — Product Identity
+
+## Names and slugs
+
+- **User-facing product name:** Prompt Pilot
+- **Package and repository slug:** `prompt-pilot`
+- **Natural-language possessive:** Prompt Pilot's
+- **Environment-variable prefix:** `PROMPT_PILOT_`
+
+Do not display machine slugs or retired product names to users. Use **Prompt Pilot** for user-facing text and `prompt-pilot` for package or repository slugs only.
+
+## What Prompt Pilot is
+
+Prompt Pilot is a provider-neutral **AI Video Production Planner, Tool Recommendation Engine, and Prompt Compiler**.
+
+## What Prompt Pilot is not
+
+- Prompt Pilot does **not** generate videos or images.
+- Do not describe Prompt Pilot as a media generator.
+- Do not show fake generation progress or imply rendered output.
+
+## Recommendations and domain language
+
+- Provider recommendations must remain **provider-neutral and explainable**.
+- Do not hard-code universal "best provider" rankings.
+- Do not make unsupported provider capability claims.
+- **Publishing destinations** (YouTube, Instagram, TikTok, etc.) and **AI video providers** (Veo, Sora, Runway, Kling, Firefly) are distinct domain concepts — do not conflate them.
+
+## Scope discipline
+
+- Use only the identity defined in this rule. Do not revert to names from prior migration phases.
+- Do not rename generic domain terms (prompt, pilot, scene, provider, production plan) unless explicitly required by a phase contract.

@@ -1,6 +1,6 @@
 # MVP Scope
 
-**Project:** ScenePilot
+**Project:** Prompt Pilot
 
 Related documents: [Product Contract](product-contract.md) · [User Journey](user-journey.md) · [Domain Glossary](domain-glossary.md) · [Phase Roadmap](phase-roadmap.md)
 

@@ -1,6 +1,6 @@
 # Structured Output Contracts
 
-**Project:** ScenePilot
+**Project:** Prompt Pilot
 
 Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-scope.md) · [Domain Glossary](domain-glossary.md) · [Phase Roadmap](phase-roadmap.md)
 

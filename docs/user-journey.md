@@ -1,6 +1,6 @@
 # User Journey
 
-**Project:** ScenePilot
+**Project:** Prompt Pilot
 
 Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-scope.md) · [Domain Glossary](domain-glossary.md)
 
@@ -32,7 +32,7 @@ The main user path from sign-in to export:
 | 18 | User reviews and edits scenes | User |
 | 19 | User copies or exports the plan | User |
 
-After step 19, the user takes the exported prompts and instructions to the recommended external AI video provider. ScenePilot does not generate media.
+After step 19, the user takes the exported prompts and instructions to the recommended external AI video provider. Prompt Pilot does not generate media.
 
 ---
 

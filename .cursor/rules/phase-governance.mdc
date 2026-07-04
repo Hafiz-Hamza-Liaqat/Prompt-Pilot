@@ -1,0 +1,57 @@
+---
+description: Phase execution governance for Prompt Pilot development
+alwaysApply: true
+---
+
+# Prompt Pilot — Phase Governance
+
+## Required process for every implementation phase
+
+1. Audit current repository state.
+2. Read the relevant contracts.
+3. Confirm prerequisites.
+4. Mark only the approved phase `IN_PROGRESS`.
+5. Implement only the approved scope.
+6. Add or update focused tests.
+7. Run focused tests.
+8. Run relevant regression tests.
+9. Run typecheck.
+10. Run build when a build script exists.
+11. Run `git diff --check`.
+12. Update [docs/implementation-checklist.md](docs/implementation-checklist.md).
+13. Create one approved local commit.
+14. Confirm `git status --short` is clean.
+15. Mark the next phase `READY`.
+16. Stop without implementing the next phase.
+
+## Execution policy
+
+- Cursor performs all testing and verification.
+- Never ask the user to run normal project tests manually.
+- Never run two phases together unless a future phase contract explicitly authorizes a combined pack.
+- Stop after one repeated failure and report the root cause.
+- Do not weaken tests to obtain a passing result.
+- Do not auto-commit partial or failing work.
+
+## Prohibited without explicit user approval
+
+- `git push`
+- Adding a Git remote
+- Creating a GitHub repository
+- Deploying to Vercel, Supabase cloud, Render, or any production infrastructure
+- Publishing packages or public preview deployments
+
+## Repository safety
+
+- Do not perform destructive Git commands (`git reset --hard`, `git clean -fd`, history rewrite).
+- Do not amend earlier commits unless explicitly authorized.
+- Preserve user files.
+
+## Scope control
+
+- Future ideas belong in the roadmap or checklist notes, not the current implementation.
+- Do not modify unrelated modules while editing nearby files.
+- Do not silently change product contracts.
+- Exactly one phase may be `IN_PROGRESS` at a time.
+
+Status tracking: [docs/implementation-checklist.md](docs/implementation-checklist.md) is authoritative for execution status; [docs/phase-roadmap.md](docs/phase-roadmap.md) describes scope.

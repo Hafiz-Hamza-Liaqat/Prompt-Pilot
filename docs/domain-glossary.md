@@ -1,6 +1,6 @@
 # Domain Glossary
 
-**Project:** ScenePilot
+**Project:** Prompt Pilot
 
 Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-scope.md) · [User Journey](user-journey.md)
 
@@ -16,7 +16,7 @@ The normalized input describing what the user wants to create: source material, 
 
 ### Production Plan
 
-The complete structured output of ScenePilot. Contains all sections defined in [Product Contract — Definition of a successful production plan](product-contract.md#7-definition-of-a-successful-production-plan). A Production Plan is a document of prompts and instructions — not a rendered video file.
+The complete structured output of Prompt Pilot. Contains all sections defined in [Product Contract — Definition of a successful production plan](product-contract.md#7-definition-of-a-successful-production-plan). A Production Plan is a document of prompts and instructions — not a rendered video file.
 
 ### Publishing Destination
 
@@ -34,7 +34,7 @@ One of the 12 supported content types (e.g., product advertisement, explainer vi
 
 ### Scene
 
-A contiguous narrative unit within a Production Plan. Each scene has a duration, description, shots, and a provider-specific **Compiled Prompt**. Scenes are planned in ScenePilot; clips are generated externally.
+A contiguous narrative unit within a Production Plan. Each scene has a duration, description, shots, and a provider-specific **Compiled Prompt**. Scenes are planned in Prompt Pilot; clips are generated externally.
 
 ### Shot
 
@@ -42,7 +42,7 @@ A single visual beat within a scene (e.g., wide establishing shot, product close
 
 ### Clip
 
-An individual video segment generated on an external AI video provider. A clip corresponds to one scene (or shot, if decomposed). ScenePilot produces the prompt; the provider produces the clip.
+An individual video segment generated on an external AI video provider. A clip corresponds to one scene (or shot, if decomposed). Prompt Pilot produces the prompt; the provider produces the clip.
 
 ### Scene Timeline
 

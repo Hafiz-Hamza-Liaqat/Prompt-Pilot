@@ -1,6 +1,6 @@
 # Product Contract
 
-**Project:** ScenePilot
+**Project:** Prompt Pilot
 
 Related documents: [MVP Scope](mvp-scope.md) · [User Journey](user-journey.md) · [Domain Glossary](domain-glossary.md) · [Safety and Content Boundaries](safety-and-content-boundaries.md) · [Phase Roadmap](phase-roadmap.md)
 
@@ -8,7 +8,7 @@ Related documents: [MVP Scope](mvp-scope.md) · [User Journey](user-journey.md) 
 
 ## 1. Product definition
 
-ScenePilot is a **provider-neutral AI video planning and prompt-compilation platform**.
+Prompt Pilot is a **provider-neutral AI video planning and prompt-compilation platform**.
 
 It sits above AI video-generation providers (Google Veo, OpenAI Sora, Runway, Kling, Adobe Firefly) and helps users move from raw source material to a structured **Production Plan** — a complete package of brief, recommendations, scene roadmap, provider-specific prompts, continuity instructions, and editing and publishing guidance.
 
@@ -31,7 +31,7 @@ Users who want to create AI-assisted video content frequently struggle with prob
 
 ## 3. Product promise
 
-ScenePilot transforms source material through a defined pipeline:
+Prompt Pilot transforms source material through a defined pipeline:
 
 ```text
 Idea, script, article, or product page
