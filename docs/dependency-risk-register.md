@@ -10,7 +10,21 @@ This register records dependency vulnerability review decisions. It does not rep
 
 ## Current review date
 
-**2026-07-04** (last reviewed during Phase 4 closure)
+**2026-07-04** (last reviewed during Phase 5 closure)
+
+---
+
+## Phase 5 packages reviewed
+
+Phase 5 did not introduce new npm dependencies. Existing Supabase packages were re-verified:
+
+| Package | Role |
+|---|---|
+| `@supabase/supabase-js` | Supabase client for Auth, RLS-respecting queries, and soft-delete RPC |
+| `@supabase/ssr` | Cookie-based SSR session handling |
+| `supabase` (dev) | Local CLI, migrations, SQL tests, type generation |
+
+No new high or critical vulnerabilities were introduced at Phase 5 review time.
 
 ---
 

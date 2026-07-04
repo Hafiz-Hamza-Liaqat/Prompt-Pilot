@@ -71,8 +71,9 @@ Exactly these foundation components are installed:
 - Input
 - Label
 - Alert
+- Textarea
 
-Phase 4 uses Input, Label, and Alert for authentication forms only.
+Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Textarea for project descriptions and project-specific form components under `src/components/projects/`.
 
 ---
 
@@ -84,6 +85,21 @@ Phase 4 uses Input, Label, and Alert for authentication forms only.
 | SiteHeader | `src/components/layout/site-header.tsx` | Brand, badge, in-page navigation |
 | SiteFooter | `src/components/layout/site-footer.tsx` | Copyright and product honesty |
 | SectionHeading | `src/components/layout/section-heading.tsx` | Reusable section titles |
+
+### Project components
+
+| Component | Path | Purpose |
+|---|---|---|
+| SubmitButton | `src/components/forms/submit-button.tsx` | Pending-aware form submit |
+| ProjectAppHeader | `src/components/projects/project-app-header.tsx` | Projects area navigation |
+| ProjectCard | `src/components/projects/project-card.tsx` | Dashboard project summary |
+| ProjectCreateForm | `src/components/projects/project-create-form.tsx` | Create project |
+| ProjectEditForm | `src/components/projects/project-edit-form.tsx` | Edit title and description |
+| ProjectActionForm | `src/components/projects/project-action-form.tsx` | Archive, restore, duplicate, delete |
+| ProjectEmptyState | `src/components/projects/project-empty-state.tsx` | Honest empty states |
+| ProjectPagination | `src/components/projects/project-pagination.tsx` | Dashboard pagination |
+| ProjectQueryControls | `src/components/projects/project-query-controls.tsx` | Search, filter, sort |
+| ProjectStatusBadge | `src/components/projects/project-status-badge.tsx` | Active/archived badge |
 
 ---
 
@@ -101,10 +117,8 @@ Phase 4 uses Input, Label, and Alert for authentication forms only.
 
 ## Current limitations
 
-- No authentication UI beyond sign-in, sign-up, and account foundation
-- No dashboard or project workspace
+- No guided creation wizard or video brief UI (Phase 6)
 - No theme toggle or dark-mode UI
-- No forms, dialogs, drawers, or dropdowns
 - No mobile drawer navigation
 - No live AI provider connections
 - No video or image generation

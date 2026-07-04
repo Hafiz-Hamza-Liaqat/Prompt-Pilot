@@ -47,6 +47,10 @@ export function sanitizeRedirectPath(
   return value;
 }
 
+export function buildProtectedRedirectPath(pathname: string): string {
+  return sanitizeRedirectPath(pathname, '/projects');
+}
+
 export const AUTH_ERROR_CODES = {
   invalidCredentials: 'invalid-credentials',
   validationFailed: 'validation-failed',

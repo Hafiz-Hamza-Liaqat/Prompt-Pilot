@@ -22,7 +22,8 @@
     "supabase:test": "supabase test db",
     "supabase:lint": "supabase db lint --local",
     "supabase:types": "node scripts/generate-database-types.mjs",
-    "verify:auth:local": "node --env-file=.env.local scripts/verify-local-auth.mjs"
+    "verify:auth:local": "node --env-file=.env.local scripts/verify-local-auth.mjs",
+    "verify:projects:local": "node --env-file=.env.local scripts/verify-local-projects.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 4 — Local Supabase Database and Authentication Foundation** (current)
+**Phase 5 — Project Dashboard and Project Management** (current)
 
-Local Supabase Auth with email/password signup, signin, signout, `public.profiles` RLS, and a protected account foundation route. Domain Zod contracts remain authoritative. No cloud Supabase, dashboard, or project workflows yet.
+Local Supabase Auth with email/password signup, signin, signout, `public.profiles` and `public.projects` RLS, protected account and project routes. Authenticated users can create, search, filter, sort, edit, archive, restore, duplicate, and soft-delete projects. Domain Zod contracts remain authoritative. No video briefs, AI planning, or cloud deployment yet.
 
 ## Local development foundation
 
@@ -54,4 +54,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Application Foundation](docs/application-foundation.md) | Next.js foundation, routes, and commands |
 | [UI Design System](docs/ui-design-system.md) | Tailwind v4, shadcn/ui, tokens, and layout components |
 | [Database and Auth Foundation](docs/database-auth-foundation.md) | Local Supabase, profiles schema, RLS, and Auth flows |
+| [Project Management Foundation](docs/project-management-foundation.md) | Project dashboard, CRUD, archive, duplicate, soft delete |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

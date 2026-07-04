@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -35,7 +36,7 @@ export default async function AccountPage() {
         <SectionHeading
           headingLevel={1}
           title="Account foundation"
-          description="Your authenticated Prompt Pilot profile. Project workflows arrive in Phase 5."
+          description="Your authenticated Prompt Pilot profile and workspace entry point."
         />
 
         <Card className="mt-8">
@@ -52,14 +53,19 @@ export default async function AccountPage() {
               instructions. It does not generate videos or images.
             </p>
             <p>
-              Project creation, dashboards, and persistence workflows are planned for
-              Phase 5 and later phases.
+              Project containers are available from the project dashboard. Guided video brief
+              creation begins in Phase 6.
             </p>
-            <form action={signOutAction}>
-              <Button type="submit" variant="outline">
-                Sign out
+            <div className="flex flex-wrap gap-3">
+              <Button asChild>
+                <Link href="/projects">Open projects</Link>
               </Button>
-            </form>
+              <form action={signOutAction}>
+                <Button type="submit" variant="outline">
+                  Sign out
+                </Button>
+              </form>
+            </div>
           </CardContent>
         </Card>
       </PageContainer>

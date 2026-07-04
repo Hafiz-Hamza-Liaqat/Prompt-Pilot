@@ -4,7 +4,7 @@
 
 Related documents: [Application Foundation](application-foundation.md) · [Implementation Checklist](implementation-checklist.md)
 
-Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation.
+Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC.
 
 ---
 
@@ -14,10 +14,10 @@ Phase 4 establishes a **local-only** Supabase database and email/password authen
 |---|---|
 | Supabase CLI | Local project configuration and migrations |
 | Docker | Postgres, Auth, REST API, Studio containers |
-| Postgres | Stores `public.profiles` |
+| Postgres | Stores `public.profiles` and `public.projects` |
 | Supabase Auth | Email/password signup, signin, signout |
 | `@supabase/ssr` | Cookie-based session handling in Next.js |
-| Next.js `proxy.ts` | Session refresh and `/account` route protection |
+| Next.js `proxy.ts` | Session refresh and `/account`, `/projects` route protection |
 
 No hosted Supabase project is linked. No cloud deployment exists in this phase.
 
@@ -38,12 +38,36 @@ No hosted Supabase project is linked. No cloud deployment exists in this phase.
 - No password, role, plan, or project fields
 - Profile rows are created automatically by `prompt_pilot_handle_new_user` after Auth signup
 
-### Row Level Security
+### `public.projects`
+
+| Column | Purpose |
+|---|---|
+| `id` | UUID primary key |
+| `owner_id` | References `auth.users(id)` with `ON DELETE CASCADE` |
+| `title` | Trimmed title (1–120 characters) |
+| `description` | Optional description (max 500 characters) or `null` |
+| `archived_at` | Archive timestamp; `null` = active |
+| `deleted_at` | Soft-delete timestamp; `null` = visible |
+| `created_at` | Creation timestamp |
+| `updated_at` | Maintained by `prompt_pilot_set_updated_at` trigger |
+
+See [Project Management Foundation](project-management-foundation.md) for dashboard and Server Action details.
+
+### Row Level Security — profiles
 
 - **Select:** authenticated users may read only `auth.uid() = id`
 - **Update:** authenticated users may update only their own row (`USING` and `WITH CHECK`)
 - **Insert/Delete:** not granted to normal authenticated users
 - **Anonymous:** no profile access
+
+### Row Level Security — projects
+
+- **Select:** authenticated users may read own rows where `deleted_at IS NULL`
+- **Insert:** authenticated users may insert own rows only
+- **Update:** authenticated users may update own non-deleted rows; immutable columns protected by trigger
+- **Soft delete:** `prompt_pilot_soft_delete_project()` RPC (security definer)
+- **SQL DELETE:** not granted to authenticated users
+- **Anonymous:** no project access
 
 ---
 
@@ -90,6 +114,7 @@ npm run supabase:lint
 npm run supabase:test
 npm run supabase:types
 npm run verify:auth:local
+npm run verify:projects:local
 npm run supabase:stop
 ```
 

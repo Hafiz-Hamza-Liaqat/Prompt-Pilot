@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -30,12 +30,48 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          archived_at: string | null
+          created_at: string
+          deleted_at: string | null
+          description: string | null
+          id: string
+          owner_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          archived_at?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          owner_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          archived_at?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          owner_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      prompt_pilot_soft_delete_project: {
+        Args: { project_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

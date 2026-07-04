@@ -42,10 +42,16 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  if (!user && (pathname === '/account' || pathname.startsWith('/account/'))) {
+  if (
+    !user &&
+    (pathname === '/account' ||
+      pathname.startsWith('/account/') ||
+      pathname === '/projects' ||
+      pathname.startsWith('/projects/'))
+  ) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = '/auth/sign-in';
-    redirectUrl.searchParams.set('next', sanitizeRedirectPath(pathname));
+    redirectUrl.searchParams.set('next', sanitizeRedirectPath(pathname, '/projects'));
     return NextResponse.redirect(redirectUrl);
   }
 

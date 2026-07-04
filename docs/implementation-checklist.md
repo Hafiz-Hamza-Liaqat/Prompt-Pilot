@@ -42,9 +42,8 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 5
-Only permitted work: None (Phase 4 complete)
-Next phase after Phase 4 closure: Phase 5 — Dashboard and Project Management
+Next ready phase: Phase 6
+Next phase after Phase 5 closure: Phase 6 — Guided Creation Wizard
 ```
 
 ---
@@ -60,9 +59,9 @@ Next phase after Phase 4 closure: Phase 5 — Dashboard and Project Management
 | 2 | Next.js Repository and Application Foundation | DONE | 42 tests passed; lint/typecheck/build passed; HTTP 200 smoke on :3100 |
 | 2-A | Foundation Hygiene and Dependency-Risk Review | DONE | ESLint 0/0; 42 tests; typecheck/build/smoke passed; audit recorded |
 | 3 | UI Design System and Application Shell | DONE | Tailwind v4; shadcn/Radix; button/badge/card/separator; 64 tests; lint 0/0; typecheck/build/smoke passed; audit reviewed; commit pending |
-| 4 | Supabase Database and Authentication | DONE | Local Supabase; profiles migration; RLS 19/19; 83 unit tests; auth integration passed; lint 0/0; build/smoke passed; commit pending |
-| 5 | Dashboard and Project Management | READY | Requires Phase 4 |
-| 6 | Guided Creation Wizard | NOT_STARTED | Requires Phase 5 |
+| 4 | Supabase Database and Authentication | DONE | Local Supabase; profiles migration; RLS 19/19; 83 unit tests; auth integration passed; lint 0/0; build/smoke passed; commit `2ce05a8` |
+| 5 | Dashboard and Project Management | DONE | Projects migration `20260704193000`; RLS 35/35 SQL; 122 unit tests; project integration passed; auth regression passed; lint 0/0; typecheck/build/smoke passed; audit reviewed; local commit pending |
+| 6 | Guided Creation Wizard | READY | Requires Phase 5 |
 | 7 | Provider Catalogue | NOT_STARTED | Requires Phase 6 |
 | 8 | Mock Result Workspace | NOT_STARTED | Requires Phase 7 |
 | 9 | Duration and Scene Decomposition | NOT_STARTED | Requires Phase 8 |
