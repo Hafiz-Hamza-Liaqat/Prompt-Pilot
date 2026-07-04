@@ -8,8 +8,10 @@ import {
 } from '../../src/domain/mockResultWorkspace.js';
 import { calculateComplexityRiskAssessment } from '../../src/domain/complexityRiskAssessment.js';
 import { decomposeDurationIntoScenes } from '../../src/domain/sceneDecomposition.js';
+import { calculateProviderRecommendation } from '../../src/domain/providerRecommendationEngine.js';
 import { createDefaultProductionRequirements } from '../../src/domain/productionRequirements.js';
 import { mockResultWorkspaceFixture } from '../../src/fixtures/mock-result-workspace.js';
+import { buildRecommendationCalculateInput } from '../recommendations/catalogueFixtures.js';
 import {
   containsRetiredProductName,
   RETIRED_PRODUCT_NAMES,
@@ -23,7 +25,7 @@ function buildTruthfulViewModel() {
     mode: 'hybrid_preview',
     dataOrigin: 'mixed',
     isDecisionReady: false,
-    fixtureVersion: 'workspace-v3',
+    fixtureVersion: 'workspace-v4',
     sampleDisclaimer: WORKSPACE_SAMPLE_DISCLAIMER,
     previewTitle: WORKSPACE_PREVIEW_TITLE,
     sectionOrigins: WORKSPACE_SECTION_ORIGINS,
@@ -55,58 +57,7 @@ function buildTruthfulViewModel() {
       sourceUrl: null,
       completedAt: '2026-07-04T12:00:00+00:00',
     },
-    providers: [
-      {
-        id: 'adobe_firefly',
-        displayName: 'Adobe Firefly',
-        lifecycleStatus: 'active',
-        apiAccessStatus: 'public',
-        freshness: 'fresh',
-        catalogueNotice: null,
-        sunsetAt: null,
-        referenceState: 'catalogue_reference',
-      },
-      {
-        id: 'google_veo',
-        displayName: 'Google Veo',
-        lifecycleStatus: 'active',
-        apiAccessStatus: 'public',
-        freshness: 'fresh',
-        catalogueNotice: null,
-        sunsetAt: null,
-        referenceState: 'catalogue_reference',
-      },
-      {
-        id: 'kling',
-        displayName: 'Kling',
-        lifecycleStatus: 'active',
-        apiAccessStatus: 'public',
-        freshness: 'fresh',
-        catalogueNotice: null,
-        sunsetAt: null,
-        referenceState: 'catalogue_reference',
-      },
-      {
-        id: 'openai_sora',
-        displayName: 'OpenAI Sora',
-        lifecycleStatus: 'sunsetting',
-        apiAccessStatus: 'preview',
-        freshness: 'fresh',
-        catalogueNotice: 'Sora is sunsetting.',
-        sunsetAt: null,
-        referenceState: 'catalogue_reference',
-      },
-      {
-        id: 'runway',
-        displayName: 'Runway',
-        lifecycleStatus: 'active',
-        apiAccessStatus: 'public',
-        freshness: 'fresh',
-        catalogueNotice: null,
-        sunsetAt: null,
-        referenceState: 'catalogue_reference',
-      },
-    ],
+    providerRecommendation: calculateProviderRecommendation(buildRecommendationCalculateInput()),
     sceneDecomposition: decomposeDurationIntoScenes(30),
     complexityRiskAssessment: calculateComplexityRiskAssessment({
       durationSeconds: 30,
@@ -137,7 +88,8 @@ describe('workspace disclaimer wording', () => {
 
   it('states remaining sections use static data', () => {
     expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toContain('static demonstration data');
-    expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toContain('recommended');
+    expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).toContain('prompt');
+    expect(WORKSPACE_SAMPLE_DISCLAIMER.toLowerCase()).not.toContain('provider recommendations');
   });
 
   it('does not claim assessments are AI-generated', () => {

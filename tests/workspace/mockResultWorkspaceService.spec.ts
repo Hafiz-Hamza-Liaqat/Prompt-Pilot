@@ -26,9 +26,7 @@ import {
   createMockResultWorkspaceService,
   MockResultWorkspaceService,
 } from '../../src/server/workspace/mock-result-workspace-service.js';
-
-const VERIFIED_AT = '2026-07-04T12:00:00+00:00';
-const REVIEW_DUE_AT = '2026-08-03T12:00:00+00:00';
+import { buildDeterministicRecommendationCatalogue } from '../recommendations/catalogueFixtures.js';
 const COMPLETED_AT = '2026-07-04T12:00:00+00:00';
 
 const ownerA = '11111111-1111-1111-1111-111111111111';
@@ -253,183 +251,29 @@ class FakeProviderCatalogueRepository implements ProviderCatalogueRepository {
   }
 }
 
-function providerRecord(
-  id: AiVideoProvider,
-  overrides: Partial<CatalogueProvider> = {},
-): CatalogueProvider {
-  const defaults: Record<AiVideoProvider, Pick<CatalogueProvider, 'displayName' | 'vendorName'>> = {
-    google_veo: { displayName: 'Google Veo', vendorName: 'Google' },
-    openai_sora: { displayName: 'OpenAI Sora', vendorName: 'OpenAI' },
-    runway: { displayName: 'Runway', vendorName: 'Runway' },
-    kling: { displayName: 'Kling', vendorName: 'Kuaishou' },
-    adobe_firefly: { displayName: 'Adobe Firefly', vendorName: 'Adobe' },
-  };
-
-  return {
-    id,
-    displayName: defaults[id].displayName,
-    vendorName: defaults[id].vendorName,
-    summary: `${defaults[id].displayName} summary for Prompt Pilot catalogue testing.`,
-    lifecycleStatus: 'active',
-    apiAccessStatus: 'public',
-    recommendationEligible: true,
-    sunsetAt: null,
-    catalogueNotice: null,
-    verifiedAt: VERIFIED_AT,
-    reviewDueAt: REVIEW_DUE_AT,
-    createdAt: VERIFIED_AT,
-    updatedAt: VERIFIED_AT,
-    ...overrides,
-  };
+function seedFromDeterministicCatalogue(repository: FakeProviderCatalogueRepository) {
+  const catalogue = buildDeterministicRecommendationCatalogue();
+  for (const provider of catalogue.providers) {
+    repository.seedProvider(provider);
+  }
+  for (const offering of catalogue.offerings) {
+    repository.seedOffering(offering);
+  }
+  for (const [offeringId, facts] of Object.entries(catalogue.factsByOfferingId)) {
+    repository.seedFacts(offeringId, facts);
+  }
+  for (const [providerId, sources] of Object.entries(catalogue.sourcesByProviderId)) {
+    repository.seedSources(providerId as AiVideoProvider, sources);
+  }
+  return catalogue;
 }
 
-function offeringRecord(
-  id: string,
-  providerId: AiVideoProvider,
-  overrides: Partial<CatalogueOffering> = {},
-): CatalogueOffering {
-  return {
-    id,
-    providerId,
-    offeringKey: `${providerId}-primary`,
-    displayName: `${providerId} offering`,
-    offeringType: 'model',
-    ownershipType: 'first_party',
-    officialIdentifier: `${providerId}-model`,
-    summary: `${providerId} offering summary for Prompt Pilot catalogue testing.`,
-    lifecycleStatus: 'active',
-    apiAccessStatus: 'public',
-    recommendationEligible: true,
-    sunsetAt: null,
-    verifiedAt: VERIFIED_AT,
-    reviewDueAt: REVIEW_DUE_AT,
-    createdAt: VERIFIED_AT,
-    updatedAt: VERIFIED_AT,
-    ...overrides,
-  };
-}
-
-function sourceRecord(
-  id: string,
-  providerId: AiVideoProvider,
-  url: string,
-  overrides: Partial<CatalogueSource> = {},
-): CatalogueSource {
-  return {
-    id,
-    providerId,
-    offeringId: null,
-    sourceKind: 'developer_docs',
-    title: `${providerId} official documentation`,
-    url,
-    publishedOrUpdatedAt: null,
-    verifiedAt: VERIFIED_AT,
-    createdAt: VERIFIED_AT,
-    ...overrides,
-  };
-}
-
-function factRecord(
-  id: string,
-  offeringId: string,
-  sourceId: string,
-  overrides: Partial<CatalogueCapabilityFact> = {},
-): CatalogueCapabilityFact {
-  return {
-    id,
-    offeringId,
-    capabilityKey: 'text_to_video',
-    supportLevel: 'supported',
-    numericValue: null,
-    textValue: null,
-    structuredValue: null,
-    evidenceSummary: 'Official documentation describes text-to-video generation.',
-    limitationSummary: null,
-    sourceId,
-    verifiedAt: VERIFIED_AT,
-    reviewDueAt: REVIEW_DUE_AT,
-    createdAt: VERIFIED_AT,
-    updatedAt: VERIFIED_AT,
-    ...overrides,
-  };
-}
-
-const fixtureIds: Record<
-  AiVideoProvider,
-  { offeringId: string; sourceId: string; factId: string }
-> = {
-  google_veo: {
-    offeringId: 'a1000001-0001-4001-8001-000000000001',
-    sourceId: 'b1000001-0001-4001-8001-000000000001',
-    factId: 'c1000001-0001-4001-8001-000000000001',
-  },
-  openai_sora: {
-    offeringId: 'a2000001-0001-4001-8001-000000000001',
-    sourceId: 'b2000001-0001-4001-8001-000000000001',
-    factId: 'c2000001-0001-4001-8001-000000000001',
-  },
-  runway: {
-    offeringId: 'a3000001-0001-4001-8001-000000000001',
-    sourceId: 'b3000001-0001-4001-8001-000000000001',
-    factId: 'c3000001-0001-4001-8001-000000000001',
-  },
-  kling: {
-    offeringId: 'a4000001-0001-4001-8001-000000000001',
-    sourceId: 'b4000001-0001-4001-8001-000000000001',
-    factId: 'c4000001-0001-4001-8001-000000000001',
-  },
-  adobe_firefly: {
-    offeringId: 'a5000001-0001-4001-8001-000000000001',
-    sourceId: 'b5000001-0001-4001-8001-000000000001',
-    factId: 'c5000001-0001-4001-8001-000000000001',
-  },
-};
-
-const officialUrls: Record<AiVideoProvider, string> = {
-  google_veo: 'https://ai.google.dev/gemini-api/docs/veo',
-  openai_sora: 'https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation',
-  runway: 'https://docs.dev.runwayml.com/guides/using-the-api/',
-  kling: 'https://app.klingai.com/global/dev/document-api/apiReference/model/textToVideo',
-  adobe_firefly: 'https://developer.adobe.com/audio-video-firefly-services/',
-};
-
-function buildCatalogueRepository(options?: { sunsettingSora?: boolean }) {
+function buildCatalogueRepository(options?: { excludeSora?: boolean }) {
   const repository = new FakeProviderCatalogueRepository();
-  const providerIds: AiVideoProvider[] = [
-    'google_veo',
-    'openai_sora',
-    'runway',
-    'kling',
-    'adobe_firefly',
-  ];
+  seedFromDeterministicCatalogue(repository);
 
-  for (const providerId of providerIds) {
-    const { offeringId, sourceId, factId } = fixtureIds[providerId];
-    repository.seedProvider(
-      providerRecord(providerId, {
-        lifecycleStatus:
-          options?.sunsettingSora && providerId === 'openai_sora' ? 'sunsetting' : 'active',
-        catalogueNotice:
-          options?.sunsettingSora && providerId === 'openai_sora'
-            ? 'OpenAI Sora is sunsetting.'
-            : null,
-      }),
-    );
-    repository.seedOffering(
-      offeringRecord(offeringId, providerId, {
-        id: offeringId,
-        offeringKey: providerId === 'adobe_firefly' ? 'reframe-api' : `${providerId}-primary`,
-        offeringType: providerId === 'adobe_firefly' ? 'api_service' : 'model',
-        officialIdentifier: providerId === 'adobe_firefly' ? null : `${providerId}-model`,
-      }),
-    );
-    repository.seedSources(providerId, [
-      sourceRecord(sourceId, providerId, officialUrls[providerId], {
-        id: sourceId,
-        offeringId,
-      }),
-    ]);
-    repository.seedFacts(offeringId, [factRecord(factId, offeringId, sourceId, { id: factId })]);
+  if (options?.excludeSora) {
+    repository.removeProvider('openai_sora');
   }
 
   return repository;
@@ -481,13 +325,13 @@ function buildCompletedBrief(overrides: Partial<PartialVideoBriefDraft> = {}): P
 }
 
 function createService(options?: {
-  sunsettingSora?: boolean;
+  excludeSora?: boolean;
   fixture?: typeof mockResultWorkspaceFixture;
 }) {
   const projectRepository = new FakeProjectRepository();
   const briefRepository = new FakeVideoBriefRepository();
   const providerCatalogueRepository = buildCatalogueRepository({
-    sunsettingSora: options?.sunsettingSora,
+    excludeSora: options?.excludeSora,
   });
 
   projectRepository.seed(buildProject());
@@ -625,73 +469,79 @@ describe('MockResultWorkspaceService', () => {
     }
   });
 
-  it('sorts providers alphabetically by display name', async () => {
+  it('includes providerRecommendation in the view model', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data.providers.map((provider) => provider.displayName)).toEqual([
-        'Adobe Firefly',
-        'Google Veo',
-        'Kling',
-        'OpenAI Sora',
-        'Runway',
-      ]);
+      expect(result.data.providerRecommendation.algorithmVersion).toBe('provider-recommendation-v1');
+      expect(result.data.providerRecommendation.origin).toBe('deterministic_evidence_engine');
+      expect(result.data).not.toHaveProperty('providers');
     }
   });
 
-  it('returns exactly five providers', async () => {
+  it('returns evaluated provider recommendation candidates', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.data.providers).toHaveLength(5);
+      const recommendation = result.data.providerRecommendation;
+      expect(recommendation.requestedNeeds.length).toBeGreaterThan(0);
+      expect(recommendation.ineligible.length).toBeGreaterThan(0);
+      expect([
+        'recommended',
+        'close_alternatives',
+        'insufficient_evidence',
+        'no_eligible_candidate',
+      ]).toContain(recommendation.recommendationStatus);
     }
   });
 
-  it('preserves unknown catalogue lifecycle states without ranking', async () => {
-    const { service } = createService({ sunsettingSora: true });
+  it('marks sunsetting Sora as ineligible in recommendation output', async () => {
+    const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      const sora = result.data.providers.find((provider) => provider.id === 'openai_sora');
-      expect(sora?.lifecycleStatus).toBe('sunsetting');
-      expect(sora?.catalogueNotice).toBe('OpenAI Sora is sunsetting.');
+      const sora = result.data.providerRecommendation.ineligible.find(
+        (candidate) => candidate.providerId === 'openai_sora',
+      );
+      expect(sora).toBeDefined();
+      expect(sora?.classification).toBe('ineligible');
     }
   });
 
-  it('keeps sunsetting provider state visible', async () => {
-    const { service } = createService({ sunsettingSora: true });
+  it('keeps sunsetting Sora out of ranked recommendations', async () => {
+    const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(
-        result.data.providers.some(
-          (provider) =>
-            provider.id === 'openai_sora' && provider.lifecycleStatus === 'sunsetting',
+      const rankedIds = [
+        result.data.providerRecommendation.primaryRecommendation?.providerId,
+        ...result.data.providerRecommendation.leadingAlternatives.map(
+          (candidate) => candidate.providerId,
         ),
-      ).toBe(true);
+        ...result.data.providerRecommendation.alternatives.map((candidate) => candidate.providerId),
+      ].filter(Boolean);
+      expect(rankedIds).not.toContain('openai_sora');
     }
   });
 
-  it('does not select a provider', async () => {
+  it('does not select a provider for execution', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.data).not.toHaveProperty('selectedProvider');
-      expect(result.data.providers.every((provider) => provider.referenceState === 'catalogue_reference')).toBe(
-        true,
-      );
+      expect(result.data.isDecisionReady).toBe(false);
     }
   });
 
-  it('does not create provider ranking metadata', async () => {
+  it('does not create forbidden ranking metadata on the view model', async () => {
     const { service } = createService();
     const result = await service.loadWorkspace(ownerA, projectId);
 
@@ -699,10 +549,7 @@ describe('MockResultWorkspaceService', () => {
     if (result.ok) {
       expect(result.data).not.toHaveProperty('recommendationScore');
       expect(result.data).not.toHaveProperty('winningProvider');
-      for (const provider of result.data.providers) {
-        expect(provider).not.toHaveProperty('rank');
-        expect(provider).not.toHaveProperty('matchPercentage');
-      }
+      expect(result.data).not.toHaveProperty('matchPercentage');
     }
   });
 
@@ -780,18 +627,18 @@ describe('MockResultWorkspaceService', () => {
     }
   });
 
-  it('does not change assessment when provider catalogue lifecycle changes', async () => {
+  it('does not change assessment when catalogue eligibility changes', async () => {
     const baseline = createService();
-    const sunsetting = createService({ sunsettingSora: true });
+    const withoutSora = createService({ excludeSora: true });
 
     const baselineResult = await baseline.service.loadWorkspace(ownerA, projectId);
-    const sunsettingResult = await sunsetting.service.loadWorkspace(ownerA, projectId);
+    const withoutSoraResult = await withoutSora.service.loadWorkspace(ownerA, projectId);
 
     expect(baselineResult.ok).toBe(true);
-    expect(sunsettingResult.ok).toBe(true);
-    if (baselineResult.ok && sunsettingResult.ok) {
+    expect(withoutSoraResult.ok).toBe(true);
+    if (baselineResult.ok && withoutSoraResult.ok) {
       expect(baselineResult.data.complexityRiskAssessment).toEqual(
-        sunsettingResult.data.complexityRiskAssessment,
+        withoutSoraResult.data.complexityRiskAssessment,
       );
     }
   });
@@ -804,7 +651,7 @@ describe('MockResultWorkspaceService', () => {
     if (result.ok) {
       expect(result.data.sectionOrigins.scenes).toBe('deterministic_rule_engine');
       expect(result.data.sectionOrigins.prompts).toBe('static_fixture');
-      expect(result.data.sectionOrigins.providers).toBe('catalogue_snapshot');
+      expect(result.data.sectionOrigins.providers).toBe('deterministic_evidence_engine');
       expect(result.data.sectionOrigins.quality).toBe('deterministic_rule_engine');
       expect(result.data.sectionOrigins.overview).toBe('persisted_input');
     }

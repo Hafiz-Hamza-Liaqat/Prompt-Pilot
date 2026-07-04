@@ -18,3 +18,7 @@ export function WorkspaceSampleBadge({
 export function WorkspaceCatalogueReferenceBadge() {
   return <Badge variant="outline">{WORKSPACE_CATALOGUE_REFERENCE_LABEL}</Badge>;
 }
+
+export function WorkspaceRuleBasedBadge({ label }: { label: string }) {
+  return <Badge variant="outline">{label}</Badge>;
+}

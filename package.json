@@ -28,7 +28,8 @@
     "verify:providers:local": "node --env-file=.env.local scripts/verify-local-provider-catalogue.mjs",
     "verify:workspace:local": "node --env-file=.env.local scripts/verify-local-mock-workspace.mjs",
     "verify:scenes:local": "node --env-file=.env.local scripts/verify-local-scene-decomposition.mjs",
-    "verify:scoring:local": "node --env-file=.env.local scripts/verify-local-complexity-risk.mjs"
+    "verify:scoring:local": "node --env-file=.env.local scripts/verify-local-complexity-risk.mjs",
+    "verify:recommendations:local": "node --env-file=.env.local scripts/verify-local-provider-recommendations.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

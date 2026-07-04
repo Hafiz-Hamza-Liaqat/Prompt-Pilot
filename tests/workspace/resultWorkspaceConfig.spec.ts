@@ -66,10 +66,10 @@ describe('result workspace configuration', () => {
     expect(WORKSPACE_TRUTHFULNESS_NOTICES.sampleDisclaimer.trim().length).toBeGreaterThan(0);
   });
 
-  it('states provider section is not recommendation output', () => {
-    expect(WORKSPACE_SECTION_DESCRIPTIONS.providers.toLowerCase()).toContain('not recommendations');
-    expect(WORKSPACE_TRUTHFULNESS_NOTICES.providerPanelLabel.toLowerCase()).toContain(
-      'not recommendations',
+  it('describes evidence-backed provider recommendations', () => {
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.providers.toLowerCase()).toContain('evidence-backed');
+    expect(WORKSPACE_TRUTHFULNESS_NOTICES.recommendationNotice.toLowerCase()).toContain(
+      'not success probabilities',
     );
   });
 

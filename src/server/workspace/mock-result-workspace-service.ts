@@ -12,12 +12,10 @@ import {
   type MockResultWorkspaceViewModel,
   type WorkspaceSection,
 } from '@/domain/mockResultWorkspace';
-import type { ProviderCatalogueListItem } from '@/server/providers/provider-catalogue-service';
 import type { PartialVideoBriefDraft } from '@/domain/videoBriefDraft';
 import type { ProjectRepository, RepositoryResult } from '@/server/projects/project-repository';
 import type { VideoBriefRepository } from '@/server/briefs/video-brief-repository';
 import type { ProviderCatalogueRepository } from '@/server/providers/provider-catalogue-repository';
-import { ProviderCatalogueService } from '@/server/providers/provider-catalogue-service';
 import {
   createSceneDecompositionService,
   type SceneDecompositionService,
@@ -26,6 +24,10 @@ import {
   createComplexityRiskService,
   type ComplexityRiskService,
 } from '@/server/scoring/complexity-risk-service';
+import {
+  createProviderRecommendationService,
+  type ProviderRecommendationService,
+} from '@/server/recommendations/provider-recommendation-service';
 
 export type MockWorkspaceServiceErrorCode =
   | 'not_authenticated'
@@ -45,6 +47,7 @@ export type MockWorkspaceDependencies = {
   fixture: MockResultWorkspaceStaticFixture;
   sceneDecompositionService?: SceneDecompositionService;
   complexityRiskService?: ComplexityRiskService;
+  providerRecommendationService?: ProviderRecommendationService;
 };
 
 function mapProjectError<T>(result: RepositoryResult<T>): MockWorkspaceServiceResult<T> {
@@ -57,14 +60,6 @@ function mapProjectError<T>(result: RepositoryResult<T>): MockWorkspaceServiceRe
   }
 
   return { ok: false, code: 'persistence_error' };
-}
-
-function sortProvidersAlphabetically(
-  providers: ProviderCatalogueListItem[],
-): ProviderCatalogueListItem[] {
-  return [...providers].sort((left, right) =>
-    left.provider.displayName.localeCompare(right.provider.displayName),
-  );
 }
 
 function mapProjectSummary(project: ProjectRecord) {
@@ -197,18 +192,18 @@ function applyRequirementAwareAudio(
 }
 
 export class MockResultWorkspaceService {
-  private readonly catalogueService: ProviderCatalogueService;
   private readonly sceneDecompositionService: SceneDecompositionService;
   private readonly complexityRiskService: ComplexityRiskService;
+  private readonly providerRecommendationService: ProviderRecommendationService;
 
   constructor(private readonly dependencies: MockWorkspaceDependencies) {
-    this.catalogueService = new ProviderCatalogueService(
-      dependencies.providerCatalogueRepository,
-    );
     this.sceneDecompositionService =
       dependencies.sceneDecompositionService ?? createSceneDecompositionService();
     this.complexityRiskService =
       dependencies.complexityRiskService ?? createComplexityRiskService();
+    this.providerRecommendationService =
+      dependencies.providerRecommendationService ??
+      createProviderRecommendationService(dependencies.providerCatalogueRepository);
   }
 
   async loadWorkspace(
@@ -251,18 +246,6 @@ export class MockResultWorkspaceService {
       return { ok: false, code: 'brief_required' };
     }
 
-    const providersResult = await this.catalogueService.listProviders();
-
-    if (!providersResult.ok) {
-      return { ok: false, code: 'persistence_error' };
-    }
-
-    const sortedProviders = sortProvidersAlphabetically(providersResult.data);
-
-    if (sortedProviders.length !== 5) {
-      return { ok: false, code: 'persistence_error' };
-    }
-
     const fixture = this.dependencies.fixture;
 
     const decompositionResult = this.sceneDecompositionService.decomposeCompletedBrief(
@@ -301,6 +284,30 @@ export class MockResultWorkspaceService {
       return { ok: false, code: 'invalid_fixture' };
     }
 
+    const recommendationResult = await this.providerRecommendationService.recommendForCompletedBrief(
+      {
+        brief: briefResult.data,
+        sceneDecomposition: decompositionResult.data,
+        complexityRiskAssessment: assessmentResult.data,
+      },
+    );
+
+    if (!recommendationResult.ok) {
+      if (recommendationResult.code === 'brief_required') {
+        return { ok: false, code: 'brief_required' };
+      }
+
+      if (
+        recommendationResult.code === 'catalogue_unavailable' ||
+        recommendationResult.code === 'catalogue_invalid' ||
+        recommendationResult.code === 'recommendation_error'
+      ) {
+        return { ok: false, code: 'persistence_error' };
+      }
+
+      return { ok: false, code: 'persistence_error' };
+    }
+
     try {
       const viewModel = MockResultWorkspaceViewModelSchema.parse({
         mode: 'hybrid_preview',
@@ -313,18 +320,9 @@ export class MockResultWorkspaceService {
         activeSection,
         project: mapProjectSummary(mappedProject.data),
         brief: mapBriefSummary(briefResult.data),
-        providers: sortedProviders.map((item) => ({
-          id: item.provider.id,
-          displayName: item.provider.displayName,
-          lifecycleStatus: item.provider.lifecycleStatus,
-          apiAccessStatus: item.provider.apiAccessStatus,
-          freshness: item.freshness,
-          catalogueNotice: item.provider.catalogueNotice,
-          sunsetAt: item.provider.sunsetAt,
-          referenceState: 'catalogue_reference' as const,
-        })),
         sceneDecomposition: decompositionResult.data,
         complexityRiskAssessment: assessmentResult.data,
+        providerRecommendation: recommendationResult.data,
         samplePromptSections: fixture.samplePromptSections,
         continuityItems: applyRequirementAwareContinuity(fixture, briefResult.data),
         audioEditingItems: applyRequirementAwareAudio(fixture, briefResult.data),

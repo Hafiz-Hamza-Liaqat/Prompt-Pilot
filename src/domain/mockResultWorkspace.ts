@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ComplexityRiskAssessmentSchema } from './complexityRiskAssessment';
+import { ProviderRecommendationResultSchema } from './providerRecommendationEngine';
 import { IsoDateTimeSchema } from './common';
 import { SceneDecompositionSchema } from './sceneDecomposition';
 import { projectIdSchema } from './project';
@@ -16,6 +17,7 @@ export const SECTION_DATA_ORIGINS = [
   'persisted_input',
   'catalogue_snapshot',
   'deterministic_rule_engine',
+  'deterministic_evidence_engine',
   'static_fixture',
 ] as const;
 
@@ -50,14 +52,14 @@ export const MOCK_PROMPT_SECTION_KEYS = [
   'negative_constraints',
 ] as const;
 
-export const WORKSPACE_FIXTURE_VERSION = 'workspace-v3' as const;
+export const WORKSPACE_FIXTURE_VERSION = 'workspace-v4' as const;
 
 export const WORKSPACE_SECTION_ORIGINS: Record<
   (typeof WORKSPACE_SECTIONS)[number],
   (typeof SECTION_DATA_ORIGINS)[number]
 > = {
   overview: 'persisted_input',
-  providers: 'catalogue_snapshot',
+  providers: 'deterministic_evidence_engine',
   scenes: 'deterministic_rule_engine',
   prompts: 'static_fixture',
   continuity: 'static_fixture',
@@ -66,7 +68,7 @@ export const WORKSPACE_SECTION_ORIGINS: Record<
 };
 
 export const WORKSPACE_SAMPLE_DISCLAIMER =
-  'Prompt, continuity, and audio/editing sections still use static demonstration data. No AI model or provider has generated or recommended this plan.';
+  'Prompt, continuity, and audio/editing sections still use static demonstration data. No AI model or provider has generated this plan.';
 
 export const WORKSPACE_PREVIEW_TITLE = 'Planning workspace preview';
 
@@ -84,7 +86,7 @@ export const MockPromptSectionKeySchema = z.enum(MOCK_PROMPT_SECTION_KEYS);
 
 export const WorkspaceSectionOriginsSchema = z.object({
   overview: z.literal('persisted_input'),
-  providers: z.literal('catalogue_snapshot'),
+  providers: z.literal('deterministic_evidence_engine'),
   scenes: z.literal('deterministic_rule_engine'),
   prompts: z.literal('static_fixture'),
   continuity: z.literal('static_fixture'),
@@ -141,17 +143,6 @@ export const WorkspaceBriefSummarySchema = z.object({
   completedAt: IsoDateTimeSchema,
 });
 
-export const WorkspaceProviderReferenceSchema = z.object({
-  id: z.string().trim().min(1),
-  displayName: z.string().trim().min(1),
-  lifecycleStatus: z.string().trim().min(1),
-  apiAccessStatus: z.string().trim().min(1),
-  freshness: z.string().trim().min(1),
-  catalogueNotice: z.string().nullable(),
-  sunsetAt: IsoDateTimeSchema.nullable(),
-  referenceState: ProviderReferenceStateSchema,
-});
-
 export const MockResultWorkspaceStaticFixtureSchema = z.object({
   fixtureVersion: z.literal(WORKSPACE_FIXTURE_VERSION),
   sampleDisclaimer: z.string().trim().min(1),
@@ -172,9 +163,9 @@ export const MockResultWorkspaceViewModelSchema = z
     activeSection: WorkspaceSectionSchema,
     project: WorkspaceProjectSummarySchema,
     brief: WorkspaceBriefSummarySchema,
-    providers: z.array(WorkspaceProviderReferenceSchema).length(5),
     sceneDecomposition: SceneDecompositionSchema,
     complexityRiskAssessment: ComplexityRiskAssessmentSchema,
+    providerRecommendation: ProviderRecommendationResultSchema,
     samplePromptSections: z.array(MockPromptSectionSchema).min(8),
     continuityItems: z.array(MockContinuityItemSchema).min(1),
     audioEditingItems: z.array(MockAudioEditingItemSchema).min(1),
@@ -192,7 +183,6 @@ export type MockContinuityItem = z.infer<typeof MockContinuityItemSchema>;
 export type MockAudioEditingItem = z.infer<typeof MockAudioEditingItemSchema>;
 export type WorkspaceProjectSummary = z.infer<typeof WorkspaceProjectSummarySchema>;
 export type WorkspaceBriefSummary = z.infer<typeof WorkspaceBriefSummarySchema>;
-export type WorkspaceProviderReference = z.infer<typeof WorkspaceProviderReferenceSchema>;
 export type MockResultWorkspaceStaticFixture = z.infer<
   typeof MockResultWorkspaceStaticFixtureSchema
 >;

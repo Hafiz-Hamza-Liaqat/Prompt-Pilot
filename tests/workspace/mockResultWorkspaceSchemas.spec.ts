@@ -29,8 +29,10 @@ import {
   mapEnabledRequirementLabels,
   normalizeWorkspaceSection,
 } from '../../src/domain/mockResultWorkspace.js';
+import { calculateProviderRecommendation } from '../../src/domain/providerRecommendationEngine.js';
 import { mockResultWorkspaceFixture } from '../../src/fixtures/mock-result-workspace.js';
 import { createDefaultProductionRequirements } from '../../src/domain/productionRequirements.js';
+import { buildRecommendationCalculateInput } from '../recommendations/catalogueFixtures.js';
 
 const PROJECT_ID = '33333333-3333-3333-3333-333333333333';
 const BRIEF_ID = '44444444-4444-4444-4444-444444444444';
@@ -69,18 +71,8 @@ function validBriefSummary() {
   };
 }
 
-function validProviderReference(overrides: Record<string, unknown> = {}) {
-  return {
-    id: 'google_veo',
-    displayName: 'Google Veo',
-    lifecycleStatus: 'active',
-    apiAccessStatus: 'public',
-    freshness: 'fresh',
-    catalogueNotice: null,
-    sunsetAt: null,
-    referenceState: 'catalogue_reference' as const,
-    ...overrides,
-  };
+function validProviderRecommendation() {
+  return calculateProviderRecommendation(buildRecommendationCalculateInput());
 }
 
 function buildAssessment(durationSeconds = 30) {
@@ -106,13 +98,7 @@ function validViewModel(overrides: Record<string, unknown> = {}) {
     activeSection: 'overview' as const,
     project: validProjectSummary(),
     brief: validBriefSummary(),
-    providers: [
-      validProviderReference({ id: 'adobe_firefly', displayName: 'Adobe Firefly' }),
-      validProviderReference({ id: 'google_veo', displayName: 'Google Veo' }),
-      validProviderReference({ id: 'kling', displayName: 'Kling' }),
-      validProviderReference({ id: 'openai_sora', displayName: 'OpenAI Sora' }),
-      validProviderReference({ id: 'runway', displayName: 'Runway' }),
-    ],
+    providerRecommendation: validProviderRecommendation(),
     sceneDecomposition: decomposeDurationIntoScenes(30),
     complexityRiskAssessment: buildAssessment(30),
     samplePromptSections: mockResultWorkspaceFixture.samplePromptSections,
@@ -142,6 +128,7 @@ describe('data origin', () => {
       'persisted_input',
       'catalogue_snapshot',
       'deterministic_rule_engine',
+      'deterministic_evidence_engine',
       'static_fixture',
     ]);
     for (const origin of SECTION_DATA_ORIGINS) {
@@ -152,7 +139,7 @@ describe('data origin', () => {
   it('maps each workspace section to an approved origin', () => {
     expect(WorkspaceSectionOriginsSchema.parse(WORKSPACE_SECTION_ORIGINS)).toEqual({
       overview: 'persisted_input',
-      providers: 'catalogue_snapshot',
+      providers: 'deterministic_evidence_engine',
       scenes: 'deterministic_rule_engine',
       prompts: 'static_fixture',
       continuity: 'static_fixture',
@@ -341,7 +328,7 @@ describe('static fixture schema', () => {
   });
 
   it('uses the approved fixture version', () => {
-    expect(mockResultWorkspaceFixture.fixtureVersion).toBe('workspace-v3');
+    expect(mockResultWorkspaceFixture.fixtureVersion).toBe('workspace-v4');
   });
 
   it('does not include static quality items in the active fixture', () => {
@@ -357,26 +344,21 @@ describe('real summary acceptance', () => {
     expect(parsed.brief.completedAt).toBe(COMPLETED_AT);
   });
 
-  it('preserves provider lifecycle and access states', () => {
-    const parsed = MockResultWorkspaceViewModelSchema.parse(
-      validViewModel({
-        providers: [
-          validProviderReference({
-            id: 'openai_sora',
-            displayName: 'OpenAI Sora',
-            lifecycleStatus: 'sunsetting',
-            apiAccessStatus: 'preview',
-            catalogueNotice: 'Sora is sunsetting.',
-          }),
-          ...validViewModel().providers.slice(1),
-        ],
-      }),
-    );
+  it('requires providerRecommendation with algorithm version provider-recommendation-v1', () => {
+    const parsed = MockResultWorkspaceViewModelSchema.parse(validViewModel());
+    expect(parsed.providerRecommendation.algorithmVersion).toBe('provider-recommendation-v1');
+    expect(parsed.providerRecommendation.origin).toBe('deterministic_evidence_engine');
+    expect(parsed.providerRecommendation.isAiGenerated).toBe(false);
+    expect(parsed).not.toHaveProperty('providers');
+  });
 
-    const sora = parsed.providers.find((provider) => provider.id === 'openai_sora');
-    expect(sora?.lifecycleStatus).toBe('sunsetting');
-    expect(sora?.apiAccessStatus).toBe('preview');
-    expect(sora?.catalogueNotice).toBe('Sora is sunsetting.');
+  it('places sunsetting Sora in ineligible recommendations from catalogue fixtures', () => {
+    const parsed = MockResultWorkspaceViewModelSchema.parse(validViewModel());
+    expect(
+      parsed.providerRecommendation.ineligible.some(
+        (candidate) => candidate.providerId === 'openai_sora',
+      ),
+    ).toBe(true);
   });
 });
 

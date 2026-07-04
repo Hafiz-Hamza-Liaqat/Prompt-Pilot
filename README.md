@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 10 — Deterministic Complexity and Execution-Risk Scoring** (current)
+**Phase 11 — Evidence-Backed Provider Recommendation Engine** (current)
 
-Local Supabase Auth, project dashboard, guided video brief wizard, and public provider catalogue. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. Scene timing and complexity/execution-risk assessments are calculated deterministically from the saved brief; prompt, continuity, and audio/editing sections remain static preview fixtures. No planning output is persisted or AI-generated.
+Local Supabase Auth, project dashboard, guided video brief wizard, and public provider catalogue. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. Scene timing, complexity/execution-risk assessments, and provider recommendations are calculated deterministically from the saved brief and catalogue; prompt, continuity, and audio/editing sections remain static preview fixtures. No planning output is persisted or AI-generated.
 
 ## Local development foundation
 
@@ -60,4 +60,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [Mock Result Workspace](docs/mock-result-workspace.md) | Hybrid workspace preview with deterministic scene timing |
 | [Duration Scene Decomposition](docs/duration-scene-decomposition.md) | Deterministic scene-count, role, and timing algorithm |
 | [Complexity and Risk Scoring](docs/complexity-risk-scoring.md) | Deterministic production complexity and execution-risk assessment |
+| [Provider Recommendation Engine](docs/provider-recommendation-engine.md) | Evidence-backed offering-level provider recommendations |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

@@ -1,4 +1,3 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { WORKSPACE_SECTION_LABELS } from '@/config/result-workspace';
 import type { MockResultWorkspaceViewModel } from '@/domain/mockResultWorkspace';
 import { WorkspaceAudioEditingPreview } from './workspace-audio-editing-preview';
@@ -7,7 +6,7 @@ import { WorkspaceHeader } from './workspace-header';
 import { WorkspaceOverview } from './workspace-overview';
 import { WorkspacePreviewNotice } from './workspace-preview-notice';
 import { WorkspacePromptPreview } from './workspace-prompt-preview';
-import { WorkspaceProviderReference } from './workspace-provider-reference';
+import { WorkspaceProviderRecommendations } from './workspace-provider-recommendations';
 import { WorkspaceComplexityRisk } from './workspace-complexity-risk';
 import { WorkspaceSceneRoadmap } from './workspace-scene-roadmap';
 import { WorkspaceSectionHeading } from './workspace-section-heading';
@@ -20,7 +19,9 @@ type WorkspaceShellProps = {
 function renderActiveSection(workspace: MockResultWorkspaceViewModel) {
   switch (workspace.activeSection) {
     case 'providers':
-      return <WorkspaceProviderReference providers={workspace.providers} />;
+      return (
+        <WorkspaceProviderRecommendations recommendation={workspace.providerRecommendation} />
+      );
     case 'scenes':
       return <WorkspaceSceneRoadmap decomposition={workspace.sceneDecomposition} />;
     case 'prompts':
@@ -53,13 +54,6 @@ export function WorkspaceShell({ workspace }: WorkspaceShellProps) {
         />
         {renderActiveSection(workspace)}
       </section>
-      <Alert>
-        <AlertTitle>Recommendation not implemented</AlertTitle>
-        <AlertDescription>
-          Prompt Pilot does not yet generate plans, recommend providers, or compile executable
-          prompts for this project.
-        </AlertDescription>
-      </Alert>
     </div>
   );
 }
