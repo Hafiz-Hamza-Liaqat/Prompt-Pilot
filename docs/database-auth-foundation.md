@@ -4,7 +4,7 @@
 
 Related documents: [Application Foundation](application-foundation.md) · [Implementation Checklist](implementation-checklist.md)
 
-Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC.
+Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC. Phase 6 adds `public.video_briefs` with RLS, reopen trigger, and completion RPC.
 
 ---
 
@@ -14,7 +14,7 @@ Phase 4 establishes a **local-only** Supabase database and email/password authen
 |---|---|
 | Supabase CLI | Local project configuration and migrations |
 | Docker | Postgres, Auth, REST API, Studio containers |
-| Postgres | Stores `public.profiles` and `public.projects` |
+| Postgres | Stores `public.profiles`, `public.projects`, and `public.video_briefs` |
 | Supabase Auth | Email/password signup, signin, signout |
 | `@supabase/ssr` | Cookie-based session handling in Next.js |
 | Next.js `proxy.ts` | Session refresh and `/account`, `/projects` route protection |
@@ -53,6 +53,22 @@ No hosted Supabase project is linked. No cloud deployment exists in this phase.
 
 See [Project Management Foundation](project-management-foundation.md) for dashboard and Server Action details.
 
+### `public.video_briefs`
+
+| Column | Purpose |
+|---|---|
+| `id` | UUID primary key |
+| `project_id` | Unique reference to `public.projects(id)` with `ON DELETE CASCADE` |
+| `source_type` | `idea`, `script`, `product_url`, or `article_url` |
+| `source_text` / `source_url` | Mutually exclusive source input per type |
+| Wizard fields | Objective, destination, category, duration, style, requirements, priorities |
+| `completed_at` | Non-null when brief is marked ready; cleared on content edit |
+| `created_at` / `updated_at` | Maintained by triggers |
+
+One brief per project. No `owner_id` column — ownership is inherited from the parent project.
+
+See [Guided Creation Wizard](guided-creation-wizard.md) for wizard scope, constraints, and UX.
+
 ### Row Level Security — profiles
 
 - **Select:** authenticated users may read only `auth.uid() = id`
@@ -68,6 +84,16 @@ See [Project Management Foundation](project-management-foundation.md) for dashbo
 - **Soft delete:** `prompt_pilot_soft_delete_project()` RPC (security definer)
 - **SQL DELETE:** not granted to authenticated users
 - **Anonymous:** no project access
+
+### Row Level Security — video_briefs
+
+- **Select:** authenticated users may read briefs for own non-deleted projects (archived projects included)
+- **Insert:** authenticated users may insert for own active, non-deleted projects only
+- **Update:** authenticated users may update user-editable columns on own active, non-deleted projects; `completed_at` not directly updatable
+- **Complete:** `prompt_pilot_complete_video_brief(project_uuid)` RPC (security definer)
+- **Reopen:** trigger clears `completed_at` when user-editable content changes
+- **SQL DELETE:** not granted to authenticated users
+- **Anonymous:** no brief access
 
 ---
 
@@ -115,6 +141,7 @@ npm run supabase:test
 npm run supabase:types
 npm run verify:auth:local
 npm run verify:projects:local
+npm run verify:briefs:local
 npm run supabase:stop
 ```
 

@@ -73,7 +73,7 @@ Exactly these foundation components are installed:
 - Alert
 - Textarea
 
-Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Textarea for project descriptions and project-specific form components under `src/components/projects/`.
+Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Textarea for project descriptions and project-specific form components under `src/components/projects/`. Phase 6 adds brief wizard components under `src/components/briefs/`.
 
 ---
 
@@ -101,6 +101,18 @@ Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Text
 | ProjectQueryControls | `src/components/projects/project-query-controls.tsx` | Search, filter, sort |
 | ProjectStatusBadge | `src/components/projects/project-status-badge.tsx` | Active/archived badge |
 
+### Brief wizard components
+
+| Component | Path | Purpose |
+|---|---|---|
+| BriefWizardShell | `src/components/briefs/brief-wizard-shell.tsx` | Wizard layout, progress, navigation |
+| BriefWizardProgress | `src/components/briefs/brief-wizard-progress.tsx` | Saved input-step progress |
+| BriefWizardNavigation | `src/components/briefs/brief-wizard-navigation.tsx` | Reachable step links |
+| BriefStatusBadge | `src/components/briefs/brief-status-badge.tsx` | Not started / Draft / Ready |
+| BriefActionMessage | `src/components/briefs/brief-action-message.tsx` | Safe validation and action feedback |
+| SourceStepForm … PrioritiesStepForm | `src/components/briefs/*-step-form.tsx` | One form per wizard input step |
+| BriefReview | `src/components/briefs/brief-review.tsx` | Summary and “Mark brief ready” |
+
 ---
 
 ## Accessibility baseline
@@ -117,7 +129,6 @@ Phase 4 uses Input, Label, and Alert for authentication forms. Phase 5 adds Text
 
 ## Current limitations
 
-- No guided creation wizard or video brief UI (Phase 6)
 - No theme toggle or dark-mode UI
 - No mobile drawer navigation
 - No live AI provider connections

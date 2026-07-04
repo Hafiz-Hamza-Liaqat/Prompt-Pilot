@@ -4,7 +4,7 @@
 
 Related documents: [Database and Auth Foundation](database-auth-foundation.md) · [Application Foundation](application-foundation.md) · [Implementation Checklist](implementation-checklist.md)
 
-Phase 5 establishes secure, persistent project management for authenticated users on the local Supabase stack.
+Phase 5 establishes secure, persistent project management for authenticated users on the local Supabase stack. Phase 6 adds video-brief status and wizard entry on the project detail page.
 
 ---
 
@@ -24,7 +24,7 @@ Authenticated users can:
 - Duplicate a project with a deterministic copied title
 - Soft-delete a project through an explicit confirmation page
 
-Phase 5 does **not** include video briefs, AI planning, provider recommendations, or any media generation.
+Phase 5 does **not** include AI planning, provider recommendations, or any media generation. Phase 6 adds video-brief collection on active projects only; see [Guided Creation Wizard](guided-creation-wizard.md).
 
 ---
 
@@ -114,12 +114,26 @@ Soft delete uses a security-definer function because PostgreSQL requires updated
 
 ---
 
+## Video brief integration
+
+The project detail page (`/projects/[projectId]`) displays a **Video brief** section:
+
+| Brief status | User action (active project) |
+|---|---|
+| Not started | Start video brief → `/projects/[projectId]/brief` |
+| Draft | Continue video brief → wizard entry redirect |
+| Ready | Review video brief → wizard entry redirect |
+
+Archived projects show status without an editing action. Restore the project before editing the brief.
+
+Approved brief notices: `brief-ready`, `brief-reopened`.
+
+---
+
 ## Deferred features
 
-- Guided creation wizard (Phase 6)
-- Video brief and structured planning fields
-- AI planning and prompt compilation
-- Provider catalogue and recommendations
+- Provider catalogue and recommendations (Phases 7–11)
+- AI planning and prompt compilation (Phases 12–16)
 - Sharing, teams, and workspaces
 - Billing and usage limits
 - Cloud Supabase deployment

@@ -63,14 +63,156 @@ export type Database = {
         }
         Relationships: []
       }
+      video_briefs: {
+        Row: {
+          aspect_ratio: string | null
+          budget_priority: string | null
+          completed_at: string | null
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          objective: string | null
+          project_id: string
+          publishing_destination: string | null
+          quality_priority: string | null
+          requires_camera_control: boolean
+          requires_character_consistency: boolean
+          requires_commercial_use: boolean
+          requires_dialogue: boolean
+          requires_exact_text_visibility: boolean
+          requires_first_last_frame_control: boolean
+          requires_lip_sync: boolean
+          requires_logo_accuracy: boolean
+          requires_multiple_locations: boolean
+          requires_native_audio: boolean
+          requires_product_consistency: boolean
+          requires_reference_images: boolean
+          requires_video_extension: boolean
+          requires_voiceover: boolean
+          source_text: string | null
+          source_type: string
+          source_url: string | null
+          target_audience: string | null
+          tone: string | null
+          updated_at: string
+          user_constraints: string | null
+          video_category: string | null
+          visual_style: string | null
+          working_title: string | null
+        }
+        Insert: {
+          aspect_ratio?: string | null
+          budget_priority?: string | null
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          objective?: string | null
+          project_id: string
+          publishing_destination?: string | null
+          quality_priority?: string | null
+          requires_camera_control?: boolean
+          requires_character_consistency?: boolean
+          requires_commercial_use?: boolean
+          requires_dialogue?: boolean
+          requires_exact_text_visibility?: boolean
+          requires_first_last_frame_control?: boolean
+          requires_lip_sync?: boolean
+          requires_logo_accuracy?: boolean
+          requires_multiple_locations?: boolean
+          requires_native_audio?: boolean
+          requires_product_consistency?: boolean
+          requires_reference_images?: boolean
+          requires_video_extension?: boolean
+          requires_voiceover?: boolean
+          source_text?: string | null
+          source_type: string
+          source_url?: string | null
+          target_audience?: string | null
+          tone?: string | null
+          updated_at?: string
+          user_constraints?: string | null
+          video_category?: string | null
+          visual_style?: string | null
+          working_title?: string | null
+        }
+        Update: {
+          aspect_ratio?: string | null
+          budget_priority?: string | null
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          objective?: string | null
+          project_id?: string
+          publishing_destination?: string | null
+          quality_priority?: string | null
+          requires_camera_control?: boolean
+          requires_character_consistency?: boolean
+          requires_commercial_use?: boolean
+          requires_dialogue?: boolean
+          requires_exact_text_visibility?: boolean
+          requires_first_last_frame_control?: boolean
+          requires_lip_sync?: boolean
+          requires_logo_accuracy?: boolean
+          requires_multiple_locations?: boolean
+          requires_native_audio?: boolean
+          requires_product_consistency?: boolean
+          requires_reference_images?: boolean
+          requires_video_extension?: boolean
+          requires_voiceover?: boolean
+          source_text?: string | null
+          source_type?: string
+          source_url?: string | null
+          target_audience?: string | null
+          tone?: string | null
+          updated_at?: string
+          user_constraints?: string | null
+          video_category?: string | null
+          visual_style?: string | null
+          working_title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_briefs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: true
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      prompt_pilot_complete_video_brief: {
+        Args: { project_uuid: string }
+        Returns: string
+      }
       prompt_pilot_soft_delete_project: {
         Args: { project_id: string }
         Returns: undefined
+      }
+      prompt_pilot_video_brief_is_complete: {
+        Args: {
+          p_aspect_ratio: string
+          p_budget_priority: string
+          p_duration_seconds: number
+          p_objective: string
+          p_publishing_destination: string
+          p_quality_priority: string
+          p_source_text: string
+          p_source_type: string
+          p_source_url: string
+          p_target_audience: string
+          p_tone: string
+          p_video_category: string
+          p_visual_style: string
+          p_working_title: string
+        }
+        Returns: boolean
       }
     }
     Enums: {

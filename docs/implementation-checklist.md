@@ -42,8 +42,8 @@ A phase may be marked `DONE` only when:
 
 ```text
 Current phase: None
-Next ready phase: Phase 6
-Next phase after Phase 5 closure: Phase 6 — Guided Creation Wizard
+Next ready phase: Phase 7
+Next phase after Phase 6 closure: Phase 7 — Provider Catalogue
 ```
 
 ---
@@ -59,10 +59,10 @@ Next phase after Phase 5 closure: Phase 6 — Guided Creation Wizard
 | 2 | Next.js Repository and Application Foundation | DONE | 42 tests passed; lint/typecheck/build passed; HTTP 200 smoke on :3100 |
 | 2-A | Foundation Hygiene and Dependency-Risk Review | DONE | ESLint 0/0; 42 tests; typecheck/build/smoke passed; audit recorded |
 | 3 | UI Design System and Application Shell | DONE | Tailwind v4; shadcn/Radix; button/badge/card/separator; 64 tests; lint 0/0; typecheck/build/smoke passed; audit reviewed; commit pending |
-| 4 | Supabase Database and Authentication | DONE | Local Supabase; profiles migration; RLS 19/19; 83 unit tests; auth integration passed; lint 0/0; build/smoke passed; commit `2ce05a8` |
-| 5 | Dashboard and Project Management | DONE | Projects migration `20260704193000`; RLS 35/35 SQL; 122 unit tests; project integration passed; auth regression passed; lint 0/0; typecheck/build/smoke passed; audit reviewed; local commit pending |
-| 6 | Guided Creation Wizard | READY | Requires Phase 5 |
-| 7 | Provider Catalogue | NOT_STARTED | Requires Phase 6 |
+| 4 | Supabase Database and Authentication | DONE | Local Supabase; profiles migration; RLS 19/19; 83 unit tests; auth integration passed; commit `2ce05a8` |
+| 5 | Dashboard and Project Management | DONE | Projects migration `20260704193000`; RLS 35/35 SQL; 122 unit tests; project integration passed; commit `891eb8a` |
+| 6 | Guided Creation Wizard | DONE | Brief migration `20260704200000`; RLS 52/52 SQL; 213 unit tests; brief integration passed; auth/project regression passed; lint 0/0; typecheck/build/smoke passed; audit reviewed; local commit pending |
+| 7 | Provider Catalogue | READY | Requires Phase 6 |
 | 8 | Mock Result Workspace | NOT_STARTED | Requires Phase 7 |
 | 9 | Duration and Scene Decomposition | NOT_STARTED | Requires Phase 8 |
 | 10 | Complexity and Risk Scoring | NOT_STARTED | Requires Phase 9 |

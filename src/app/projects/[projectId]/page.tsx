@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { BriefStatusBadge } from '@/components/briefs/brief-status-badge';
 import { PageContainer } from '@/components/layout/page-container';
 import { SectionHeading } from '@/components/layout/section-heading';
 import { ProjectActionForm } from '@/components/projects/project-action-form';
@@ -13,8 +14,15 @@ import {
   projectIdSchema,
   PROJECT_NOTICE_MESSAGES,
 } from '@/domain/project';
+import {
+  BRIEF_NOTICE_MESSAGES,
+  deriveBriefStatus,
+  isBriefNotice,
+} from '@/domain/videoBriefDraft';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireUser } from '@/server/auth/require-user';
+import { createVideoBriefService } from '@/server/briefs/video-brief-service';
+import { createSupabaseVideoBriefRepository } from '@/server/briefs/supabase-video-brief-repository';
 import { createProjectService } from '@/server/projects/project-service';
 import { createSupabaseProjectRepository } from '@/server/projects/supabase-project-repository';
 
@@ -45,7 +53,20 @@ export default async function ProjectDetailPage({
 
   const project = result.data;
   const status = deriveProjectStatus(project.archivedAt);
-  const notice = isProjectNotice(query.notice) ? query.notice : undefined;
+  const projectNotice = isProjectNotice(query.notice) ? query.notice : undefined;
+  const briefNotice = isBriefNotice(query.notice) ? query.notice : undefined;
+
+  const briefService = createVideoBriefService(createSupabaseVideoBriefRepository(supabase));
+  const briefResult = await briefService.getByProjectId(user.id, projectId);
+  const briefDraft = briefResult.ok ? briefResult.data.draft : null;
+  const briefStatus = deriveBriefStatus(briefDraft);
+
+  const briefActionLabel =
+    briefStatus === 'not_started'
+      ? 'Start video brief'
+      : briefStatus === 'ready'
+        ? 'Review video brief'
+        : 'Continue video brief';
 
   return (
     <main id="main-content" className="flex-1 py-10">
@@ -59,13 +80,20 @@ export default async function ProjectDetailPage({
         <SectionHeading
           headingLevel={1}
           title={project.title}
-          description="Project container for future planning workflows."
+          description="Project container for planning workflows."
         />
 
-        {notice ? (
+        {projectNotice ? (
           <Alert>
             <AlertTitle>Project update</AlertTitle>
-            <AlertDescription>{PROJECT_NOTICE_MESSAGES[notice]}</AlertDescription>
+            <AlertDescription>{PROJECT_NOTICE_MESSAGES[projectNotice]}</AlertDescription>
+          </Alert>
+        ) : null}
+
+        {briefNotice ? (
+          <Alert>
+            <AlertTitle>Video brief update</AlertTitle>
+            <AlertDescription>{BRIEF_NOTICE_MESSAGES[briefNotice]}</AlertDescription>
           </Alert>
         ) : null}
 
@@ -82,13 +110,27 @@ export default async function ProjectDetailPage({
           </p>
         </div>
 
-        <Alert>
-          <AlertTitle>Phase 6 preview</AlertTitle>
-          <AlertDescription>
-            Guided video brief creation begins in Phase 6. Prompt Pilot still does not generate
-            videos or images.
-          </AlertDescription>
-        </Alert>
+        <div className="rounded-lg border border-border p-4 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-foreground">Video brief</h2>
+              <p className="text-sm text-muted-foreground">
+                Collect and validate production requirements before later planning phases.
+              </p>
+            </div>
+            <BriefStatusBadge draft={briefDraft} />
+          </div>
+
+          {status === 'active' ? (
+            <Button asChild>
+              <Link href={`/projects/${project.id}/brief`}>{briefActionLabel}</Link>
+            </Button>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Restore this project before editing the video brief.
+            </p>
+          )}
+        </div>
 
         <ProjectEditForm
           projectId={project.id}

@@ -26,9 +26,9 @@ The planned stack is documented for future phases. Phase 3 integrates Tailwind C
 
 ## Development status
 
-**Phase 5 — Project Dashboard and Project Management** (current)
+**Phase 6 — Guided Creation Wizard** (current)
 
-Local Supabase Auth with email/password signup, signin, signout, `public.profiles` and `public.projects` RLS, protected account and project routes. Authenticated users can create, search, filter, sort, edit, archive, restore, duplicate, and soft-delete projects. Domain Zod contracts remain authoritative. No video briefs, AI planning, or cloud deployment yet.
+Local Supabase Auth with email/password signup, signin, signout, `public.profiles`, `public.projects`, and `public.video_briefs` RLS. Authenticated users manage projects and complete a persistent nine-step video brief wizard (source through review) with draft/ready status on project detail. URLs are validated and stored only — not fetched. Domain Zod contracts remain authoritative. No provider recommendations, AI planning, or cloud deployment yet.
 
 ## Local development foundation
 
@@ -55,4 +55,5 @@ Cursor runs lint, typecheck, test, and build verification during phase closure.
 | [UI Design System](docs/ui-design-system.md) | Tailwind v4, shadcn/ui, tokens, and layout components |
 | [Database and Auth Foundation](docs/database-auth-foundation.md) | Local Supabase, profiles schema, RLS, and Auth flows |
 | [Project Management Foundation](docs/project-management-foundation.md) | Project dashboard, CRUD, archive, duplicate, soft delete |
+| [Guided Creation Wizard](docs/guided-creation-wizard.md) | Nine-step video brief wizard, persistence, and completion |
 | [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MAX_DURATION_SECONDS, MIN_DURATION_SECONDS } from './constants.js';
+import { MAX_DURATION_SECONDS, MIN_DURATION_SECONDS } from './constants';
 
 export const NonEmptyTrimmedStringSchema = z
   .string()

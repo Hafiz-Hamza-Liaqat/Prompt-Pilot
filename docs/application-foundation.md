@@ -4,7 +4,7 @@
 
 Related documents: [Implementation Checklist](implementation-checklist.md) · [Structured Output Contracts](structured-output-contracts.md) · [Phase Roadmap](phase-roadmap.md)
 
-Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication. Phase 5 adds secure project dashboard and management.
+Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication. Phase 5 adds secure project dashboard and management. Phase 6 adds the guided video-brief creation wizard.
 
 ---
 
@@ -37,7 +37,9 @@ Central product identity lives in `src/config/site.ts` and is consumed by applic
 | `/auth/error` | Safe authentication error page |
 | `/account` | Protected account foundation with link to projects |
 | `/projects` | Protected project dashboard (create, search, filter, sort, paginate) |
-| `/projects/[projectId]` | Project detail, edit, archive/restore, duplicate |
+| `/projects/[projectId]` | Project detail, video brief status, edit, archive/restore, duplicate |
+| `/projects/[projectId]/brief` | Wizard entry — redirects to first incomplete step or review |
+| `/projects/[projectId]/brief/[step]` | Wizard step (`source` … `review`) |
 | `/projects/[projectId]/delete` | Soft-delete confirmation |
 
 The root layout includes a site header, skip navigation link, and site footer. Session refresh runs through `src/proxy.ts`. Project routes use a dedicated app header with Projects, Account, and sign-out navigation.
@@ -54,13 +56,13 @@ Framework-level boundaries (not separate URL routes):
 
 ## Product honesty
 
-The Phase 5 foundation explicitly does **not** include:
+The Phase 6 foundation explicitly does **not** include:
 
 - Video generation
 - Image generation
-- AI provider connections
+- AI provider connections or recommendations
 - Cloud Supabase or deployment
-- Video briefs or guided creation wizard
+- URL fetching or source extraction
 - External API calls beyond local Supabase Auth
 
 The landing page, marketing configuration, and `siteConfig` state that Prompt Pilot produces plans, recommendations, prompts, and instructions only.
@@ -83,6 +85,7 @@ npm run supabase:reset
 npm run supabase:test
 npm run verify:auth:local
 npm run verify:projects:local
+npm run verify:briefs:local
 ```
 
 | Script | Purpose |
@@ -94,12 +97,13 @@ npm run verify:projects:local
 | `npm run build` | Production build |
 | `npm run start` | Serve production build locally |
 | `npm run verify:projects:local` | Local project RLS integration verification |
+| `npm run verify:briefs:local` | Local video-brief RLS integration verification |
 
 ---
 
 ## Dependency health
 
-| Check | Status (Phase 5) |
+| Check | Status (Phase 6) |
 |---|---|
 | ESLint baseline | 0 errors, 0 warnings |
 | npm audit | 2 moderate (transitive PostCSS via Next.js); 0 high; 0 critical |
@@ -114,7 +118,7 @@ See [Dependency Risk Register](dependency-risk-register.md) for decision records
 
 | Area | Target phase |
 |---|---|
-| Dashboard, wizard, provider catalogue | Phases 6–8 |
+| Provider catalogue and mock workspace | Phases 7–8 |
 | AI planning and prompt compilation | Phases 12–16 |
 | Deployment and GitHub push | Explicit user approval after project completion |
 
