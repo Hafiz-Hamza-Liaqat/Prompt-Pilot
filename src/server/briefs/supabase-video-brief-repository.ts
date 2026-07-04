@@ -1,5 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ProductionRequirements } from '@/domain/videoBrief';
+import {
+  mapProductionRequirementsFromDb,
+  mapProductionRequirementsToDb,
+  type ProductionRequirements,
+} from '@/domain/productionRequirements';
 import type {
   CategoryStepInput,
   DestinationStepInput,
@@ -77,22 +81,11 @@ function projectArchived<T>(): VideoBriefRepositoryResult<T> {
 }
 
 function mapProductionRequirements(row: VideoBriefRow): ProductionRequirements {
-  return {
-    characterConsistency: row.requires_character_consistency,
-    productConsistency: row.requires_product_consistency,
-    logoAccuracy: row.requires_logo_accuracy,
-    exactTextVisibility: row.requires_exact_text_visibility,
-    nativeAudio: row.requires_native_audio,
-    dialogue: row.requires_dialogue,
-    voiceover: row.requires_voiceover,
-    lipSync: row.requires_lip_sync,
-    multipleLocations: row.requires_multiple_locations,
-    cameraControl: row.requires_camera_control,
-    firstLastFrameControl: row.requires_first_last_frame_control,
-    videoExtension: row.requires_video_extension,
-    referenceImages: row.requires_reference_images,
-    commercialUse: row.requires_commercial_use,
-  };
+  return mapProductionRequirementsFromDb(row);
+}
+
+function mapRequirementsToDb(requirements: ProductionRequirements) {
+  return mapProductionRequirementsToDb(requirements);
 }
 
 function mapBriefRow(row: VideoBriefRow): PartialVideoBriefDraft {
@@ -119,25 +112,6 @@ function mapBriefRow(row: VideoBriefRow): PartialVideoBriefDraft {
     completedAt: row.completed_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-  };
-}
-
-function mapRequirementsToDb(requirements: ProductionRequirements) {
-  return {
-    requires_character_consistency: requirements.characterConsistency,
-    requires_product_consistency: requirements.productConsistency,
-    requires_logo_accuracy: requirements.logoAccuracy,
-    requires_exact_text_visibility: requirements.exactTextVisibility,
-    requires_native_audio: requirements.nativeAudio,
-    requires_dialogue: requirements.dialogue,
-    requires_voiceover: requirements.voiceover,
-    requires_lip_sync: requirements.lipSync,
-    requires_multiple_locations: requirements.multipleLocations,
-    requires_camera_control: requirements.cameraControl,
-    requires_first_last_frame_control: requirements.firstLastFrameControl,
-    requires_video_extension: requirements.videoExtension,
-    requires_reference_images: requirements.referenceImages,
-    requires_commercial_use: requirements.commercialUse,
   };
 }
 

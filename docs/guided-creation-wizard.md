@@ -77,7 +77,9 @@ Machine-safe step values and UI configuration live in `src/domain/videoBriefDraf
 | Completion | `completed_at` set only when every required field is valid |
 | Reopen | Database trigger clears `completed_at` when user-editable content changes |
 
-Key columns: source fields, objective fields, destination fields, category, duration, style, fourteen production-requirement booleans, budget and quality priorities, optional `user_constraints`, timestamps.
+Key columns: source fields, objective fields, destination fields, category, duration, style, **14** production-requirement booleans, budget and quality priorities, optional `user_constraints`, timestamps.
+
+Production requirement count: **14**. The canonical keys, Zod schema, database-column mapping, checkbox parser, and UI labels live in the shared client-safe module `src/domain/productionRequirements.ts`. Both the final `VideoBriefSchema` and the wizard draft consume this module. Exhaustive parity tests guard UI, repository, and database mappings. Adding a new requirement requires an explicit product-contract and migration phase.
 
 Draft input contracts are defined in `src/domain/videoBriefDraft.ts`. The final planning contract in `src/domain/videoBrief.ts` (`VideoBriefSchema`) remains authoritative for later phases and is not weakened by the draft layer.
 
@@ -112,7 +114,7 @@ When a parent project is soft-deleted (`deleted_at IS NOT NULL`), its brief is h
 | No external URL fetch | Submitted URLs are validated and stored only |
 | Error handling | Safe action states; no raw Supabase or Postgres messages exposed |
 
-Completion uses a session flag so the reopen trigger does not clear `completed_at` during the approved completion update.
+Completion uses the transaction-local session flag `prompt_pilot.completing_brief` (`set_config(..., true)`) so the reopen trigger does not clear `completed_at` during the approved completion update. The flag is cleared on success and in exception handlers.
 
 ---
 

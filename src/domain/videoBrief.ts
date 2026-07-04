@@ -14,23 +14,12 @@ import {
   VideoCategorySchema,
 } from './constants.js';
 import { SourceAnalysisSchema } from './sourceAnalysis.js';
+import {
+  ProductionRequirementsSchema,
+  type ProductionRequirements,
+} from './productionRequirements.js';
 
-export const ProductionRequirementsSchema = z.object({
-  characterConsistency: z.boolean(),
-  productConsistency: z.boolean(),
-  logoAccuracy: z.boolean(),
-  exactTextVisibility: z.boolean(),
-  nativeAudio: z.boolean(),
-  dialogue: z.boolean(),
-  voiceover: z.boolean(),
-  lipSync: z.boolean(),
-  multipleLocations: z.boolean(),
-  cameraControl: z.boolean(),
-  firstLastFrameControl: z.boolean(),
-  videoExtension: z.boolean(),
-  referenceImages: z.boolean(),
-  commercialUse: z.boolean(),
-});
+export { ProductionRequirementsSchema, type ProductionRequirements };
 
 export const VideoBriefSchema = z.object({
   briefId: NonEmptyTrimmedStringSchema,
@@ -54,5 +43,4 @@ export const VideoBriefSchema = z.object({
   contractVersion: VersionStringSchema,
 });
 
-export type ProductionRequirements = z.infer<typeof ProductionRequirementsSchema>;
 export type VideoBrief = z.infer<typeof VideoBriefSchema>;

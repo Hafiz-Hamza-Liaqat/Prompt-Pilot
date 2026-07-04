@@ -6,7 +6,11 @@ import {
   QUALITY_PRIORITIES,
   VIDEO_CATEGORIES,
 } from '@/domain/constants';
-import type { ProductionRequirements } from '@/domain/videoBrief';
+import {
+  PRODUCTION_REQUIREMENT_KEYS,
+  PRODUCTION_REQUIREMENT_LABELS,
+  type ProductionRequirementKey,
+} from '@/domain/productionRequirements';
 import { WIZARD_SOURCE_TYPES, WIZARD_STEPS, type WizardStep } from '@/domain/videoBriefDraft';
 
 export type WizardOption<T extends string = string> = {
@@ -174,49 +178,13 @@ export const QUALITY_PRIORITY_OPTIONS: readonly WizardOption<(typeof QUALITY_PRI
     label: QUALITY_PRIORITY_LABELS[value],
   }));
 
-export const PRODUCTION_REQUIREMENT_FIELDS = [
-  'characterConsistency',
-  'productConsistency',
-  'logoAccuracy',
-  'exactTextVisibility',
-  'nativeAudio',
-  'dialogue',
-  'voiceover',
-  'lipSync',
-  'multipleLocations',
-  'cameraControl',
-  'firstLastFrameControl',
-  'videoExtension',
-  'referenceImages',
-  'commercialUse',
-] as const satisfies readonly (keyof ProductionRequirements)[];
+export const PRODUCTION_REQUIREMENT_FIELDS = PRODUCTION_REQUIREMENT_KEYS;
 
-const PRODUCTION_REQUIREMENT_LABELS: Record<
-  (typeof PRODUCTION_REQUIREMENT_FIELDS)[number],
-  string
-> = {
-  characterConsistency: 'Character consistency across scenes',
-  productConsistency: 'Product consistency across scenes',
-  logoAccuracy: 'Logo accuracy',
-  exactTextVisibility: 'Exact on-screen text visibility',
-  nativeAudio: 'Native audio support',
-  dialogue: 'Spoken dialogue',
-  voiceover: 'Voiceover narration',
-  lipSync: 'Lip sync',
-  multipleLocations: 'Multiple locations',
-  cameraControl: 'Camera control',
-  firstLastFrameControl: 'First and last frame control',
-  videoExtension: 'Video extension',
-  referenceImages: 'Reference images',
-  commercialUse: 'Commercial use',
-};
-
-export const PRODUCTION_REQUIREMENT_OPTIONS: readonly WizardOption<
-  (typeof PRODUCTION_REQUIREMENT_FIELDS)[number]
->[] = PRODUCTION_REQUIREMENT_FIELDS.map((value) => ({
-  value,
-  label: PRODUCTION_REQUIREMENT_LABELS[value],
-}));
+export const PRODUCTION_REQUIREMENT_OPTIONS: readonly WizardOption<ProductionRequirementKey>[] =
+  PRODUCTION_REQUIREMENT_KEYS.map((value) => ({
+    value,
+    label: PRODUCTION_REQUIREMENT_LABELS[value],
+  }));
 
 export const WIZARD_SOURCE_TYPE_OPTIONS = SOURCE_TYPE_OPTIONS;
 export const WIZARD_DESTINATION_OPTIONS = DESTINATION_OPTIONS;

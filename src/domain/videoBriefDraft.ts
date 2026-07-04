@@ -8,24 +8,12 @@ import {
   VideoCategorySchema,
 } from './constants';
 import { projectIdSchema } from './project';
+import {
+  ProductionRequirementsSchema,
+  parseProductionRequirementCheckbox,
+} from './productionRequirements';
 
-/** Mirrors ProductionRequirementsSchema from videoBrief.ts for wizard use without pulling Phase 1 planning imports into client bundles. */
-export const wizardProductionRequirementsSchema = z.object({
-  characterConsistency: z.boolean(),
-  productConsistency: z.boolean(),
-  logoAccuracy: z.boolean(),
-  exactTextVisibility: z.boolean(),
-  nativeAudio: z.boolean(),
-  dialogue: z.boolean(),
-  voiceover: z.boolean(),
-  lipSync: z.boolean(),
-  multipleLocations: z.boolean(),
-  cameraControl: z.boolean(),
-  firstLastFrameControl: z.boolean(),
-  videoExtension: z.boolean(),
-  referenceImages: z.boolean(),
-  commercialUse: z.boolean(),
-});
+export { ProductionRequirementsSchema };
 
 /**
  * UI-supported wizard source types. The global `SourceTypeSchema` in constants.ts
@@ -262,7 +250,7 @@ export const styleStepSchema = z.object({
 });
 
 export const requirementsStepSchema = z.object({
-  productionRequirements: wizardProductionRequirementsSchema,
+  productionRequirements: ProductionRequirementsSchema,
 });
 
 export const prioritiesStepSchema = z.object({
@@ -298,7 +286,7 @@ export const PartialVideoBriefDraftSchema = z.object({
   durationSeconds: DurationSecondsSchema.nullable().optional(),
   visualStyle: z.string().nullable().optional(),
   tone: z.string().nullable().optional(),
-  productionRequirements: wizardProductionRequirementsSchema.partial().nullable().optional(),
+  productionRequirements: ProductionRequirementsSchema.partial().nullable().optional(),
   budgetPriority: BudgetPrioritySchema.nullable().optional(),
   qualityPriority: QualityPrioritySchema.nullable().optional(),
   userConstraints: z.string().nullable().optional(),
@@ -323,7 +311,7 @@ export const CompleteVideoBriefDraftSchema = z
     durationSeconds: DurationSecondsSchema,
     visualStyle: visualStyleSchema,
     tone: toneSchema,
-    productionRequirements: wizardProductionRequirementsSchema,
+    productionRequirements: ProductionRequirementsSchema,
     budgetPriority: BudgetPrioritySchema,
     qualityPriority: QualityPrioritySchema,
     userConstraints: userConstraintsValueSchema,
@@ -349,12 +337,7 @@ export type PartialVideoBriefDraft = z.infer<typeof PartialVideoBriefDraftSchema
 export type CompleteVideoBriefDraft = z.infer<typeof CompleteVideoBriefDraftSchema>;
 
 export function parseCheckboxValue(value: FormDataEntryValue | null | undefined): boolean {
-  if (value === null || value === undefined) {
-    return false;
-  }
-
-  const normalized = String(value);
-  return normalized === 'on' || normalized === 'true';
+  return parseProductionRequirementCheckbox(value);
 }
 
 export function getStepIndex(step: WizardStep): number {

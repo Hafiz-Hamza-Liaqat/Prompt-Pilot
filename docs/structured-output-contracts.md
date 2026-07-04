@@ -109,6 +109,35 @@ Budget priority represents affordability or cost sensitivity when selecting prov
 
 Quality priority represents the speed-versus-output-quality preference for generation and planning. It is a separate runtime-validated contract from budget priority.
 
+### Production requirements (exactly 14)
+
+The canonical production-requirement count is **14**. Keys are defined once in `src/domain/productionRequirements.ts` and consumed by:
+
+- `VideoBriefSchema.productionRequirements` (Phase 1 final contract)
+- Wizard draft schemas (Phase 6)
+- `public.video_briefs` `requires_*` columns
+- Wizard UI labels and review rendering
+- Repository read/write mappings
+
+| Key | Database column |
+|---|---|
+| `characterConsistency` | `requires_character_consistency` |
+| `productConsistency` | `requires_product_consistency` |
+| `logoAccuracy` | `requires_logo_accuracy` |
+| `exactTextVisibility` | `requires_exact_text_visibility` |
+| `nativeAudio` | `requires_native_audio` |
+| `dialogue` | `requires_dialogue` |
+| `voiceover` | `requires_voiceover` |
+| `lipSync` | `requires_lip_sync` |
+| `multipleLocations` | `requires_multiple_locations` |
+| `cameraControl` | `requires_camera_control` |
+| `firstLastFrameControl` | `requires_first_last_frame_control` |
+| `videoExtension` | `requires_video_extension` |
+| `referenceImages` | `requires_reference_images` |
+| `commercialUse` | `requires_commercial_use` |
+
+New production requirements require an explicit product-contract decision and a dedicated migration phase. Provider catalogue capabilities must not silently extend this taxonomy.
+
 ---
 
 ## Root-level validation rules
