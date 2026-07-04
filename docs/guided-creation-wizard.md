@@ -21,7 +21,7 @@ Phase 6 delivers:
 | Ready status | User marks a complete brief ready via the completion RPC |
 | Reopening after edits | Any content change clears `completed_at` and returns the brief to draft |
 
-This phase collects and validates user requirements only. It does not analyze sources, recommend providers, create scenes, compile prompts, or invoke external services.
+This phase collects and validates user requirements only. It does not analyze sources, recommend providers, create scenes, compile prompts, or invoke external services. Completed brief data is stored in `public.video_briefs` only; scene timing added in Phase 9 is derived later and is not persisted.
 
 ---
 

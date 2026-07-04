@@ -4,7 +4,21 @@
 
 Related documents: [Application Foundation](application-foundation.md) · [Implementation Checklist](implementation-checklist.md)
 
-Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC. Phase 6 adds `public.video_briefs` with RLS, reopen trigger, and completion RPC. Phase 7 adds read-only catalogue tables (`ai_video_providers`, `ai_video_offerings`, `ai_video_sources`, `ai_video_capability_facts`) with public SELECT RLS for `anon` and `authenticated`.
+Phase 4 establishes a **local-only** Supabase database and email/password authentication foundation. Phase 5 adds the `public.projects` table with RLS and soft-delete RPC. Phase 6 adds `public.video_briefs` with RLS, reopen trigger, and completion RPC. Phase 7 adds read-only catalogue tables (`ai_video_providers`, `ai_video_offerings`, `ai_video_sources`, `ai_video_capability_facts`) with public SELECT RLS for `anon` and `authenticated`. Phases 8 and 9 added no migrations.
+
+Prompt Pilot currently has **seven application-owned public tables** in `public`:
+
+```text
+profiles
+projects
+video_briefs
+ai_video_providers
+ai_video_offerings
+ai_video_sources
+ai_video_capability_facts
+```
+
+RPCs such as `prompt_pilot_soft_delete_project` and `prompt_pilot_complete_video_brief` are functions, not tables. Supabase Auth, Storage, Realtime, and migration-history objects are not application-owned tables. Scene decomposition from Phase 9 is derived in application code and is not persisted.
 
 ---
 

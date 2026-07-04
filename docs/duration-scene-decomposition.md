@@ -10,6 +10,8 @@ Phase 9 adds deterministic, duration-aware scene timing to the Prompt Pilot work
 - Workspace integration as mixed-origin preview data
 - No database persistence
 
+Phase 9 added no migration and no scene table. Scene output is recomputed from the completed brief on each request and is not cached or written to any of the seven application-owned public tables.
+
 ## Algorithm
 
 Scene count:

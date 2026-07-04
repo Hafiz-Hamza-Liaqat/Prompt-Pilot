@@ -35,7 +35,7 @@ See also [Duration and Scene Decomposition](./duration-scene-decomposition.md).
 
 ## Persistence
 
-No database migration stores workspace or scene decomposition output. The static fixture lives in version-controlled application code at `src/fixtures/mock-result-workspace.ts`. Scene timing is derived on each request from the completed brief duration.
+No database migration stores workspace or scene decomposition output. Prompt Pilot currently has seven application-owned public tables; none store scene timing. The static fixture lives in version-controlled application code at `src/fixtures/mock-result-workspace.ts`. Scene timing is derived on each request from the completed brief duration.
 
 ## Access
 

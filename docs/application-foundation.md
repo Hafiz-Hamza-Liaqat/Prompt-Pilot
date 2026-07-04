@@ -4,9 +4,25 @@
 
 Related documents: [Implementation Checklist](implementation-checklist.md) · [Structured Output Contracts](structured-output-contracts.md) · [Phase Roadmap](phase-roadmap.md)
 
-Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication. Phase 5 adds secure project dashboard and management. Phase 6 adds the guided video-brief creation wizard. Phase 7 adds the public read-only provider catalogue at `/providers`. Phase 8 adds the authenticated result workspace at `/projects/[projectId]/workspace`. Phase 9 evolves the workspace to hybrid preview mode with deterministic scene timing derived from the completed brief duration.
+Phase 2 established a minimal, production-buildable Next.js App Router foundation. Phase 3 adds the UI design system and public application shell. Phase 4 adds local Supabase database and authentication. Phase 5 adds secure project dashboard and management. Phase 6 adds the guided video-brief creation wizard. Phase 7 adds the public read-only provider catalogue at `/providers`. Phase 8 adds the authenticated result workspace at `/projects/[projectId]/workspace`. Phase 9 evolves the workspace to hybrid preview mode with deterministic scene timing derived from the completed brief duration. Phase 9 added no database migration; scene decomposition remains derived and non-persistent.
 
 ---
+
+## Application-owned database tables
+
+Prompt Pilot currently has **seven application-owned public tables**:
+
+| Table | Phase |
+|---|---|
+| `public.profiles` | 4 |
+| `public.projects` | 5 |
+| `public.video_briefs` | 6 |
+| `public.ai_video_providers` | 7 |
+| `public.ai_video_offerings` | 7 |
+| `public.ai_video_sources` | 7 |
+| `public.ai_video_capability_facts` | 7 |
+
+RPCs, trigger functions, and Supabase-managed schemas are not counted as application-owned tables. Future schema additions require an approved phase and migration.
 
 ## Architecture established
 
