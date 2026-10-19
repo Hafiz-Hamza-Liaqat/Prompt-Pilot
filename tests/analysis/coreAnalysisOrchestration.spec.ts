@@ -218,7 +218,7 @@ describe('executeCoreAnalysisStage orchestration integration', () => {
       idGenerator: () => analysisId,
     });
 
-    let context = await advanceToCacheLookupStage(orchestrator);
+    const context = await advanceToCacheLookupStage(orchestrator);
     const cacheLookup = await executeCacheLookupStage(orchestrator, lookupCacheCoordinator, context, {
       occurredAt: TEST_TIMESTAMP,
       ...TEST_FINGERPRINT,

@@ -6,6 +6,54 @@ Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-sc
 
 This glossary defines canonical product terminology. All documents and future code should use these terms consistently.
 
+**Foundation lock (PP-03):** Pivot terms from [PP-02](../pp-02/01-reference-video-analysis-specification.md) are authoritative for Reference, Analysis, Package, Job, and Fingerprint. Legacy terms below remain valid until Migration Phase E.
+
+---
+
+## Pivot concepts (PP-02 / PP-03)
+
+### Reference
+
+The **user-submitted intake artifact** attached to a **Project**: a public platform URL (e.g. YouTube), user upload (video/audio), transcript, or script. Records provenance, access status, and rights attestation — not interpretive content.
+
+> **Not to be confused with:** **Video Brief** (user planning intent) or legacy brief `source_*` fields (being split to Reference entity).
+
+### Reference Video Analysis
+
+The **canonical structured intelligence snapshot** produced by Core Analysis from a Reference. Immutable per `analysisVersion`. Contains observed facts and derived analysis only — **no** compiled prompts, SEO packages, or blueprints.
+
+Schema: `ReferenceVideoAnalysisSchema` in `src/domain/canonical/referenceVideoAnalysis.ts`.
+
+### Analysis
+
+Synonym for a saved **Reference Video Analysis** snapshot. The canonical object name is **ReferenceVideoAnalysis**.
+
+### Package
+
+A **typed, versioned output** from the **Package Engine** derived from exactly one Reference Video Analysis (plus optional Video Brief). Types: Blueprint, Prompt, SEO, Marketing, Repurposing. Never media.
+
+Schema: `PackageEnvelopeSchema` in `src/domain/canonical/package.ts`.
+
+### Package Engine
+
+Conceptual generator layer that produces **Packages** from Reference Video Analysis. Must not access original video, audio, or platform APIs.
+
+### Job
+
+An **asynchronous unit of work** driving the AI Pipeline for one Reference: validate → intake → fingerprint → analyze → generate packages → save.
+
+Schema: `JobRecordSchema` in `src/domain/canonical/job.ts`.
+
+### Content Fingerprint
+
+A **stable content identity** for cache lookup and deduplication. Not analysis; answers whether identical content was processed before.
+
+Schema: `ContentFingerprintSchema` in `src/domain/canonical/contentFingerprint.ts`.
+
+### Workspace
+
+The authenticated UI where users view Project context: Reference status, Reference Video Analysis sections, Packages, and Exports. Presentation layer only.
+
 ---
 
 ## Core concepts
@@ -135,7 +183,9 @@ Deterministic rating of likelihood that the plan will fail or require significan
 
 ### Source Analysis
 
-Structured extraction and normalization of user input (idea, script, URL content) into brief fields.
+**Legacy (deprecated for new modules).** Structured extraction and normalization of user input (idea, script, URL content) into brief fields. Evolves into **Reference Video Analysis** — see [compatibility.md](pp-03/compatibility.md).
+
+Schema: `SourceAnalysisSchema` (deprecated) → target `ReferenceVideoAnalysisSchema`.
 
 ---
 
@@ -155,7 +205,11 @@ Recommended sequence for generating clips on the external provider, accounting f
 
 ### Export
 
-Copy or download of the complete Production Plan in structured format (JSON, Markdown, or clipboard-ready text).
+Copy or download of structured output. In the pivot model, an **Export** serializes one or more **Packages** (and metadata) for handoff to external tools — not a rendered video file.
+
+Legacy: copy/download of the complete **Production Plan** (JSON, Markdown, or clipboard-ready text).
+
+Schema: `ExportRecordSchema` in `src/domain/canonical/export.ts`.
 
 ### Capability Version
 

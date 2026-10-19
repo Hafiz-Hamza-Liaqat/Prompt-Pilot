@@ -7,6 +7,7 @@ import {
 
 export const WORKSPACE_SECTION_LABELS: Record<WorkspaceSection, string> = {
   overview: 'Overview',
+  analysis: 'Reference analysis',
   providers: 'Provider recommendations',
   scenes: 'Scene roadmap',
   prompts: 'Prompt package',
@@ -18,6 +19,8 @@ export const WORKSPACE_SECTION_LABELS: Record<WorkspaceSection, string> = {
 export const WORKSPACE_SECTION_DESCRIPTIONS: Record<WorkspaceSection, string> = {
   overview:
     'Real project and completed brief context with preview-only workspace status.',
+  analysis:
+    'Persisted reference video analysis from the saved intelligence bundle. Display only — no regeneration in this view.',
   providers:
     'Evidence-backed provider and offering candidates derived from the saved brief and current catalogue snapshot.',
   scenes:

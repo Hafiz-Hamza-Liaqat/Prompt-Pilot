@@ -7,6 +7,7 @@ import { PageContainer } from '@/components/layout/page-container';
 import { SectionHeading } from '@/components/layout/section-heading';
 import { ProjectActionForm } from '@/components/projects/project-action-form';
 import { ProjectEditForm } from '@/components/projects/project-edit-form';
+import { ReferenceIntakeForm } from '@/components/projects/reference-intake-form';
 import { ProjectStatusBadge } from '@/components/projects/project-status-badge';
 import {
   deriveProjectStatus,
@@ -147,6 +148,19 @@ export default async function ProjectDetailPage({
             </p>
           )}
         </div>
+
+        {status === 'active' && briefStatus === 'ready' ? (
+          <div className="rounded-lg border border-border p-4 space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-foreground">Reference analysis intake</h2>
+              <p className="text-sm text-muted-foreground">
+                Submit a reference for persisted analysis. Prompt Pilot saves your attestation and
+                reference metadata; analysis execution begins in a later pipeline step.
+              </p>
+            </div>
+            <ReferenceIntakeForm projectId={project.id} />
+          </div>
+        ) : null}
 
         <ProjectEditForm
           projectId={project.id}

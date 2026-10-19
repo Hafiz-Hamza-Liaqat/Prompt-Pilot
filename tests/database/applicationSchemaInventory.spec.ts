@@ -5,9 +5,11 @@ import {
   CATALOGUE_TABLES,
   FORBIDDEN_APPLICATION_TABLES,
   FOUNDATION_TABLES,
+  PIVOT_PERSISTENCE_TABLES,
+  PIVOT_TABLE_COUNT,
 } from '../../src/domain/applicationSchemaInventory.js';
 
-const EXPECTED_TABLES = [
+const FOUNDATION_AND_CATALOGUE = [
   'profiles',
   'projects',
   'video_briefs',
@@ -18,23 +20,26 @@ const EXPECTED_TABLES = [
 ] as const;
 
 describe('application schema inventory contract', () => {
-  it('defines exactly seven application-owned tables', () => {
-    expect(APPLICATION_TABLE_COUNT).toBe(7);
-    expect(APPLICATION_OWNED_PUBLIC_TABLES).toHaveLength(7);
+  it('defines nineteen application-owned tables', () => {
+    expect(APPLICATION_TABLE_COUNT).toBe(19);
+    expect(APPLICATION_OWNED_PUBLIC_TABLES).toHaveLength(19);
   });
 
   it('uses unique table names', () => {
-    expect(new Set(APPLICATION_OWNED_PUBLIC_TABLES).size).toBe(7);
+    expect(new Set(APPLICATION_OWNED_PUBLIC_TABLES).size).toBe(19);
   });
 
-  it('includes all expected table names', () => {
-    for (const tableName of EXPECTED_TABLES) {
+  it('includes foundation and catalogue tables', () => {
+    for (const tableName of FOUNDATION_AND_CATALOGUE) {
       expect(APPLICATION_OWNED_PUBLIC_TABLES).toContain(tableName);
     }
   });
 
-  it('contains no extra table names', () => {
-    expect([...APPLICATION_OWNED_PUBLIC_TABLES].sort()).toEqual([...EXPECTED_TABLES].sort());
+  it('includes all pivot persistence tables', () => {
+    expect(PIVOT_TABLE_COUNT).toBe(12);
+    for (const tableName of PIVOT_PERSISTENCE_TABLES) {
+      expect(APPLICATION_OWNED_PUBLIC_TABLES).toContain(tableName);
+    }
   });
 
   it('excludes scene tables', () => {
@@ -71,12 +76,13 @@ describe('application schema inventory contract', () => {
     }
   });
 
-  it('sums foundation and catalogue tables to seven', () => {
-    expect(FOUNDATION_TABLES.length + CATALOGUE_TABLES.length).toBe(7);
+  it('sums foundation, catalogue, and pivot tables to nineteen', () => {
+    expect(FOUNDATION_TABLES.length + CATALOGUE_TABLES.length + PIVOT_TABLE_COUNT).toBe(19);
   });
 
   it('does not misclassify RPC names as tables', () => {
     expect(APPLICATION_OWNED_PUBLIC_TABLES).not.toContain('prompt_pilot_complete_video_brief');
     expect(APPLICATION_OWNED_PUBLIC_TABLES).not.toContain('prompt_pilot_soft_delete_project');
+    expect(APPLICATION_OWNED_PUBLIC_TABLES).not.toContain('prompt_pilot_set_latest_analysis');
   });
 });

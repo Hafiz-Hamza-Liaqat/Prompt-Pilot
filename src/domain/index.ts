@@ -169,6 +169,8 @@ export type { Scene, SceneTimeline } from './scenePlan.js';
 export { QualityAuditSchema } from './qualityAudit.js';
 export type { QualityAudit } from './qualityAudit.js';
 
+export * from './canonical/index.js';
+
 export {
   EditingRoadmapSchema,
   ExportSettingsSchema,

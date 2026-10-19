@@ -9,5 +9,9 @@ export default defineConfig({
   },
   test: {
     include: ['tests/**/*.spec.ts'],
+    testTimeout: 60000,
+    hookTimeout: 60000,
+    teardownTimeout: 60000,
+    maxWorkers: 4,
   },
 });

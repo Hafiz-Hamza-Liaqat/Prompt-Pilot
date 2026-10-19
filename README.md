@@ -1,66 +1,166 @@
 # Prompt Pilot
 
-Prompt Pilot is a provider-neutral AI Video Production Planner, Tool Recommendation Engine, and Prompt Compiler. It helps users transform an idea, script, product page, article, or permitted link into a structured video-production brief, a recommended AI video-generation platform, provider-specific prompts, and platform-specific publishing guidance.
+A provider-neutral prompt-engineering and video production workspace for crafting, refining, organizing, and reusing AI prompts.
 
-## Core value proposition
+Prompt Pilot helps creators, marketers, and developers transform source material, creative briefs, scripts, or reference links into structured, explainable video production briefs, platform recommendations, scene breakdowns, and optimized prompts for external generative AI platforms.
 
-Users often know what they want to communicate but not how to plan, decompose, prompt, and adapt a video across AI generation platforms and social destinations. Prompt Pilot turns source material into an explainable, export-ready production plan — without generating any media itself.
+---
 
-## What this platform does not do
+## Core Value Proposition
 
-**Prompt Pilot does not generate videos or images.** It produces structured plans, recommendations, prompts, and production instructions that users copy into external AI video platforms such as Google Veo, OpenAI Sora, Runway, Kling, or Adobe Firefly.
+Creating generative AI videos often involves guesswork: understanding which provider fits a project's needs, structuring scene-by-scene timing, managing continuity, and formulating platform-specific prompts. Prompt Pilot brings engineering discipline to this workflow:
+- Decomposes target durations into narrative-driven scenes with deterministic timing.
+- Evaluates multi-dimensional complexity and execution risk.
+- Recommends the most suitable AI video generation providers using verified platform capabilities and limitations.
+- Prepares structured production briefs and export-ready prompt packages.
 
-## Technology direction (provisional)
+> **Operational Boundary:** Prompt Pilot is a planning, orchestration, and prompt compilation platform. It does **not** render or generate video/image files directly. Plans and prompts are compiled for use in external tools such as Google Veo, OpenAI Sora, Runway, Kling AI, and Adobe Firefly.
 
-The planned stack is documented for future phases. Phase 3 integrates Tailwind CSS v4 and shadcn/ui (Radix). Phase 4 adds a local Supabase database and authentication foundation.
+---
 
-| Layer | Direction |
-|---|---|
-| Frontend | Next.js, React, TypeScript, Tailwind CSS, shadcn/ui |
-| Backend / data | Supabase PostgreSQL and Auth |
-| AI planning | OpenAI Responses API |
-| Link intake | Firecrawl |
-| Validation | Zod |
-| Testing | Vitest, Playwright |
-| Hosting / ops | Vercel, Sentry |
+## Confirmed Features
 
-## Development status
+- **Authentication & User Profiles:** Built on Supabase Auth with secure session persistence, protected routing, and user profile management.
+- **Project Dashboard:** Full project lifecycle management (creation, listing, status updates, and soft deletion) with Row Level Security (RLS).
+- **Guided 9-Step Creation Wizard:** A structured, multi-step brief creator capturing:
+  1. Project Category (Explainer, Product, Narrative, Educational, Social)
+  2. Source Intake (Direct brief, text script, reference URL)
+  3. Objective & Core Message
+  4. Target Duration & Constraints (15s to 120s presets)
+  5. Publishing Destination & Aspect Ratio (YouTube 16:9, Shorts/Reels/TikTok 9:16, Square 1:1)
+  6. Visual Style & Aesthetic Direction
+  7. Budget & Speed Priorities
+  8. Production Requirements (Character consistency, lip sync, camera control, first/last frame control)
+  9. Comprehensive Brief Review & Submission
+- **Deterministic Scene Decomposition Engine:** Algorithmic duration-to-scene breakdown assigning narrative roles (`hook`, `context`, `problem`, `development`, `climax`, `resolution`, `call_to_action`) and precise millisecond timing.
+- **Complexity & Risk Scoring:** Multi-factor analysis scoring scene density, motion complexity, consistency demands, and execution risks.
+- **Evidence-Backed Provider Recommendations:** Evaluates and ranks top AI video providers against project requirements, factoring in documented support levels, capability constraints, and freshness.
+- **Curated Provider Catalogue:** Directory of documented AI video providers (Google Veo, OpenAI Sora, Runway, Kling, Adobe Firefly) with verified capability facts, source URLs, and freshness tracking (`fresh`, `due_soon`, `overdue`).
+- **Interactive Result Workspace:** Unified workspace displaying brief summaries, scene timelines, complexity scorecards, and platform recommendations.
+- **Reference Intake & Pipeline Orchestrator:** Modular pipeline architecture supporting reference link intake, media validation, state machine transitions (`idle`, `fingerprinting`, `analyzing`, `completed`, `failed`), and caching coordination.
 
-**Phase 11-B — Global navigation and workflow repair** (current)
+---
 
-Local Supabase Auth, project dashboard, guided video brief wizard, public provider catalogue, and global navigation shell. Authenticated users with a completed brief can open the hybrid result workspace at `/projects/[projectId]/workspace`. Scene timing, complexity/execution-risk assessments, and provider recommendations are calculated deterministically from the saved brief and catalogue; prompt, continuity, and audio/editing sections remain static preview fixtures. No planning output is persisted or AI-generated.
+## Verified Technology Stack
 
-Public site configuration lives in `src/config/public-site.ts`, including footer navigation and the official Prompt Pilot X profile URL (`OFFICIAL_X_PROFILE_URL`). When the X URL is unset, the footer omits the social link rather than publishing a placeholder.
+| Layer | Technology | Version | Purpose |
+|---|---|---|---|
+| **Framework** | [Next.js](https://nextjs.org/) | `16.2.10` | App Router, Server Components & Actions |
+| **UI Library** | [React](https://react.dev/) | `19.2.7` | UI component foundation |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) | `5.8.2` | Strict end-to-end type safety |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) | `4.3.2` | Modern utility-first CSS |
+| **Components** | [shadcn/ui](https://ui.shadcn.com/) / [Radix UI](https://www.radix-ui.com/) | Latest | Accessible, headless UI primitives |
+| **Icons** | [Lucide React](https://lucide.dev/) | `1.23.0` | Consistent icon system |
+| **Validation** | [Zod](https://zod.dev/) | `3.24.2` | Runtime schema validation & contract enforcement |
+| **Database & Auth** | [Supabase](https://supabase.com/) | `2.110.0` | PostgreSQL with Row-Level Security & Auth |
+| **Test Runner** | [Vitest](https://vitest.dev/) | `3.2.6` | High-speed unit & invariant test suite |
+| **Linting** | [ESLint](https://eslint.org/) | `9.39.4` | Flat config with Next.js Core Web Vitals & TypeScript rules |
 
-## Local development foundation
+---
 
-```powershell
+## Project Structure
+
+```text
+Prompt-Pilot/
+├── docs/                 # Architectural Decision Records (ADRs) and phase roadmaps
+├── scripts/              # Verification and utility scripts
+├── src/
+│   ├── app/              # Next.js App Router (pages, layouts, server actions)
+│   ├── components/       # Reusable UI components & feature widgets
+│   ├── config/           # Static application configurations & constants
+│   ├── domain/           # Core domain models, Zod schemas, algorithms & pure logic
+│   └── server/           # Backend persistence, caching, analysis & orchestrators
+├── supabase/             # Local database migrations, seed data & RLS policies
+└── tests/                # Vitest test suites (100+ files, unit & integration tests)
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js**: `>= 20.9.0`
+- **npm**: `>= 10.0.0`
+- **Supabase CLI** (optional, for local database development): `>= 2.0.0`
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/Hafiz-Hamza-Liaqat/Prompt-Pilot.git
+cd Prompt-Pilot
 npm install
+```
+
+### 2. Environment Configuration
+
+Create a `.env.local` file by copying the provided example:
+
+```bash
+cp .env.example .env.local
+```
+
+Configure your local or remote Supabase credentials in `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+```
+
+### 3. Run Local Development Server
+
+```bash
 npm run dev
 ```
 
-Cursor runs lint, typecheck, test, and build verification during phase closure.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Documentation
+---
 
-| Document | Description |
-|---|---|
-| [Product Contract](docs/product-contract.md) | What the product is, who it serves, and what success looks like |
-| [MVP Scope](docs/mvp-scope.md) | Locked inputs, outputs, categories, providers, and modules |
-| [User Journey](docs/user-journey.md) | Primary workflow, wizard steps, and result workspace |
-| [Domain Glossary](docs/domain-glossary.md) | Canonical product terminology |
-| [Safety and Content Boundaries](docs/safety-and-content-boundaries.md) | Link, copyright, identity, and honesty constraints |
-| [Phase Roadmap](docs/phase-roadmap.md) | Milestones from product definition through launch |
-| [Structured Output Contracts](docs/structured-output-contracts.md) | Zod schemas and validation rules for video plans |
-| [Implementation Checklist](docs/implementation-checklist.md) | Authoritative phase execution status |
-| [Application Foundation](docs/application-foundation.md) | Next.js foundation, routes, and commands |
-| [UI Design System](docs/ui-design-system.md) | Tailwind v4, shadcn/ui, tokens, and layout components |
-| [Database and Auth Foundation](docs/database-auth-foundation.md) | Local Supabase, profiles schema, RLS, and Auth flows |
-| [Project Management Foundation](docs/project-management-foundation.md) | Project dashboard, CRUD, archive, duplicate, soft delete |
-| [Guided Creation Wizard](docs/guided-creation-wizard.md) | Nine-step video brief wizard, persistence, and completion |
-| [Provider Catalogue](docs/provider-catalogue.md) | Source-backed read-only AI video provider catalogue |
-| [Mock Result Workspace](docs/mock-result-workspace.md) | Hybrid workspace preview with deterministic scene timing |
-| [Duration Scene Decomposition](docs/duration-scene-decomposition.md) | Deterministic scene-count, role, and timing algorithm |
-| [Complexity and Risk Scoring](docs/complexity-risk-scoring.md) | Deterministic production complexity and execution-risk assessment |
-| [Provider Recommendation Engine](docs/provider-recommendation-engine.md) | Evidence-backed offering-level provider recommendations |
-| [Dependency Risk Register](docs/dependency-risk-register.md) | Vulnerability review decisions and follow-up triggers |
+## Verification & Build Commands
+
+All quality gates are enforced and verified:
+
+```bash
+# Run TypeScript type check
+npm run typecheck
+
+# Run ESLint check
+npm run lint
+
+# Run full Vitest suite (100+ test suites, 1,280+ tests)
+npm test
+
+# Build production bundle
+npm run build
+
+# Start production server
+npm start
+```
+
+---
+
+## Known Limitations & Roadmap
+
+- **Media Rendering:** Prompt Pilot compiles prompt engineering instructions and video plans; it does not render video or image files directly.
+- **Provider API Dispatch:** Provider recommendations are evidence-backed against verified capability matrices; direct API dispatch to third-party generation services is planned for future phases.
+- **Workspace Fixtures:** Certain workspace sections (such as real-time audio generation previews and continuity bible asset extraction) currently operate in structured preview mode.
+
+---
+
+## Documentation Index
+
+Detailed architectural documents, domain contracts, and RFCs are maintained in the [`docs/`](docs/) directory:
+
+- [Product Contract](docs/product-contract.md) — Product definition, target users, and boundary constraints.
+- [MVP Scope](docs/mvp-scope.md) — Confirmed input/output contracts, providers, and modules.
+- [Domain Architecture (PP-02)](docs/pp-02/) — Domain models, canonical analysis structures, and pipeline concepts.
+- [Canonical Contracts (PP-03)](docs/pp-03/) — Zod schemas, domain glossary, and ADRs.
+- [Runtime Architecture (PP-04)](docs/pp-04/) — Execution boundaries, orchestrator patterns, and lifecycle models.
+- [Master Roadmap](docs/prompt-pilot-roadmap.md) — Forward engineering phases and implementation status.
+
+---
+
+## License
+
+This project is licensed under the MIT License.

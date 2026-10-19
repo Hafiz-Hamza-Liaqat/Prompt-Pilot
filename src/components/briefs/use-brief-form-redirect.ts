@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { BriefFormState } from '@/app/projects/[projectId]/brief/actions';
+import type { BriefFormState } from '@/app/projects/[projectId]/brief/form-state';
 
 export function useBriefFormRedirect(state: BriefFormState) {
   const router = useRouter();

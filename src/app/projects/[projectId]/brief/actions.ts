@@ -21,13 +21,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireUserResult } from '@/server/auth/require-user';
 import { createVideoBriefService } from '@/server/briefs/video-brief-service';
 import { createSupabaseVideoBriefRepository } from '@/server/briefs/supabase-video-brief-repository';
-
-export type BriefFormState = {
-  status: BriefActionStatus;
-  redirectTo?: string;
-  fieldErrors?: Record<string, string | undefined>;
-  values?: Record<string, string | boolean | null | undefined>;
-};
+import type { BriefFormState } from './form-state';
 
 function mapFieldErrors(error: z.ZodError): Record<string, string | undefined> {
   const flattened = error.flatten().fieldErrors;
@@ -545,4 +539,3 @@ export async function completeBriefAction(
   };
 }
 
-export const initialBriefFormState: BriefFormState = { status: 'idle' };

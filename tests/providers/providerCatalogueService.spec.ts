@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AiVideoProvider } from '../../src/domain/constants.js';
 import type {
   CatalogueCapabilityFact,
@@ -288,6 +288,15 @@ const officialUrls: Record<AiVideoProvider, string> = {
 };
 
 describe('ProviderCatalogueService', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(VERIFIED_AT));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('lists exactly five providers from valid repository data', async () => {
     const service = new ProviderCatalogueService(buildDefaultRepository());
     const result = await service.listProviders();

@@ -1,0 +1,81 @@
+export type {
+  AnalysisVersionQuery,
+  AppendJobEventInput,
+  CacheEntryRecord,
+  CacheLookupResult,
+  CreateAttestationInput,
+  CreateCacheEntryInput,
+  CreateExportInput,
+  CreateJobInput,
+  CreateReferenceInput,
+  CreateReferenceIntakePayloadInput,
+  CursorPage,
+  CursorPageRequest,
+  FingerprintLookupKey,
+  JobEventRecord,
+  JobStateTransitionInput,
+  OffsetPage,
+  OffsetPageRequest,
+  OwnerScope,
+  PackageQueryFilter,
+  PageCursor,
+  PersistenceError,
+  PersistenceErrorCode,
+  PersistenceErrorFactory,
+  PersistenceResult,
+  PersistenceTransaction,
+  PersistenceVoidResult,
+  PromoteFingerprintInput,
+  ReferenceIntakePayloadKind,
+  ReferenceIntakePayloadRecord,
+  RightsAttestationRecord,
+  TransactionAware,
+  UnitOfWork,
+  UpdateReferenceInput,
+  WorkspaceIntelligenceQuery,
+  WorkspaceIntelligenceSnapshot,
+} from './contracts';
+export {
+  PERSISTENCE_ERROR_CODES,
+  persistenceErr,
+  persistenceOk,
+} from './contracts';
+
+export type {
+  AnalysisRepository,
+  AttestationRepository,
+  CacheRepository,
+  ExportRepository,
+  FingerprintRepository,
+  JobRepository,
+  PackageRepository,
+  ReferenceIntakePayloadRepository,
+  ReferenceRepository,
+  WorkspaceRepository,
+} from './repositories';
+
+export type {
+  PersistenceToken,
+  PivotRepositoryKey,
+  PivotRepositoryMap,
+  PivotRepositoryRegistration,
+  PivotRepositoryRegistry,
+} from './tokens';
+export { PERSISTENCE_TOKENS } from './tokens';
+
+export {
+  createSupabasePivotRepositoryRegistry,
+  SupabaseAnalysisRepository,
+  SupabaseAttestationRepository,
+  SupabaseCacheRepository,
+  SupabaseExportRepository,
+  SupabaseFingerprintRepository,
+  SupabaseJobRepository,
+  SupabasePackageRepository,
+  SupabaseReferenceIntakePayloadRepository,
+  SupabaseReferenceRepository,
+  SupabaseWorkspaceRepository,
+  buildCacheLookupKey,
+  buildIdentityDescriptor,
+} from './adapters/supabase';
+export { SupabaseSequentialUnitOfWork } from './adapters/postgres/postgres-unit-of-work';

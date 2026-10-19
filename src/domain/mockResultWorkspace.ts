@@ -15,6 +15,7 @@ export const WORKSPACE_MODES = ['hybrid_preview'] as const;
 export const DATA_ORIGINS = ['mixed'] as const;
 export const SECTION_DATA_ORIGINS = [
   'persisted_input',
+  'persisted_analysis',
   'catalogue_snapshot',
   'deterministic_rule_engine',
   'deterministic_evidence_engine',
@@ -23,6 +24,7 @@ export const SECTION_DATA_ORIGINS = [
 
 export const WORKSPACE_SECTIONS = [
   'overview',
+  'analysis',
   'providers',
   'scenes',
   'prompts',
@@ -59,6 +61,7 @@ export const WORKSPACE_SECTION_ORIGINS: Record<
   (typeof SECTION_DATA_ORIGINS)[number]
 > = {
   overview: 'persisted_input',
+  analysis: 'persisted_analysis',
   providers: 'deterministic_evidence_engine',
   scenes: 'deterministic_rule_engine',
   prompts: 'static_fixture',
@@ -86,6 +89,7 @@ export const MockPromptSectionKeySchema = z.enum(MOCK_PROMPT_SECTION_KEYS);
 
 export const WorkspaceSectionOriginsSchema = z.object({
   overview: z.literal('persisted_input'),
+  analysis: z.literal('persisted_analysis'),
   providers: z.literal('deterministic_evidence_engine'),
   scenes: z.literal('deterministic_rule_engine'),
   prompts: z.literal('static_fixture'),

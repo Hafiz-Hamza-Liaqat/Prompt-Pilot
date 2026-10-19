@@ -51,6 +51,7 @@
 | 14a | PP-10A | Core Analysis Design Audit | **COMPLETE** |
 | 14a1 | PP-10A.1 | Core Analysis Design Hardening | **COMPLETE** |
 | 14 | PP-10 | Core Analysis (Mock Provider) | **COMPLETE** |
+| 15a | PP-11A | Workspace & UI Integration Design Audit | **COMPLETE** |
 | 15 | PP-11 | Core Analysis UI & Workspace Integration | NOT_STARTED |
 | 16 | PP-12 | Real AI Analysis Provider Boundary | NOT_STARTED |
 | 17 | PP-13 | Package Engine (Mock) | NOT_STARTED |
@@ -454,10 +455,19 @@
 |---|---|
 | **Dependencies** | PP-10 |
 | **PP-04 requires** | Workspace Composer Â· sequence diagrams |
+| **Design** | [pp-11/](pp-11/) â€” PP-11A **COMPLETE** |
 | **Deliverables** | Project CTAs, analysis panels, extend workspace |
 | **Acceptance** | E2E mock path; existing brief/workspace regression passes |
 | **Deferred** | SEO/marketing panels |
-| **Status** | NOT_STARTED |
+| **Status** | NOT_STARTED (PP-11A design **COMPLETE**) |
+
+### PP-11A â€” Workspace & UI Integration Design Audit
+
+| Item | Detail |
+|---|---|
+| **Deliverables** | Architecture audit, view-model matrix, intake matrix, Composer design, UI plan, server actions, test slices |
+| **Acceptance** | Cross-document consistency; PP-10 boundaries preserved |
+| **Status** | **COMPLETE** |
 
 ---
 

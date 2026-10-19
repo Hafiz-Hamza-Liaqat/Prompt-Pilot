@@ -6,7 +6,31 @@ Related documents: [Product Contract](product-contract.md) · [MVP Scope](mvp-sc
 
 Phase 1 establishes the authoritative domain contracts for MVP structured video-plan output.
 
+> **PP-03 update:** Pivot contracts live in `src/domain/canonical/`. Legacy hierarchy below remains for brief wizard and VideoPlan until Migration Phase E.
+
 > **These contracts do not generate media, call AI providers, access a database, or expose application routes.**
+
+---
+
+## Canonical contract hierarchy (PP-03)
+
+```text
+ReferenceVideoAnalysisSchema (root analysis — pivot)
+├── AnalysisMetadataSchema … AnalysisSafetySchema
+├── AnalysisFingerprintRefSchema
+└── AnalysisVersionSchema
+
+PackageEnvelopeSchema (discriminatedUnion packageType)
+├── BlueprintPackagePayloadSchema → SceneTimelineSchema, ContinuityBibleSchema
+├── PromptPackagePayloadSchema → CompiledPromptSchema[]
+├── SeoPackagePayloadSchema
+├── MarketingPackagePayloadSchema
+└── RepurposingPackagePayloadSchema
+
+ContentFingerprintSchema · JobRecordSchema · ExportRecordSchema · ReferenceSchema
+```
+
+See [PP-03 compatibility](pp-03/compatibility.md) and [domain glossary](domain-glossary.md).
 
 ---
 
@@ -27,9 +51,18 @@ if (result.success) {
 
 Do not maintain parallel hand-written interfaces. If a field changes, update the Zod schema first and let types follow via `z.infer<typeof SchemaName>`.
 
+For pivot modules, prefer:
+
+```ts
+import {
+  ReferenceVideoAnalysisSchema,
+  PackageEnvelopeSchema,
+} from './src/domain/index.js';
+```
+
 ---
 
-## Contract hierarchy
+## Legacy contract hierarchy (Phase 1)
 
 ```text
 VideoPlanSchema (root)

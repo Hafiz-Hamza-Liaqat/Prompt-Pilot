@@ -1,6 +1,7 @@
 import { WORKSPACE_SECTION_LABELS } from '@/config/result-workspace';
-import type { MockResultWorkspaceViewModel } from '@/domain/mockResultWorkspace';
+import type { WorkspaceViewModel } from '@/domain/workspace/workspace-display';
 import { WorkspaceAudioEditingPreview } from './workspace-audio-editing-preview';
+import { WorkspaceAnalysisSection } from './workspace-analysis-section';
 import { WorkspaceContinuityPreview } from './workspace-continuity-preview';
 import { WorkspaceHeader } from './workspace-header';
 import { WorkspaceOverview } from './workspace-overview';
@@ -13,11 +14,19 @@ import { WorkspaceSectionHeading } from './workspace-section-heading';
 import { WorkspaceSectionNav } from './workspace-section-nav';
 
 type WorkspaceShellProps = {
-  workspace: MockResultWorkspaceViewModel;
+  workspace: WorkspaceViewModel;
 };
 
-function renderActiveSection(workspace: MockResultWorkspaceViewModel) {
+function renderActiveSection(workspace: WorkspaceViewModel) {
   switch (workspace.activeSection) {
+    case 'analysis':
+      return (
+        <WorkspaceAnalysisSection
+          analysis={workspace.analysis}
+          intelligence={workspace.intelligence}
+          projectId={workspace.project.id}
+        />
+      );
     case 'providers':
       return (
         <WorkspaceProviderRecommendations recommendation={workspace.providerRecommendation} />

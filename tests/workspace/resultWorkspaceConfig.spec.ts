@@ -18,9 +18,9 @@ import {
 const PROJECT_ID = '33333333-3333-3333-3333-333333333333';
 
 describe('result workspace configuration', () => {
-  it('defines seven workspace sections', () => {
-    expect(resultWorkspaceSections).toHaveLength(7);
-    expect(Object.keys(WORKSPACE_SECTION_LABELS)).toHaveLength(7);
+  it('defines eight workspace sections', () => {
+    expect(resultWorkspaceSections).toHaveLength(8);
+    expect(Object.keys(WORKSPACE_SECTION_LABELS)).toHaveLength(8);
   });
 
   it('matches domain section order', () => {
@@ -64,6 +64,12 @@ describe('result workspace configuration', () => {
   it('includes the sample disclaimer notice', () => {
     expect(WORKSPACE_TRUTHFULNESS_NOTICES.sampleDisclaimer).toBe(WORKSPACE_SAMPLE_DISCLAIMER);
     expect(WORKSPACE_TRUTHFULNESS_NOTICES.sampleDisclaimer.trim().length).toBeGreaterThan(0);
+  });
+
+  it('describes persisted reference analysis', () => {
+    expect(WORKSPACE_SECTION_LABELS.analysis).toBe('Reference analysis');
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.analysis.toLowerCase()).toContain('persisted');
+    expect(WORKSPACE_SECTION_DESCRIPTIONS.analysis.toLowerCase()).toContain('no regeneration');
   });
 
   it('describes evidence-backed provider recommendations', () => {

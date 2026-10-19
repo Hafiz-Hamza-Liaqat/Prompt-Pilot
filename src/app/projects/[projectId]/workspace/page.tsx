@@ -6,9 +6,10 @@ import { mockResultWorkspaceFixture } from '@/fixtures/mock-result-workspace';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireUser } from '@/server/auth/require-user';
 import { createSupabaseVideoBriefRepository } from '@/server/briefs/supabase-video-brief-repository';
+import { createSupabasePivotRepositoryRegistry } from '@/server/persistence/adapters/supabase';
 import { createSupabaseProjectRepository } from '@/server/projects/supabase-project-repository';
 import { createSupabaseProviderCatalogueRepository } from '@/server/providers/supabase-provider-catalogue-repository';
-import { createMockResultWorkspaceService } from '@/server/workspace/mock-result-workspace-service';
+import { createWorkspaceComposerService } from '@/server/workspace/workspace-composer-service';
 
 export const metadata = {
   title: 'Result workspace preview | Prompt Pilot',
@@ -34,14 +35,16 @@ export default async function ProjectWorkspacePage({ params, searchParams }: Wor
   });
 
   const supabase = await createSupabaseServerClient();
-  const service = createMockResultWorkspaceService({
+  const registry = createSupabasePivotRepositoryRegistry(supabase);
+  const composer = createWorkspaceComposerService({
+    workspaceRepository: registry.workspaceRepository,
     projectRepository: createSupabaseProjectRepository(supabase),
     briefRepository: createSupabaseVideoBriefRepository(supabase),
     providerCatalogueRepository: createSupabaseProviderCatalogueRepository(supabase),
-    fixture: mockResultWorkspaceFixture,
+    staticFixture: mockResultWorkspaceFixture,
   });
 
-  const result = await service.loadWorkspace(user.id, projectId, query.section);
+  const result = await composer.loadWorkspace(user.id, projectId, query.section);
 
   if (!result.ok) {
     if (result.code === 'not_found') {

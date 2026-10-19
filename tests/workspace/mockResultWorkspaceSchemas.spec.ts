@@ -126,6 +126,7 @@ describe('data origin', () => {
   it('defines approved section data origins', () => {
     expect(SECTION_DATA_ORIGINS).toEqual([
       'persisted_input',
+      'persisted_analysis',
       'catalogue_snapshot',
       'deterministic_rule_engine',
       'deterministic_evidence_engine',
@@ -139,6 +140,7 @@ describe('data origin', () => {
   it('maps each workspace section to an approved origin', () => {
     expect(WorkspaceSectionOriginsSchema.parse(WORKSPACE_SECTION_ORIGINS)).toEqual({
       overview: 'persisted_input',
+      analysis: 'persisted_analysis',
       providers: 'deterministic_evidence_engine',
       scenes: 'deterministic_rule_engine',
       prompts: 'static_fixture',
@@ -161,8 +163,8 @@ describe('decision readiness', () => {
 });
 
 describe('workspace sections', () => {
-  it('defines exactly seven sections', () => {
-    expect(WORKSPACE_SECTIONS).toHaveLength(7);
+  it('defines exactly eight sections', () => {
+    expect(WORKSPACE_SECTIONS).toHaveLength(8);
   });
 
   it('keeps section values unique', () => {
@@ -171,6 +173,7 @@ describe('workspace sections', () => {
 
   it('falls back invalid sections to overview', () => {
     expect(normalizeWorkspaceSection('scenes')).toBe('scenes');
+    expect(normalizeWorkspaceSection('analysis')).toBe('analysis');
     expect(normalizeWorkspaceSection('invalid')).toBe('overview');
     expect(normalizeWorkspaceSection(undefined)).toBe('overview');
   });

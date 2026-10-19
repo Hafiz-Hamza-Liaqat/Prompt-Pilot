@@ -1,10 +1,8 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import {
-  initialBriefFormState,
-  saveSourceStepAction,
-} from '@/app/projects/[projectId]/brief/actions';
+import { saveSourceStepAction } from '@/app/projects/[projectId]/brief/actions';
+import { initialBriefFormState } from '@/app/projects/[projectId]/brief/form-state';
 import { BriefActionMessage } from '@/components/briefs/brief-action-message';
 import { useBriefFormRedirect } from '@/components/briefs/use-brief-form-redirect';
 import { SubmitButton } from '@/components/forms/submit-button';

@@ -2,6 +2,12 @@ import { z } from 'zod';
 import { NonEmptyTrimmedStringSchema, SourceReferenceSchema } from './common.js';
 import { SourceTypeSchema } from './constants.js';
 
+/**
+ * Legacy text extraction schema from Phase 1.
+ *
+ * @deprecated Target {@link ReferenceVideoAnalysisSchema} in `./canonical/referenceVideoAnalysis.js`.
+ * Retained until Migration Phase E (PP-02). New modules must not extend this schema.
+ */
 export const SourceAnalysisSchema = z.object({
   sourceType: SourceTypeSchema,
   originalInput: NonEmptyTrimmedStringSchema,

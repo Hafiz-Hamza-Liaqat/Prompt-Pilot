@@ -8,8 +8,8 @@
     "node": ">=20.9.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -29,7 +29,8 @@
     "verify:workspace:local": "node --env-file=.env.local scripts/verify-local-mock-workspace.mjs",
     "verify:scenes:local": "node --env-file=.env.local scripts/verify-local-scene-decomposition.mjs",
     "verify:scoring:local": "node --env-file=.env.local scripts/verify-local-complexity-risk.mjs",
-    "verify:recommendations:local": "node --env-file=.env.local scripts/verify-local-provider-recommendations.mjs"
+    "verify:recommendations:local": "node --env-file=.env.local scripts/verify-local-provider-recommendations.mjs",
+    "verify:pivot:local": "node --env-file=.env.local ./node_modules/vitest/vitest.mjs run tests/persistence/supabaseIntegration.spec.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

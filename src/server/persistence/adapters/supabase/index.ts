@@ -1,0 +1,12 @@
+export { createSupabasePivotRepositoryRegistry } from './create-supabase-pivot-repository-registry';
+export { SupabaseAnalysisRepository } from './supabase-analysis-repository';
+export { SupabaseAttestationRepository } from './supabase-attestation-repository';
+export { SupabaseCacheRepository } from './supabase-cache-repository';
+export { SupabaseExportRepository } from './supabase-export-repository';
+export { SupabaseFingerprintRepository } from './supabase-fingerprint-repository';
+export { SupabaseJobRepository } from './supabase-job-repository';
+export { SupabasePackageRepository } from './supabase-package-repository';
+export { SupabaseReferenceIntakePayloadRepository } from './supabase-reference-intake-payload-repository';
+export { SupabaseReferenceRepository } from './supabase-reference-repository';
+export { SupabaseWorkspaceRepository } from './supabase-workspace-repository';
+export { buildCacheLookupKey, buildIdentityDescriptor } from './fingerprint-identity';

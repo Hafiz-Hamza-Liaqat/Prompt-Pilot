@@ -2,7 +2,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(16);
+select plan(23);
 
 select is(
   (
@@ -11,8 +11,8 @@ select is(
     where table_schema = 'public'
       and table_type = 'BASE TABLE'
   ),
-  7,
-  'Exactly seven application-owned public tables exist'
+  19,
+  'Exactly nineteen application-owned public tables exist'
 );
 
 select tables_are(
@@ -22,9 +22,21 @@ select tables_are(
     'ai_video_offerings',
     'ai_video_providers',
     'ai_video_sources',
+    'analysis_jobs',
+    'cache_entries',
+    'content_exports',
+    'content_fingerprints',
+    'content_packages',
+    'content_references',
+    'job_events',
     'profiles',
     'projects',
-    'video_briefs'
+    'provider_usage',
+    'reference_analyses',
+    'reference_intake_payloads',
+    'rights_attestations',
+    'video_briefs',
+    'workspace_assets'
   ],
   'Application-owned table names match the approved set'
 );
@@ -37,10 +49,12 @@ select hasnt_table('public', 'provider_recommendations', 'No provider_recommenda
 select hasnt_table('public', 'result_workspaces', 'No result_workspaces table exists');
 select hasnt_table('public', 'prompt_outputs', 'No prompt_outputs table exists');
 
-select has_table('public', 'profiles', 'Phase 4 profiles table remains present');
-select has_table('public', 'projects', 'Phase 5 projects table remains present');
-select has_table('public', 'video_briefs', 'Phase 6 video_briefs table remains present');
-select has_table('public', 'ai_video_providers', 'Phase 7 ai_video_providers table remains present');
+select has_table('public', 'content_references', 'PP-05C content_references table exists');
+select has_table('public', 'reference_intake_payloads', 'PP-11 Slice 4A reference_intake_payloads table exists');
+select has_table('public', 'reference_analyses', 'PP-05C reference_analyses table exists');
+select has_table('public', 'content_packages', 'PP-05C content_packages table exists');
+select has_table('public', 'analysis_jobs', 'PP-05C analysis_jobs table exists');
+select has_table('public', 'cache_entries', 'PP-05C cache_entries table exists');
 
 select ok(
   (
@@ -64,6 +78,13 @@ select has_function(
   'prompt_pilot_complete_video_brief',
   array['uuid'],
   'prompt_pilot_complete_video_brief RPC remains present'
+);
+
+select has_function(
+  'public',
+  'prompt_pilot_set_latest_analysis',
+  array['uuid', 'uuid', 'uuid'],
+  'prompt_pilot_set_latest_analysis RPC exists for analysis versioning'
 );
 
 select * from finish();
